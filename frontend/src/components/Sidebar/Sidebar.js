@@ -12,8 +12,6 @@ import {
 } from "@coreui/react";
 import AuthService from "../../services/authentication/auth.service";
 
-import CIcon from "@coreui/icons-react";
-
 // sidebar nav config
 import navigation from "../../containers/_nav";
 import adminNavigation from "../../containers/_adminNav";

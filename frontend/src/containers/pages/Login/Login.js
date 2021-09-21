@@ -17,6 +17,7 @@ import {
   CAlert,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import { Helmet } from "react-helmet";
 
 const Login = (props) => {
   const form = useRef();
@@ -61,6 +62,9 @@ const Login = (props) => {
 
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
+      <Helmet>
+        <title>Phần mềm quản lý phòng khám</title>
+      </Helmet>
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md="8">
