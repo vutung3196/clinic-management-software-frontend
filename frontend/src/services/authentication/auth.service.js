@@ -37,6 +37,7 @@ const authenticated = () => {
     console.log("no user");
     return false;
   }
+  console.log("it's true dude");
   console.log("user is authenticated");
   return true;
 };
@@ -56,10 +57,12 @@ const isAdmin = () => {
 
 const isMasterAdmin = () => {
   var currentUser = getCurrentUser();
+  console.log(currentUser);
   if (!currentUser) {
     return false;
   }
   if (currentUser.role === "MasterAdmin") {
+    console.log("it's true lol");
     return true;
   }
   return false;

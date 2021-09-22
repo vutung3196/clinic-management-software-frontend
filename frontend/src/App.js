@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -7,9 +7,13 @@ import {
 } from "react-router-dom";
 import "./scss/style.scss";
 import Main from "./containers/pages/Main";
-import authService from "./services/authentication/auth.service";
-import PrivateRoute from "./utils/privateRoute";
 import Login from "./containers/pages/Login";
+import ClinicManagementPage from "./containers/pages/ClinicManagement";
+
+import authService from "./services/authentication/auth.service";
+
+import PrivateRoute from "./utils/privateRoute";
+import MasterAdminRoute from "./utils/masterAdminRoute";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -37,6 +41,12 @@ const App = () => {
               )
             }
           />
+          <MasterAdminRoute
+            exact
+            path="/clinicmanagement"
+            props
+            component={ClinicManagementPage}
+          ></MasterAdminRoute>
           <PrivateRoute path="/" component={Main}></PrivateRoute>
         </Switch>
       </React.Suspense>
