@@ -13,14 +13,6 @@ const getUsers = async () => {
   return response.data;
 };
 
-// const getPrescriptionsByClinicId = async (clinicId) => {
-//   const response = await axios.request({
-//     url: API_URL_CLINIC + clinicId,
-//     method: "get",
-//   });
-//   return response.data;
-// };
-
 const createUser = async (
   userName,
   password,
@@ -68,24 +60,15 @@ const editUser = async (
   return response.data;
 };
 
-const deleteUser = async (id) => {
+const deactivateUser = async (id) => {
   const response = await axios.delete(API_URL + id, config);
   return response.data;
 };
 
-// const getPrescription = async (id) => {
-//   const response = await axios.request({
-//     url: API_URL + id,
-//     method: "get",
-//   });
-//   console.log(response.data);
-//   return response.data;
-// };
-
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getUsers,
-  deleteUser,
+  deactivateUser,
   createUser,
   editUser,
 };

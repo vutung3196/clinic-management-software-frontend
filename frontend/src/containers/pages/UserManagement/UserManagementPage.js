@@ -1,10 +1,10 @@
 import React from "react";
+import UserManagement from "../../../components/UserManagement";
 import { TheFooter, TheHeader } from "../../index";
 import Sidebar from "../../../components/Sidebar";
-import ClinicManagement from "../../../components/ClinicManagement";
 import { Helmet } from "react-helmet";
 
-const ClinicManagementPage = (props) => {
+const UserManagementPage = (props) => {
   return (
     <div>
       <Helmet>
@@ -15,7 +15,7 @@ const ClinicManagementPage = (props) => {
         <div className="c-wrapper">
           <TheHeader />
           <div className="c-body">
-            <ClinicManagement />
+            <UserManagement />
           </div>
           <TheFooter />
         </div>
@@ -24,4 +24,4 @@ const ClinicManagementPage = (props) => {
   );
 };
 
-export default ClinicManagementPage;
+export default UserManagementPage;

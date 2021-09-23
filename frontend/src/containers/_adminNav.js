@@ -1,12 +1,8 @@
-import React from "react";
-import CIcon from "@coreui/icons-react";
-
 const _adminNav = [
   {
     _tag: "CSidebarNavItem",
     name: "Trang chủ",
     to: "/dashboard",
-    icon: <CIcon name="cil-exit-to-app" customClasses="c-sidebar-nav-icon" />,
   },
   {
     _tag: "CSidebarNavTitle",

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as Icon from "react-bootstrap-icons";
 import CIcon from "@coreui/icons-react";
-import authService from "../../services/authentication/auth.service";
 import {
   CCard,
   CCardBody,
@@ -10,58 +9,57 @@ import {
   CDataTable,
   CRow,
   CButton,
-  CDropdownItem as option,
 } from "@coreui/react";
-import clinicService from "../../services/clinicservice/clinic.service";
-import EditClinicModal from "./EditClinicModal";
-import DeactivateClinicModal from "./DeactivateClinicModal";
+import userService from "src/services/user/user.service";
+import DeactivateUserModal from "./DeactivateUserModal";
+import EditUserModal from "./EditUserModal";
 
-const ClinicManagement = () => {
-  const constClinic = {
-    id: 1,
-    name: "Hà Phạm Clinic",
-    emailAddress: "tungvu3196@gmail.com",
-    phoneNumber: "1231311",
-    address: "Nam Dinh12",
-    userName: "tungvu3196",
-    password: null,
+const UserManagement = () => {
+  const constUser = {
+    phoneNumber: null,
+    id: 0,
+    userName: "",
+    firstName: null,
+    lastName: null,
+    enabled: 1,
+    isEnabled: false,
+    clinicId: 0,
+    role: "",
   };
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(3);
-  const [clinics, setClinics] = useState([]);
-  const [clinic, setClinic] = useState(constClinic);
+  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState(constUser);
   const [userId, setUserId] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
   // modal
-  const [deleteModal, setDeleteModal] = useState(false);
+  const [deactivateModal, setDeactivateModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
 
-  const retrieveClinics = () => {
-    clinicService
-      .getAllClinics()
+  const retrieveUsers = () => {
+    userService
+      .getUsers()
       .then((response) => {
         console.log(response.data);
-        setClinics(response.data);
+        setUsers(response.data);
       })
       .catch((e) => {
         console.log(e);
       });
   };
 
-  useEffect(retrieveClinics, []);
+  useEffect(retrieveUsers, []);
 
   const fields = [
     {
-      key: "name",
-      label: "TÊN PHÒNG KHÁM",
+      key: "userName",
+      label: "Tên đăng nhập",
       _style: { width: "8%" },
     },
-    { key: "address", label: "Địa chỉ" },
-    { key: "phoneNumber", label: "SỐ ĐIỆN THOẠI" },
-    { key: "username", label: "TÀI KHOẢN ADMIN" },
-    { key: "username", label: "TÀI KHOẢN ADMIN" },
+    { key: "fullName", label: "Họ tên" },
+    { key: "roleDescription", label: "NHÓM NGƯỜI DÙNG" },
     { key: "status", label: "Trạng thái" },
     { key: "createdAt", label: "NGÀY TẠO" },
     {
@@ -86,22 +84,22 @@ const ClinicManagement = () => {
 
   const openDeactivateModal = (item) => {
     if (!item.enabled) {
-      alert("Phòng khám đã khóa");
+      alert("Người dùng đã khóa");
     } else {
-      setClinic(item);
-      setDeleteModal(!deleteModal);
+      setUser(item);
+      setDeactivateModal(!deactivateModal);
     }
   };
 
   const openEditModal = (item) => {
     console.log(item);
     setIsEditing(true);
-    setClinic(item);
+    setUser(item);
     setEditModal(!editModal);
   };
 
   const openCreate = (item) => {
-    setClinic(constClinic);
+    setUser(constUser);
     setIsEditing(false);
     setEditModal(!editModal);
   };
@@ -110,7 +108,7 @@ const ClinicManagement = () => {
     <CRow>
       <CCol>
         <CCard>
-          <CCardHeader>Danh sách phòng khám</CCardHeader>
+          <CCardHeader>Danh sách người dùng</CCardHeader>
           <div col="2" class="mb-3 mb-xl-0 col-sm-4 col-md-2 ">
             <CButton
               class="btn btn-primary btn-block"
@@ -122,7 +120,7 @@ const ClinicManagement = () => {
           </div>
           <CCardBody>
             <CDataTable
-              items={clinics}
+              items={users}
               fields={fields}
               columnFilter
               hover
@@ -166,23 +164,23 @@ const ClinicManagement = () => {
           </CCardBody>
         </CCard>
       </CCol>
-      <DeactivateClinicModal
-        modal={deleteModal}
-        onClose={setDeleteModal}
-        clinics={clinics}
-        setClinics={setClinics}
-        clinic={clinic}
+      <DeactivateUserModal
+        modal={deactivateModal}
+        onClose={setDeactivateModal}
+        users={users}
+        setUsers={setUsers}
+        user={user}
       />
-      <EditClinicModal
+      <EditUserModal
         modal={editModal}
         onClose={setEditModal}
-        clinics={clinics}
-        setClinics={setClinics}
-        clinic={clinic}
+        users={users}
+        setUsers={setUsers}
+        user={user}
         isEditing={isEditing}
       />{" "}
     </CRow>
   );
 };
 
-export default ClinicManagement;
+export default UserManagement;

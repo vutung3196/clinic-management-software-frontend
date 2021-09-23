@@ -29,8 +29,6 @@ import {
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { useForm } from "react-hook-form";
-import userService from "../../services/user/user.service";
-import { FormLabel } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import clinicService from "src/services/clinicservice/clinic.service";
@@ -130,15 +128,11 @@ const EditClinicModal = ({
             onClose(false);
           },
           (error) => {
-            if (error.response.data.errors !== undefined) {
-              var a = error.response.data.errors.UserName;
-              var b = error.response.data.errors.Password;
+            if (error.response.data !== undefined) {
+              var a = error.response.data;
               let arr = [];
               if (a !== undefined) {
                 arr.push(a);
-              }
-              if (b !== undefined) {
-                arr.push(b);
               }
               setMessages(arr);
             }
@@ -225,7 +219,7 @@ const EditClinicModal = ({
             </div>
 
             <div>
-              {isEditing === false ? (
+              {!isEditing ? (
                 <TextField
                   id="standard-full-width"
                   value={username}
@@ -244,6 +238,7 @@ const EditClinicModal = ({
                   id="standard-full-width-2"
                   value={username}
                   type="username"
+                  disabled
                   label="Tài khoản admin đăng nhập"
                   readonly
                   style={{ margin: 8 }}

@@ -9,10 +9,13 @@ import "./scss/style.scss";
 import Main from "./containers/pages/Main";
 import Login from "./containers/pages/Login";
 import ClinicManagementPage from "./containers/pages/ClinicManagement";
+import UserManagementPage from "./containers/pages/UserManagement";
+import InformationManagementPage from "./containers/pages/InformationManagement";
 
 import authService from "./services/authentication/auth.service";
 
 import PrivateRoute from "./utils/privateRoute";
+import AdminRoute from "./utils/adminRoute";
 import MasterAdminRoute from "./utils/masterAdminRoute";
 
 const loading = (
@@ -41,6 +44,18 @@ const App = () => {
               )
             }
           />
+          <AdminRoute
+            exact
+            path="/usermanagement"
+            props
+            component={UserManagementPage}
+          ></AdminRoute>
+          <AdminRoute
+            exact
+            path="/informationmanagement"
+            props
+            component={InformationManagementPage}
+          ></AdminRoute>
           <MasterAdminRoute
             exact
             path="/clinicmanagement"
