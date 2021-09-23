@@ -85,8 +85,14 @@ const ClinicManagement = () => {
   };
 
   const openDeactivateModal = (item) => {
-    setClinic(item);
-    setDeleteModal(!deleteModal);
+    console.log("lol");
+    console.log(item);
+    if (!item.enabled) {
+      alert("Phòng khám đã khóa");
+    } else {
+      setClinic(item);
+      setDeleteModal(!deleteModal);
+    }
   };
 
   const openEditModal = (item) => {

@@ -47,8 +47,7 @@ const DeactivateClinicModal = ({
           onClose(false);
         },
         (error) => {
-          console.log("=========");
-          console.log(error.response);
+          console.log(error);
         }
       );
   };
