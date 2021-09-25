@@ -50,6 +50,7 @@ const Login = (props) => {
       },
       (error) => {
         console.log("=========");
+        console.log(error);
         console.log(error.response);
         const resMessage = error.response.data;
         setLoading(false);
