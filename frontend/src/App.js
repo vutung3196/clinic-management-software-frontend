@@ -11,12 +11,14 @@ import Login from "./containers/pages/Login";
 import ClinicManagementPage from "./containers/pages/ClinicManagement";
 import UserManagementPage from "./containers/pages/UserManagement";
 import InformationManagementPage from "./containers/pages/InformationManagement";
+import PatientsPage from "./containers/pages/Patients";
 
 import authService from "./services/authentication/auth.service";
 
 import PrivateRoute from "./utils/privateRoute";
 import AdminRoute from "./utils/adminRoute";
 import MasterAdminRoute from "./utils/masterAdminRoute";
+import ReceptionistRoute from "./utils/receptionistRoute";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -62,6 +64,12 @@ const App = () => {
             props
             component={ClinicManagementPage}
           ></MasterAdminRoute>
+          <ReceptionistRoute
+            exact
+            path="/patients"
+            props
+            component={PatientsPage}
+          ></ReceptionistRoute>
           <PrivateRoute path="/" component={Main}></PrivateRoute>
         </Switch>
       </React.Suspense>

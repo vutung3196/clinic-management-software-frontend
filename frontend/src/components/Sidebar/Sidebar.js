@@ -18,6 +18,7 @@ import CIcon from "@coreui/icons-react";
 import navigation from "../../containers/_nav";
 import adminNavigation from "../../containers/_adminNav";
 import masterAdminNavigation from "../../containers/_masterAdminNav";
+import receptionistNav from "src/containers/_receptionistNav";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,15 @@ const Sidebar = () => {
         ) : AuthService.isAdmin() ? (
           <CCreateElement
             items={adminNavigation}
+            components={{
+              CSidebarNavDropdown,
+              CSidebarNavItem,
+              CSidebarNavTitle,
+            }}
+          />
+        ) : AuthService.isReceptionist() ? (
+          <CCreateElement
+            items={receptionistNav}
             components={{
               CSidebarNavDropdown,
               CSidebarNavItem,

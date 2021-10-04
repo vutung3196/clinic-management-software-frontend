@@ -44,12 +44,21 @@ const authenticated = () => {
 
 const isAdmin = () => {
   var currentUser = getCurrentUser();
-  console.log("show me current user please ");
-  console.log(currentUser);
   if (!currentUser) {
     return false;
   }
   if (currentUser.role === "Admin") {
+    return true;
+  }
+  return false;
+};
+
+const isReceptionist = () => {
+  var currentUser = getCurrentUser();
+  if (!currentUser) {
+    return false;
+  }
+  if (currentUser.role === "Receptionist") {
     return true;
   }
   return false;
@@ -68,6 +77,7 @@ const isMasterAdmin = () => {
   return false;
 };
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   login,
   logout,
@@ -75,4 +85,5 @@ export default {
   authenticated,
   isAdmin,
   isMasterAdmin,
+  isReceptionist,
 };

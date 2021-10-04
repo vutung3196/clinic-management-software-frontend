@@ -26,11 +26,11 @@ import {
   CLabel,
   CAlert,
 } from "@coreui/react";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import { useForm } from "react-hook-form";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 import clinicService from "src/services/clinicservice/clinic.service";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";

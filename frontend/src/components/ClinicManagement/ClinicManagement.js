@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as Icon from "react-bootstrap-icons";
 import CIcon from "@coreui/icons-react";
-import authService from "../../services/authentication/auth.service";
 import {
   CCard,
   CCardBody,
