@@ -26,7 +26,7 @@ import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import Autocomplete from "@mui/material/Autocomplete";
 
-const PatientCreateModal = ({
+const PatientCreateOrEditModal = ({
   modal,
   onClose,
   patients,
@@ -1336,7 +1336,7 @@ const PatientCreateModal = ({
               />
             </Grid>
             <Grid item xs={12} sm={7}>
-              <Autocomplete
+              {/* <Autocomplete
                 options={top100Films}
                 getOptionLabel={(option) => option.name}
                 // onChange={this.onTagsChange}
@@ -1353,8 +1353,8 @@ const PatientCreateModal = ({
                     fullWidth
                   />
                 )}
-              />
-              {/* <TextField
+              /> */}
+              <TextField
                 id="zip"
                 name="zip"
                 label="Thành phố"
@@ -1362,7 +1362,7 @@ const PatientCreateModal = ({
                 variant="standard"
                 value={addressCity}
                 onChange={(e) => setAddressCity(e.target.value)}
-              /> */}
+              />
             </Grid>
             <Grid item xs={12} sm={12}>
               <TextField
@@ -1401,4 +1401,4 @@ const PatientCreateModal = ({
   );
 };
 
-export default PatientCreateModal;
+export default PatientCreateOrEditModal;

@@ -8,14 +8,14 @@ import {
   CDataTable,
   CRow,
   CButton,
-  CDropdownItem as option,
   CCollapse,
 } from "@coreui/react";
 
 import CIcon from "@coreui/icons-react";
 import * as Icon from "react-bootstrap-icons";
-import PatientCreateModal from "./PatientCreateModal";
+import PatientCreateOrEditModal from "./PatientCreateOrEditModal";
 import PatientDeleteModal from "./PatientDeleteModal";
+import CreateVisitingDoctorFormAndPaymentModal from "./CreateVisitingDoctorFormAndPaymentModal";
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
@@ -26,12 +26,8 @@ const Patients = () => {
 
   const [detailedModal, setDetailedModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [prescriptionModal, setPresciptionModal] = useState(false);
-  const [prescriptionsHistory, setPrescriptionHistory] = useState([]);
-  const [patientProfile, setPatientProfile] = useState("");
-  const [profileModal, setProfileModal] = useState(false);
-  const [diseaseStages, setDiseaseStages] = useState([]);
+  const [doctorVisitingFormModal, setDoctorVisitingFormModal] = useState(false);
+
   const constPatient = {
     id: 1,
     fullName: "",
@@ -60,6 +56,11 @@ const Patients = () => {
     setPatient(patient);
     setIsEditing(true);
     setCreateModal(!createModal);
+  };
+
+  const toggleDoctorVisitingForm = (patient) => {
+    setPatient(patient);
+    setDoctorVisitingFormModal(!doctorVisitingFormModal);
   };
 
   const toggleDelete = (patientId) => {
@@ -93,6 +94,14 @@ const Patients = () => {
     return params;
   };
 
+  const handleOpenDoctorVisitingFormModal = (patient) => {
+    setPatient(patient);
+    setDoctorVisitingFormModal(true);
+    console.log("================");
+  };
+  const handleCloseDoctorVisitingFormModal = () =>
+    setDoctorVisitingFormModal(false);
+
   const retrievePatients = () => {
     PatientService.getPatients()
       .then((response) => {
@@ -115,7 +124,7 @@ const Patients = () => {
     { key: "addressCity", label: "ĐỊA CHỈ (TỈNH)" },
     { key: "createdAt", label: "NGÀY TẠO" },
     {
-      key: "profile",
+      key: "doctorvisitingform",
       label: "TẠO PHIẾU KHÁM",
       _style: { width: "4%" },
       sorter: false,
@@ -166,7 +175,7 @@ const Patients = () => {
                 sorter
                 pagination
                 scopedSlots={{
-                  profile: (item) => {
+                  doctorvisitingform: (patient) => {
                     return (
                       <td className="py-2">
                         <Icon.PersonBadge
@@ -174,23 +183,9 @@ const Patients = () => {
                           size="22"
                           style={cursorPointerStyle}
                           onClick={() => {
-                            toggleProfile(item);
+                            handleOpenDoctorVisitingFormModal(patient);
                           }}
                         />
-                      </td>
-                    );
-                  },
-                  clinic_specific_examination: (item) => {
-                    return (
-                      <td className="py-2">
-                        <CButton
-                          color="primary"
-                          variant="outline"
-                          shape="square"
-                          size="sm"
-                        >
-                          PCĐ
-                        </CButton>
                       </td>
                     );
                   },
@@ -250,13 +245,18 @@ const Patients = () => {
         onClose={setDeleteModal}
         patients={patients}
       />
-      <PatientCreateModal
+      <PatientCreateOrEditModal
         modal={createModal}
         onClose={setCreateModal}
         patients={patients}
         setPatients={setPatients}
         patient={patient}
         isEditing={isEditing}
+      />
+      <CreateVisitingDoctorFormAndPaymentModal
+        open={doctorVisitingFormModal}
+        onClose={handleCloseDoctorVisitingFormModal}
+        patient={patient}
       />
     </>
   );

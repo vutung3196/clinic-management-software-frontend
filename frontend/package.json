@@ -36,6 +36,7 @@
     "@material-ui/pickers": "^3.3.10",
     "@mui/lab": "^5.0.0-alpha.49",
     "@mui/material": "^5.0.2",
+    "@mui/x-data-grid": "^4.0.1",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.0",
     "axios": "^0.21.4",
     "classnames": "^2.2.6",
