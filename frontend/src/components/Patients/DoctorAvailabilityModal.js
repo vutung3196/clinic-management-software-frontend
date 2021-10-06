@@ -19,30 +19,43 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import patientdoctorvisitingformService from "src/services/patientdoctorvisitingform/patientdoctorvisitingform.service";
 
-const DoctorAvailabilityModal = ({ open, id, onClose }) => {
+const DoctorAvailabilityModal = ({
+  open,
+  id,
+  onClose,
+  setDoctorName,
+  setDoctorId,
+}) => {
   const theme = createTheme();
+
+  const [doctorAvalabilities, setDoctorAvailabilities] = React.useState([]);
 
   function createData(name, status) {
     return { name, status };
   }
 
-  const doctors = [
-    createData("Doctor 1", "Đang tiếp nhận 1 bệnh nhân"),
-    createData("Doctor 1", "Đang tiếp nhận 1 bệnh nhân"),
-    createData("Doctor 1", "Đang tiếp nhận 1 bệnh nhân"),
-    createData("Doctor 1", "Đang tiếp nhận 1 bệnh nhân"),
-    createData("Doctor 1", "Đang tiếp nhận 1 bệnh nhân"),
-    createData("Doctor 1", "Đang tiếp nhận 1 bệnh nhân"),
-    createData("Doctor 1", "Đang tiếp nhận 1 bệnh nhân"),
-  ];
+  const retrieveDoctorAvailablities = () => {
+    patientdoctorvisitingformService
+      .getDoctorAvailabilities()
+      .then((response) => {
+        setDoctorAvailabilities(response.data);
+      })
+      .catch((e) => {
+        setDoctorAvailabilities([]);
+        console.log(e);
+      });
+  };
+
+  React.useEffect(retrieveDoctorAvailablities, []);
 
   const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 1000,
+    width: 700,
     bgcolor: "background.paper",
     p: 4,
     height: 600,
@@ -50,6 +63,8 @@ const DoctorAvailabilityModal = ({ open, id, onClose }) => {
   };
 
   const selectDoctor = (row) => {
+    setDoctorName(row.doctorName);
+    setDoctorId(row.doctorId);
     console.log(row);
     onClose(true);
   };
@@ -65,27 +80,32 @@ const DoctorAvailabilityModal = ({ open, id, onClose }) => {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Danh sách bác sĩ
         </Typography>
-        <Paper sx={{ width: "100%", overflowX: "auto" }}>
+        <Paper sx={{ width: "100%" }}>
           <TableContainer>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
                   <TableCell>Họ và tên</TableCell>
-                  <TableCell align="right">Trạng thái</TableCell>
+                  <TableCell>Trạng thái</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {doctors.map((row) => (
+                {doctorAvalabilities.map((row) => (
                   <TableRow
                     key={row.name}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      cursor: "pointer",
+                    }}
                     hover
                     onClick={() => selectDoctor(row)}
                   >
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {row.doctorName}
                     </TableCell>
-                    <TableCell align="right">{row.status}</TableCell>
+                    <TableCell>
+                      {"Đang tiếp nhận " + row.patientNumber + " bệnh nhân"}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

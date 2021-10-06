@@ -19,6 +19,8 @@ import PrivateRoute from "./utils/privateRoute";
 import AdminRoute from "./utils/adminRoute";
 import MasterAdminRoute from "./utils/masterAdminRoute";
 import ReceptionistRoute from "./utils/receptionistRoute";
+import SingleReceiptPage from "./utils/singleReceiptPage";
+import SingleDoctorVisitingFormPage from "./utils/singleDoctorVisitingFormPage";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -70,6 +72,14 @@ const App = () => {
             props
             component={PatientsPage}
           ></ReceptionistRoute>
+          <PrivateRoute
+            path="/receipt/:id"
+            component={SingleReceiptPage}
+          ></PrivateRoute>
+          <PrivateRoute
+            path="/doctorvisitingform/:id"
+            component={SingleDoctorVisitingFormPage}
+          ></PrivateRoute>
           <PrivateRoute path="/" component={Main}></PrivateRoute>
         </Switch>
       </React.Suspense>

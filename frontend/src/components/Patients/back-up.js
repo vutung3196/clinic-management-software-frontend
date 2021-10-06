@@ -24,97 +24,28 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import VisitingDoctorFirstStep from "./VisitingDoctorFirstStep";
 import VisitingDoctorSecondStep from "./VisitingDoctorSecondStep";
 import Modal from "@mui/material/Modal";
-import { useForm } from "react-hook-form";
-import medicalService from "src/services/medicalservice/medical.service";
-import patientdoctorvisitingformService from "src/services/patientdoctorvisitingform/patientdoctorvisitingform.service";
 
 const CreateVisitingDoctorFormAndPaymentModal = ({
   open,
   patient,
   onClose,
-  setOpenSuccessModal,
 }) => {
-  const { register, handleSubmit, errors, formState } = useForm({
-    mode: "all",
-  });
+  const handleCreate = (patientId) => {
+    console.log("let's smile please, everybody think you are approachable");
+  };
+
+  let formRef = React.createRef();
 
   const [doctorId, setDoctorId] = React.useState(0);
   const [doctorName, setDoctorName] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [description, setDescription] = React.useState("zzz");
   const [paymentDescription, setPaymentDescription] = React.useState("");
-  const [visitingFormCode, setVisitingFormCode] = React.useState("");
-  const [paymentCode, setPaymentCode] = React.useState("");
-  const [medicalServices, setMedicalServices] = React.useState([]);
-  const [total, setTotal] = React.useState(0);
-  // const [formState, setFormState] = React.useState({});
+  const [formState, setFormState] = React.useState({});
 
   const [steps, setSteps] = React.useState([
     "Shipping address",
     "Review your order",
   ]);
-
-  const handleCreate = () => {
-    setOpenSuccessModal(true);
-    patientdoctorvisitingformService
-      .create(
-        visitingFormCode,
-        description,
-        doctorId,
-        paymentDescription,
-        patient.id,
-        paymentCode
-      )
-      .then(
-        (response) => {
-          console.log(response);
-          onClose(false);
-        },
-        (error) => {
-          console.log("=========");
-          console.log(error.response.data.errors);
-          if (error.response.data.errors !== undefined) {
-            var a = error.response.data.errors.EmailAddress;
-            var b = error.response.data.errors.FullName;
-            let arr = [];
-            if (a !== undefined) {
-              arr.push(a);
-            }
-            if (b !== undefined) {
-              arr.push(b);
-            }
-            // setMessages(arr);
-          }
-        }
-      );
-  };
-
-  const retrieveMedicalServices = () => {
-    medicalService
-      .getDoctorVisitingFormMedicalService()
-      .then((response) => {
-        var arr = [];
-        arr.push(response.data);
-        setMedicalServices(arr);
-        setTotal(response.data.total);
-      })
-      .catch((e) => {
-        setMedicalServices([]);
-        console.log(e);
-      });
-  };
-
-  const closeModal = () => {
-    onClose(!open);
-  };
-
-  React.useEffect(() => {
-    var currentMillis = new Date().getUTCMilliseconds();
-    setVisitingFormCode(
-      "PK" + patient.id.toString() + currentMillis.toString()
-    );
-    setPaymentCode("PT" + patient.id.toString() + currentMillis.toString());
-    retrieveMedicalServices();
-  }, [patient.id]);
 
   const theme = createTheme();
 
@@ -122,9 +53,31 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
   const myForm = React.useRef(null);
 
   const handleNext = () => {
-    // console.log(myForm.current.checkValidity());
+    console.log("==============");
+    console.log(myForm.current);
+    console.log("==============");
+    console.log(myForm.current.checkValidity());
+    if (myForm.current.checkValidity() === false) {
+      console.log(myForm.current);
+
+      return;
+    }
     setStep(step + 1);
   };
+
+  //   const handleNext = () => {
+  //     if (!myForm.current.checkValidity()) {
+  //        return;
+  //     }
+  //     let newSkipped = skipped;
+  //     if (isStepSkipped(activeStep)) {
+  //         newSkipped = new Set(newSkipped.values());
+  //         newSkipped.delete(activeStep);
+  //     }
+
+  //     setActiveStep(prevActiveStep => prevActiveStep + 1);
+  //     setSkipped(newSkipped);
+  // };
 
   const handleBack = () => {
     setStep(step - 1);
@@ -138,24 +91,10 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
             patient={patient}
             description={description}
             setDescription={setDescription}
-            doctorId={doctorId}
-            doctorName={doctorName}
-            setDoctorName={setDoctorName}
-            setDoctorId={setDoctorId}
-            visitingFormCode={visitingFormCode}
           />
         );
       case 1:
-        return (
-          <VisitingDoctorSecondStep
-            patient={patient}
-            paymentDescription={paymentDescription}
-            setPaymentDescription={setPaymentDescription}
-            medicalServices={medicalServices}
-            total={total}
-            paymentCode={paymentCode}
-          />
-        );
+        return <VisitingDoctorSecondStep patient={patient} />;
       default:
         throw new Error("Unknown step");
     }
@@ -185,11 +124,7 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
             >
               <React.Fragment>
                 <React.Fragment>
-                  <form
-                    ref={myForm}
-                    onSubmit={handleSubmit(handleCreate)}
-                    novalidate
-                  >
+                  <form action="/" method="POST" ref={myForm}>
                     {getStepContent(step)}
                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                       {step !== 0 && (
@@ -200,25 +135,14 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
                       {step === steps.length - 1 ? (
                         <Button
                           variant="contained"
-                          // type="submit"
-                          onClick={handleCreate}
+                          onClick={handleNext}
                           sx={{ mt: 3, ml: 1 }}
                         >
                           LƯU VÀ IN
                         </Button>
-                      ) : description === "" || doctorName === "" ? (
-                        <Button
-                          variant="contained"
-                          disabled="true"
-                          onClick={handleNext}
-                          sx={{ mt: 3, ml: 1 }}
-                        >
-                          TIẾP THEO
-                        </Button>
                       ) : (
                         <Button
                           variant="contained"
-                          // disabled="false"
                           onClick={handleNext}
                           sx={{ mt: 3, ml: 1 }}
                         >

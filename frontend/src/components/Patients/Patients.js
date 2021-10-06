@@ -16,6 +16,12 @@ import * as Icon from "react-bootstrap-icons";
 import PatientCreateOrEditModal from "./PatientCreateOrEditModal";
 import PatientDeleteModal from "./PatientDeleteModal";
 import CreateVisitingDoctorFormAndPaymentModal from "./CreateVisitingDoctorFormAndPaymentModal";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
@@ -27,7 +33,15 @@ const Patients = () => {
   const [detailedModal, setDetailedModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [doctorVisitingFormModal, setDoctorVisitingFormModal] = useState(false);
+  const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSuccessModal(false);
+  };
   const constPatient = {
     id: 1,
     fullName: "",
@@ -257,7 +271,17 @@ const Patients = () => {
         open={doctorVisitingFormModal}
         onClose={handleCloseDoctorVisitingFormModal}
         patient={patient}
+        setOpenSuccessModal={setOpenSuccessModal}
       />
+      <Snackbar
+        open={openSuccessModal}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          Tạo phiếu khám thành công
+        </Alert>
+      </Snackbar>
     </>
   );
 };

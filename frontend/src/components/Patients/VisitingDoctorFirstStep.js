@@ -2,12 +2,19 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import DoctorAvailabilityModal from "./DoctorAvailabilityModal";
 
-const AddressForm = (props) => {
+const VisitingDoctorFirstStep = ({
+  patient,
+  description,
+  setDescription,
+  doctorId,
+  setDoctorId,
+  doctorName,
+  setDoctorName,
+  visitingFormCode,
+}) => {
   const [doctorVisitingFormModal, setDoctorVisitingFormModal] =
     React.useState(false);
 
@@ -15,16 +22,17 @@ const AddressForm = (props) => {
     setDoctorVisitingFormModal(true);
     console.log("================");
   };
+
   const handleCloseDoctorVisitingFormModal = () =>
     setDoctorVisitingFormModal(false);
 
-  //   const toggleDelete = () => {
-  //     setDeleteModal(!deleteModal);
-  //   };
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-        Mã phiếu: PK123456
+      <Typography component="h1" variant="h4" align="center">
+        Phiếu khám
+      </Typography>
+      <Typography component="h6" align="center">
+        Mã phiếu: {visitingFormCode}
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -35,11 +43,8 @@ const AddressForm = (props) => {
             fullWidth
             autoComplete="given-name"
             variant="standard"
-            value={props.patient.fullName}
+            value={patient.fullName}
             readonly
-            // InputLabelProps={{
-            //   shrink: true,
-            // }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -50,7 +55,7 @@ const AddressForm = (props) => {
             fullWidth
             autoComplete="family-name"
             variant="standard"
-            value={props.patient.dateOfBirthDetail}
+            value={patient.dateOfBirthDetail}
             readonly
           />
         </Grid>
@@ -61,7 +66,7 @@ const AddressForm = (props) => {
             label="Giới tính"
             fullWidth
             variant="standard"
-            value={props.patient.gender}
+            value={patient.gender}
             readonly
           />
         </Grid>
@@ -72,7 +77,7 @@ const AddressForm = (props) => {
             label="Điện thoại"
             fullWidth
             variant="standard"
-            value={props.patient.phoneNumber}
+            value={patient.phoneNumber}
             readonly
           />
         </Grid>
@@ -83,7 +88,7 @@ const AddressForm = (props) => {
             label="Số nhà"
             fullWidth
             variant="standard"
-            value={props.patient.addressDetail}
+            value={patient.addressDetail}
             readonly
           />
         </Grid>
@@ -94,7 +99,7 @@ const AddressForm = (props) => {
             label="Đường, phố"
             fullWidth
             variant="standard"
-            value={props.patient.addressStreet}
+            value={patient.addressStreet}
             readonly
           />
         </Grid>
@@ -105,7 +110,7 @@ const AddressForm = (props) => {
             label="Quận, huyện"
             fullWidth
             variant="standard"
-            value={props.patient.addressDistrict}
+            value={patient.addressDistrict}
             readonly
           />
         </Grid>
@@ -116,7 +121,7 @@ const AddressForm = (props) => {
             label="Thành phố"
             fullWidth
             variant="standard"
-            value={props.patient.addressCity}
+            value={patient.addressCity}
             readonly
           />
         </Grid>
@@ -127,19 +132,32 @@ const AddressForm = (props) => {
             fullWidth
             autoComplete="shipping country"
             variant="standard"
-            value={props.patient.medicalInsuranceCode}
+            value={patient.medicalInsuranceCode}
             readonly
           />
         </Grid>
         <Grid item xs={12}>
-          <TextareaAutosize
+          <TextField
+            id="country"
+            name="country"
+            required
+            fullWidth
+            variant="standard"
+            label="Lý do khám"
+            value={description}
+            placeholder="Lý do khám"
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          {/* <TextareaAutosize
             aria-label="empty textarea"
             minRows={3}
             required
-            label="Lý do khám"
+            label="Lý do khám (bắt buộc)"
+            value={visitReason}
             placeholder="Lý do khám"
+            onChange={(e) => onChangeVisitReason(e.target.value)}
             style={{ width: 300 }}
-          />
+          /> */}
         </Grid>
         <Grid item xs={12}>
           <TextField
@@ -149,25 +167,20 @@ const AddressForm = (props) => {
             label="Bác sĩ khám: "
             fullWidth
             variant="standard"
-            value="John Doe 1"
+            value={doctorName}
+            placeholder="Lý do khám"
             onClick={() => handleOpenDoctorVisitingFormModal()}
           />
         </Grid>
-        {/* <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox color="secondary" name="saveAddress" value="yes" />
-            }
-            label="Use this address for payment details"
-          />
-        </Grid> */}
       </Grid>
       <DoctorAvailabilityModal
         open={doctorVisitingFormModal}
         onClose={handleCloseDoctorVisitingFormModal}
+        setDoctorName={setDoctorName}
+        setDoctorId={setDoctorId}
       />
     </React.Fragment>
   );
 };
 
-export default AddressForm;
+export default VisitingDoctorFirstStep;

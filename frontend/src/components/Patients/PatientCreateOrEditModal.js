@@ -1126,7 +1126,7 @@ const PatientCreateOrEditModal = ({
     console.log("ahahahha");
   };
 
-  const handleCreate = (event) => {
+  const handleCreate = () => {
     if (isEditing === false) {
       PatientService.addPatient(
         fullName,
@@ -1154,7 +1154,6 @@ const PatientCreateOrEditModal = ({
           console.log("=========");
           console.log(error.response.data.errors);
           if (error.response.data.errors !== undefined) {
-            console.log("Error !!!!");
             var a = error.response.data.errors.EmailAddress;
             var b = error.response.data.errors.FullName;
             let arr = [];
