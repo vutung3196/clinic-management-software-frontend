@@ -1,98 +1,52 @@
-import prescriptionService from "../../../services/prescription/prescription.service";
-import patientService from "../../../services/patient/patient.service";
 import { useState, useEffect } from "react";
-import jsPDF from "jspdf";
+import patientdoctorvisitingformService from "src/services/patientdoctorvisitingform/patientdoctorvisitingform.service";
 import * as Icon from "react-bootstrap-icons";
 import { CTooltip } from "@coreui/react";
-import clinicService from "src/services/clinicservice/clinic.service";
-import authService from "src/services/authentication/auth.service";
-
-const style1 = {
-  display: "none",
-};
-
-const style2 = {
-  "text-align": "center",
-};
-
-const style3 = {
-  padding: "5px 0 5px",
-  overflow: "auto",
-};
-
-const style4 = {
-  width: "100%",
-};
-
-const style5 = {
-  width: "80px",
-};
-
-const style6 = {
-  float: "left",
-};
-
-const style20 = {
-  width: "100%",
-};
-
-const style7 = {
-  width: "65%",
-};
-
-const style8 = {
-  width: "35%",
-};
-
-const style9 = {
-  "text-align": "left",
-};
-
-const style10 = {
-  "line-height": "0.3",
-};
-
-const style11 = {
-  float: "right",
-  width: "30%",
-};
-
-const style12 = {
-  "white-space": "nowrap",
-};
-
-const style13 = {
-  "border-top": "1px solid #ccc",
-};
-
-const style14 = {
-  width: "900px",
-};
 
 const SingleDoctorVisitingFormPage = (props) => {
-  const retrieveClinicInformation = () => {
-    var currentUser = authService.getCurrentUser();
-    console.log("=====");
-    console.log(currentUser);
-    clinicService
-      .getClinicInformation(currentUser.clinicId)
-      .then((response) => {
-        var clinic = response.data;
-        setClinicName(clinic.name);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const init = {
+    id: 9,
+    code: "PK7489",
+    description: "Xam xam",
+    visitingStatus: 1,
+    visitingStatusDisplayed: "Đang chờ khám",
+    patientInformation: {
+      id: 1,
+      clinicId: 1,
+      fullName: "John Doe 1",
+      emailAddress: "tungvu3196@gmail.com",
+      phoneNumber: "84912068946",
+      gender: "Nữ",
+      createdAt: "09/25/2021",
+      updatedAt: "09/25/2021",
+      addressDetail: "59/102",
+      addressCity: "Thành phố Hà Nội",
+      addressStreet: "Truong Chinh",
+      addressDistrict: "Dong Da",
+      dateOfBirth: "2018-10-04T09:00:55",
+      dateOfBirthDetail: "10/04/2018",
+      age: 3,
+      medicalInsuranceCode: "03123213123",
+    },
+    doctorName: "Doctor 1",
+    doctorId: 6,
+    clinicInformation: {
+      id: 0,
+      name: "Ha pham",
+      emailAddress: null,
+      phoneNumber: "+84912068946",
+      address: "Hà Nội",
+      description: null,
+    },
   };
-  const a = { day: 1, month: 1, year: 1 };
-  const [prescription, setPrescription] = useState("");
-  const [patient, setPatient] = useState("");
+  const [visitingForm, setVisitingForm] = useState(init);
   const [date, setDate] = useState("");
-  const [clinicName, setClinicName] = useState("");
 
   useEffect(() => {
-    prescriptionService.getPrescription(props.match.params.id).then(
+    patientdoctorvisitingformService.getById(props.match.params.id).then(
       (response) => {
+        setVisitingForm(response.data);
+        console.log(response.data);
         var arr = response.data.createdAt.split("/");
         var date = {
           day: arr[1],
@@ -100,220 +54,404 @@ const SingleDoctorVisitingFormPage = (props) => {
           year: arr[2],
         };
         setDate(date);
-        setPrescription(response.data);
       },
       (error) => {
         console.log(error.response);
       }
     );
-
-    retrieveClinicInformation();
-    patientService.getPatient(props.match.params.patientId).then(
-      (response) => {
-        if (response.data.gender === "Male") {
-          response.data.gender = "Nam";
-        } else {
-          response.data.gender = "Nữ";
-        }
-        setPatient(response.data);
-      },
-      (error) => {
-        console.log("=========");
-        // console.log(error.response);
-        // const resMessage = error.response.data;
-      }
-    );
   }, []);
 
-  const style30 = {
-    "padding-bottom": "5px",
-  };
+  function isMedication(element) {
+    return element.isMedication === true;
+  }
 
-  const testPrint = () => {
-    var pdf = new jsPDF("p", "pt", "letter");
-    var source = window.document.getElementsByTagName("body")[0];
-    pdf.html(source, function () {
-      pdf.save("Test.pdf");
-    });
-    console.log(121323);
-    pdf.save("Test.pdf");
-  };
-
-  const style31 = {
-    "text-align": "center",
-    "font-size": "16px",
-    "font-weight": "bold",
-  };
-
-  const style32 = {
-    "text-align": "center",
-  };
-
-  const style33 = {
-    width: "100%",
-  };
-
-  const style34 = {
-    float: "left",
-  };
-
-  const style35 = {
-    float: "right",
-    width: "30%",
-  };
-
-  const style36 = {
-    width: "65%",
-  };
-
-  const style37 = {
-    width: "35%",
-  };
-
-  const style38 = {
-    "font-size": "90%",
-  };
-
-  const style39 = {
-    "white-space": "nowrap",
-  };
-
-  const style40 = {
-    "border-top": "1px solid #ccc",
-  };
+  function isService(element) {
+    return element.isMedication === false;
+  }
 
   const print = () => {
     window.print();
   };
 
   return (
-    <html>
-      <head></head>
-      <body data-new-gr-c-s-check-loaded="14.1019.0" data-gr-ext-installed="">
-        <div id="StayFocusd-infobar" style={style1}>
+    <html lang="vi" class="js-focus-visible" data-js-focus-visible="">
+      <title>Hóa đơn [11732]</title>
+      <body data-new-gr-c-s-check-loaded="14.1022.0" data-gr-ext-installed="">
+        <div
+          id="StayFocusd-infobar"
+          style={{
+            display: "none",
+            top: "0px",
+          }}
+        >
           <span id="StayFocusd-infobar-msg"></span>
-          <span id="StayFocusd-infobar-links"></span>
+          <span id="StayFocusd-infobar-links">
+            <a id="StayFocusd-infobar-never-show">hide forever</a>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a id="StayFocusd-infobar-hide">hide once</a>
+          </span>
         </div>
-        <div class="view-c0-single">
-          <div class="view-c1-single">
+        <div
+          class="view-c0"
+          style={{
+            "text-rendering": "auto",
+            "-webkit-font-smoothing": "antialiased",
+            "font-family": "-apple-system,BlinkMacSystemFont",
+            "text-align": "left",
+            color: "#000",
+            "line-height": 2,
+            "font-size": "13px",
+            width: "800px",
+            margin: "0 auto",
+          }}
+        >
+          <div
+            class="view-c1"
+            style={{
+              "text-rendering": "auto",
+              "-webkit-font-smoothing": "antialiased",
+              "font-family": "Segoe UI",
+              "text-align": "left",
+              color: "#000",
+              "line-height": "2",
+              "font-size": "13px",
+              "box-sizing": "border-box",
+              background: "#fff",
+              padding: "20px",
+              "margin-bottom": "20px",
+              "box-shadow": "2px 3px 3px #888",
+              "border-top": "1px solid #ddd",
+              "border-left": "1px solid #ddd",
+            }}
+          >
             <div class="dochead2">
-              <div style={style10}>
-                <p>Địa chỉ: 123 Đường số 5, Q6, Tp. HCM</p>
-                <p>Điện thoại: 1900 11111</p>
+              <div style={{ "line-height": "0.3" }}>
+                <p>
+                  Tên đơn vị: Phòng khám {visitingForm.clinicInformation.name}
+                </p>
+                <p>Địa chỉ: {visitingForm.clinicInformation.address}</p>
+                <p>Điện thoại: {visitingForm.clinicInformation.phoneNumber}</p>
               </div>
             </div>
-            <div>
+            <div style={{ "text-align": "center" }}>
               <div
-                class="prescription-style"
-                onClick={() => {
-                  testPrint();
+                style={{
+                  "font-size": "20px",
+                  "font-weight": "bold",
+                  color: "#3E7770",
+                  "text-transform": "uppercase",
                 }}
               >
-                Đơn thuốc
+                Phiếu khám
               </div>
-              <div style={style2}>
-                Mã số: {prescription.patientPrescriptionCode}
-              </div>
+              <div>Mã số: {visitingForm.code} </div>
             </div>
-            <div style={style3}>
-              <table class="tab_table" style={style4}>
+            <div style={{ padding: "15px 0 5px", overflow: "auto" }}>
+              <div style={{ "font-weight": "bold" }}>Thông tin bệnh nhân</div>
+              <table class="tab_table" style={{ width: "100%", padding: 0 }}>
                 <tbody>
                   <tr>
-                    <td style={style5}>Họ tên</td>
-                    <td class="s">:</td>
+                    <td
+                      style={{
+                        width: "80px",
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Họ tên
+                    </td>
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
                     <td>
-                      <strong>{patient.fullName}</strong>
+                      <strong>
+                        {visitingForm.patientInformation.fullName}
+                      </strong>
                     </td>
-                    <td style={style5}>Năm sinh</td>
-                    <td class="s">:</td>
-                    <td>{patient.yearOfBirth}</td>
-                  </tr>
-                  <tr>
-                    <td>Điện thoại</td>
-                    <td class="s">:</td>
-                    <td>{patient.phoneNumber}</td>
-                    <td>Giới tính</td>
-                    <td class="s">:</td>
-                    <td>{patient.gender}</td>
-                  </tr>
-                  <tr>
-                    <td valign="top">Lý do khám</td>
-                    <td class="s" valign="top">
+                    <td
+                      style={{
+                        width: "80px",
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Tuổi
+                    </td>
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
                       :
                     </td>
-                    <td colspan="4" valign="top">
-                      {prescription.visitReason}
+                    <td
+                      style={{
+                        width: "80px",
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {visitingForm.patientInformation.age}
                     </td>
                   </tr>
                   <tr>
-                    <td valign="top">Chẩn đoán</td>
-                    <td class="s" valign="top">
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Điện thoại
+                    </td>
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
                       :
                     </td>
-                    <td colspan="4" valign="top">
-                      {prescription.diagnosedDescription}
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {visitingForm.patientInformation.phoneNumber}
+                    </td>
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Giới tính
+                    </td>
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {visitingForm.patientInformation.gender}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Địa chỉ
+                    </td>
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {visitingForm.patientInformation.addressCity}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Mã số thẻ BHYT (nếu có)
+                    </td>
+                    <td
+                      class="s"
+                      valign="top"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      colspan="4"
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {visitingForm.patientInformation.medicalInsuranceCode}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Lý do khám
+                    </td>
+                    <td
+                      class="s"
+                      valign="top"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      colspan="4"
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {visitingForm.description}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Bác sĩ khám
+                    </td>
+                    <td
+                      class="s"
+                      valign="top"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      colspan="4"
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {visitingForm.doctorName}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Trạng thái
+                    </td>
+                    <td
+                      class="s"
+                      valign="top"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      colspan="4"
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {visitingForm.visitingStatusDisplayed}
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div class="presc-ck"></div>
-            <table class="tab_table print_drugtable border-td2" style={style4}>
-              <colgroup>
-                <col width="30px" />
-                <col />
-                <col width="200px" />
-              </colgroup>
-              <tbody>
-                {prescription.medicationInformation !== undefined
-                  ? prescription.medicationInformation.map((entry, index) => (
-                      <tr>
-                        <td align="center" valign="top">
-                          {index + 1}.
-                        </td>
-                        <td align="left" valign="top">
-                          <div style={style6}>
-                            <strong>{entry.name}</strong>
-                            <div>{entry.usage}</div>
-                          </div>
-                          <div style={style11}>
-                            Số lượng: <strong>{entry.number}</strong> viên
-                          </div>
-                          <div class="clear"></div>
-                        </td>
-                      </tr>
-                    ))
-                  : ""}
-              </tbody>
-            </table>
-            <div class="ioc66_foot" style={style20}>
-              <div class="l" style={style7}>
-                <div>
-                  <strong>Lời dặn:</strong>
-                  <div style={style30}>- {prescription.doctorSuggestion}</div>
-                </div>
-                <div>
-                  <strong>Ngày tái khám</strong>: {prescription.revisitDate}
-                </div>
-              </div>
-              <div class="r" style={style8}>
-                <div class="d">
-                  Ngày {date.day} Tháng {date.month} Năm {date.year}
-                </div>
-                <div class="p">Bác sĩ</div>
-                <div class="b" style={style12}>
-                  Hà Phạm Clinic
-                </div>
+            <div style={{ padding: "15px 0 15px", overflow: "auto" }}>
+              <div style={{ float: "right" }}>
+                <span style={{ "text-transform": "capitalize" }}>
+                  {" "}
+                  Ngày {date.day} tháng {date.month} năm {date.year}
+                </span>
               </div>
               <div class="clear"></div>
             </div>
-            <div class="clear"></div>
-            <div style={style13}>
-              <div style={style9}>
-                Theo dõi tác dụng thuốc/ hẹn tái khám.
+            <div
+              style={{
+                padding: "15px 30px 0 30px",
+                "text-align": "center",
+                "font-weight": "bold",
+              }}
+            >
+              <div style={{ float: "left" }}>Bệnh nhân</div>
+              <div style={{ float: "right" }}>
+                Người lập
                 <br />
-                Gọi BÁC SĨ 1900 11111
+                <br />
+                <br />
+                <br />
               </div>
+              <div class="clear"></div>
             </div>
           </div>
         </div>
@@ -336,4 +474,5 @@ const SingleDoctorVisitingFormPage = (props) => {
     </html>
   );
 };
+
 export default SingleDoctorVisitingFormPage;

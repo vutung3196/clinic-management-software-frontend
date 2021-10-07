@@ -1,42 +1,67 @@
 import { useState, useEffect } from "react";
-import billService from "src/services/bill/bill.service";
+import receiptService from "src/services/receipt/receipt.service";
 import * as Icon from "react-bootstrap-icons";
 import { CTooltip } from "@coreui/react";
 
 const SingleReceiptPage = (props) => {
   const init = {
-    id: 1,
+    id: 2,
     patientInformation: {
+      id: 1,
       clinicId: 1,
-      fullName: "Tung dasVu",
+      fullName: "John Doe 1",
       emailAddress: "tungvu3196@gmail.com",
-      phoneNumber: "312313123131",
-      occupation: "SWE",
-      gender: "Male",
-      isDeleted: 0,
-      patientCode: null,
-      createdAt: "06/23/2021",
-      updatedAt: "06/23/2021",
-      deletedAt: null,
-      addressCity: "Hanoi3",
-      detailedAddress: "Hanoi2333dasdadadad",
-      yearOfBirth: 1996,
-      age: 25,
-      id: 46,
+      phoneNumber: "84912068946",
+      gender: "Nữ",
+      createdAt: "09/25/2021",
+      updatedAt: "09/25/2021",
+      addressDetail: "59/102",
+      addressCity: "Thành phố Hà Nội",
+      addressStreet: "Truong Chinh",
+      addressDistrict: "Dong Da",
+      dateOfBirth: "2018-10-04T09:00:55",
+      dateOfBirthDetail: "10/04/2018",
+      age: 3,
+      medicalInsuranceCode: "03123213123",
     },
-    patientShortInformation: "",
-    billCode: "HĐ20217221644",
-    total: 100000,
-    description: "mua thuốc",
-    createdAt: "07/18/2021",
-    clinicServiceBills: [],
+    clinicInformation: {
+      id: 0,
+      name: "Ha pham",
+      emailAddress: null,
+      phoneNumber: "+84912068946",
+      address: "Hà Nội",
+      description: null,
+    },
+    code: "PT123231313",
+    total: 50000.0,
+    totalDisplayed: "50,000",
+    totalInText: " năm mươi nghìn đồng",
+    description: "lollolol",
+    createdAt: "10/05/2021",
+    medicalServices: [
+      {
+        name: "Phí khám bệnh",
+        quantity: 1,
+        basePrice: 50000.0,
+        total: 50000.0,
+      },
+    ],
   };
-  const [billInformation, setBillInformation] = useState(init);
+  const [receiptInformation, setReceiptInformation] = useState(init);
+  const [date, setDate] = useState("");
 
   useEffect(() => {
-    billService.getById(props.match.params.id).then(
+    receiptService.getById(props.match.params.id).then(
       (response) => {
-        setBillInformation(response.data);
+        setReceiptInformation(response.data);
+        console.log(response.data);
+        var arr = response.data.createdAt.split("/");
+        var date = {
+          day: arr[1],
+          month: arr[0],
+          year: arr[2],
+        };
+        setDate(date);
       },
       (error) => {
         console.log(error.response);
@@ -109,8 +134,14 @@ const SingleReceiptPage = (props) => {
           >
             <div class="dochead2">
               <div style={{ "line-height": "0.3" }}>
-                <p>Địa chỉ: 123 Đường số 5, Q6, Tp. HCM</p>
-                <p>Điện thoại: 1900 11111</p>
+                <p>
+                  Tên đơn vị: Phòng khám{" "}
+                  {receiptInformation.clinicInformation.name}
+                </p>
+                <p>Địa chỉ: {receiptInformation.clinicInformation.address}</p>
+                <p>
+                  Điện thoại: {receiptInformation.clinicInformation.phoneNumber}
+                </p>
               </div>
             </div>
             <div style={{ "text-align": "center" }}>
@@ -122,9 +153,9 @@ const SingleReceiptPage = (props) => {
                   "text-transform": "uppercase",
                 }}
               >
-                Hóa đơn
+                Phiếu thu
               </div>
-              <div>Mã số: {billInformation.billCode} </div>
+              <div>Mã số: {receiptInformation.code} </div>
             </div>
             <div style={{ padding: "15px 0 5px", overflow: "auto" }}>
               <div style={{ "font-weight": "bold" }}>Thông tin bệnh nhân</div>
@@ -153,7 +184,7 @@ const SingleReceiptPage = (props) => {
                     </td>
                     <td>
                       <strong>
-                        {billInformation.patientInformation.fullName}
+                        {receiptInformation.patientInformation.fullName}
                       </strong>
                     </td>
                     <td
@@ -183,7 +214,7 @@ const SingleReceiptPage = (props) => {
                         padding: "3px",
                       }}
                     >
-                      {billInformation.patientInformation.age}
+                      {receiptInformation.patientInformation.age}
                     </td>
                   </tr>
                   <tr>
@@ -212,7 +243,7 @@ const SingleReceiptPage = (props) => {
                         padding: "3px",
                       }}
                     >
-                      {billInformation.patientInformation.phoneNumber}
+                      {receiptInformation.patientInformation.phoneNumber}
                     </td>
                     <td
                       style={{
@@ -239,7 +270,7 @@ const SingleReceiptPage = (props) => {
                         padding: "3px",
                       }}
                     >
-                      {billInformation.patientInformation.gender === "Male"
+                      {receiptInformation.patientInformation.gender === "Male"
                         ? "Nam"
                         : "Nữ"}
                     </td>
@@ -274,7 +305,7 @@ const SingleReceiptPage = (props) => {
                         padding: "3px",
                       }}
                     >
-                      {billInformation.patientInformation.detailedAddress}
+                      {receiptInformation.patientInformation.addressCity}
                     </td>
                   </tr>
                   <tr>
@@ -307,7 +338,7 @@ const SingleReceiptPage = (props) => {
                         padding: "3px",
                       }}
                     >
-                      {billInformation.description}
+                      {receiptInformation.description}
                     </td>
                   </tr>
                 </tbody>
@@ -337,119 +368,33 @@ const SingleReceiptPage = (props) => {
                     <th align="center" width="20px">
                       #
                     </th>
-                    <th align="left">Sản phẩm</th>
-                    <th align="center" width="120px">
-                      Đơn vị tính
-                    </th>
-                    <th align="center" width="80px">
-                      Số lượng
-                    </th>
-                    <th align="right" width="80px">
-                      Đơn giá
-                    </th>
-                    <th align="right" width="80px">
-                      Số tiền
-                    </th>
-                  </tr>
-                  {billInformation.clinicServiceBills !== undefined
-                    ? billInformation.clinicServiceBills
-                        .filter(isMedication)
-                        .map((entry, index) => (
-                          <tr>
-                            <td align="center">{index + 1}</td>
-                            <td align="left">{entry.name}</td>
-                            <td align="center">Viên</td>
-                            <td align="center">{entry.number}</td>
-                            <td align="right">{entry.price}</td>
-                            <td align="right">{entry.totalPrice}</td>
-                          </tr>
-                        ))
-                    : ""}
-                </tbody>
-              </table>
-              <div class="clear"></div>
-            </div>
-            <div style={{ padding: "15px 0 5px", overflow: "auto" }}>
-              <table
-                class="tab_table print_drugtable tbl-border"
-                style={{
-                  width: "100%",
-                  "text-rendering": "auto",
-                  "-webkit-font-smoothing": "antialiased",
-                  "text-align": "left",
-                  color: "#000",
-                  "font-family": "sans-serif",
-                  "font-size": "13px",
-                  border: "0",
-                  cursor: "default",
-                  padding: "0",
-                  "border-spacing": "0",
-                  "border-left": "1px solid #e5e5e5",
-                  "border-bottom": "1px solid #e5e5e5",
-                }}
-              >
-                <tbody>
-                  <tr>
-                    <th align="center" width="20px">
-                      #
-                    </th>
                     <th align="left">Dịch vụ</th>
-                    <th align="center" width="120px">
-                      Đơn vị tính
-                    </th>
                     <th align="center" width="80px">
                       Số lượng
                     </th>
-                    <th align="right" width="80px">
+                    <th align="center" width="80px">
                       Đơn giá
                     </th>
-                    <th align="right" width="80px">
+                    <th align="center" width="80px">
                       Tổng cộng
                     </th>
                   </tr>
-                  {billInformation.clinicServiceBills !== undefined
-                    ? billInformation.clinicServiceBills
-                        .filter(isService)
-                        .map((entry, index) => (
-                          <tr>
-                            <td align="center">{index + 1}</td>
-                            <td align="left">{entry.name}</td>
-                            <td align="center">Viên</td>
-                            <td align="center">{entry.number}</td>
-                            <td align="right">{entry.price}</td>
-                            <td align="right">{entry.totalPrice}</td>
-                          </tr>
-                        ))
+                  {receiptInformation.medicalServices !== undefined
+                    ? receiptInformation.medicalServices.map((entry, index) => (
+                        <tr>
+                          <td align="center">{index + 1}</td>
+                          <td align="left">{entry.name}</td>
+                          <td align="center">{entry.quantity}</td>
+                          <td align="center">{entry.basePrice}</td>
+                          <td align="center">{entry.total}</td>
+                        </tr>
+                      ))
                     : ""}
                 </tbody>
               </table>
               <div class="clear"></div>
             </div>
             <div style={{ padding: "15px 0 5px" }}>
-              <div style={{ "text-align": "right", "padding-right": "9px" }}>
-                Tổng hóa đơn thuốc:{" "}
-                <span
-                  style={{
-                    "font-weight": "bold",
-                    display: "inline-block",
-                    width: "80px",
-                  }}
-                >
-                  {billInformation.totalMedicationAmount}
-                </span>
-              </div>
-              <div style={{ "text-align": "right", "padding-right": "9px" }}>
-                Tổng hóa đơn dịch vụ:{" "}
-                <span
-                  style={{
-                    "font-weight": "bold",
-                    display: "inline-block",
-                    width: "80px",
-                  }}
-                >
-                  {billInformation.totalClinicServiceAmount}
-                </span>
-              </div>
               <div
                 style={{
                   float: "right",
@@ -468,18 +413,43 @@ const SingleReceiptPage = (props) => {
                     "text-align": "right",
                   }}
                 >
-                  {billInformation.total} ĐỒNG
+                  {receiptInformation.totalDisplayed} ĐỒNG
                 </span>
               </div>
               <div style={{ clear: "both" }}>
                 Tổng tiền bằng chữ:{" "}
                 <span style={{ "text-transform": "capitalize" }}>
                   {" "}
-                  {billInformation.totalInText}
+                  {receiptInformation.totalInText}
+                </span>
+              </div>
+              <div style={{ float: "right" }}>
+                <span style={{ "text-transform": "capitalize" }}>
+                  {" "}
+                  Ngày {date.day} tháng {date.month} năm {date.year}
+                  {/* Ngày {date.day} Tháng {date.month} Năm {date.year} */}
+                  {/* {receiptInformation.totalInText} */}
                 </span>
               </div>
               <div class="clear"></div>
             </div>
+            {/* <div
+              style={{
+                padding: "15px 30px 0 30px",
+                "text-align": "center",
+                "font-weight": "bold",
+              }}
+            >
+              <div style={{ float: "left" }}></div>
+              <div style={{ float: "right" }}>
+                Ngày 3 tháng 3 năm 3333
+                <br />
+                <br />
+                <br />
+                <br />
+              </div>
+              <div class="clear"></div>
+            </div> */}
             <div
               style={{
                 padding: "15px 30px 0 30px",
@@ -487,9 +457,9 @@ const SingleReceiptPage = (props) => {
                 "font-weight": "bold",
               }}
             >
-              <div style={{ float: "left" }}>Khách hàng</div>
+              <div style={{ float: "left" }}>Bệnh nhân</div>
               <div style={{ float: "right" }}>
-                Thu ngân
+                Người lập
                 <br />
                 <br />
                 <br />

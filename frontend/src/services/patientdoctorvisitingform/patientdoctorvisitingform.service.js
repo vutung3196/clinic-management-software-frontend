@@ -2,6 +2,8 @@ import axios from "axios";
 import authHeader from "../authentication/auth.header";
 
 const API_URL = "http://localhost:57679/api/PatientVisitingDoctorForm/";
+const MOVE_TO_END_QUEUE_API_URL =
+  "http://localhost:57679/api/PatientVisitingDoctorForm/movetoend";
 const DOCTOR_AVAILABILITY_FORM_URL =
   "http://localhost:57679/api/PatientVisitingDoctorForm/doctoravailability";
 
@@ -10,15 +12,17 @@ const config = {
 };
 
 const getDoctorAvailabilities = async () => {
-  console.log(config);
   const response = await axios.get(DOCTOR_AVAILABILITY_FORM_URL, config);
   return response.data;
 };
 
-const getPatient = async (id) => {
-  console.log("Here is patient service");
-  console.log(id);
+const getById = async (id) => {
   const response = await axios.get(API_URL + id, config);
+  return response.data;
+};
+
+const getByRole = async () => {
+  const response = await axios.get(API_URL + "byrole", config);
   return response.data;
 };
 
@@ -48,36 +52,33 @@ const create = (
     });
 };
 
-const editPatient = async (
-  patientId,
-  fullName,
-  dateOfBirth,
-  gender,
-  phoneNumber,
-  emailAddress,
-  addressDetail,
-  addressStreet,
-  addressDistrict,
-  addressCity,
-  medicalInsuranceCode
+const edit = (
+  id,
+  visitingFormCode,
+  description,
+  doctorId,
+  changeStatusFromWaitingForDoctorToVisitingDoctor
 ) => {
-  const response = await axios.put(
-    API_URL + patientId,
-    {
-      fullName,
-      dateOfBirth,
-      gender,
-      phoneNumber,
-      emailAddress,
-      addressDetail,
-      addressStreet,
-      addressDistrict,
-      addressCity,
-      medicalInsuranceCode,
-    },
-    config
-  );
-  return response.data;
+  return axios
+    .put(
+      API_URL + id,
+      {
+        visitingFormCode,
+        description,
+        doctorId,
+        changeStatusFromWaitingForDoctorToVisitingDoctor,
+      },
+      config
+    )
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const movetoend = async () => {
+  return axios.put(MOVE_TO_END_QUEUE_API_URL, {}, config).then((response) => {
+    return response.data;
+  });
 };
 
 const deletePatient = async (patientId) => {
@@ -86,9 +87,11 @@ const deletePatient = async (patientId) => {
 };
 
 export default {
-  getPatient,
+  getById,
   getDoctorAvailabilities,
   create,
-  editPatient,
+  movetoend,
   deletePatient,
+  getByRole,
+  edit,
 };

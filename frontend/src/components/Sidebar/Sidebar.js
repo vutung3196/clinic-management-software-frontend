@@ -19,6 +19,66 @@ import navigation from "../../containers/_nav";
 import adminNavigation from "../../containers/_adminNav";
 import masterAdminNavigation from "../../containers/_masterAdminNav";
 import receptionistNav from "src/containers/_receptionistNav";
+import doctorNav from "src/containers/_doctorNav";
+
+export const CustomSideBar = () => {
+  if (AuthService.isMasterAdmin()) {
+    return (
+      <CCreateElement
+        items={masterAdminNavigation}
+        components={{
+          CSidebarNavDropdown,
+          CSidebarNavItem,
+          CSidebarNavTitle,
+        }}
+      />
+    );
+  } else if (AuthService.isAdmin()) {
+    return (
+      <CCreateElement
+        items={adminNavigation}
+        components={{
+          CSidebarNavDropdown,
+          CSidebarNavItem,
+          CSidebarNavTitle,
+        }}
+      />
+    );
+  } else if (AuthService.isReceptionist()) {
+    return (
+      <CCreateElement
+        items={receptionistNav}
+        components={{
+          CSidebarNavDropdown,
+          CSidebarNavItem,
+          CSidebarNavTitle,
+        }}
+      />
+    );
+  } else if (AuthService.isDoctor()) {
+    return (
+      <CCreateElement
+        items={doctorNav}
+        components={{
+          CSidebarNavDropdown,
+          CSidebarNavItem,
+          CSidebarNavTitle,
+        }}
+      />
+    );
+  } else {
+    return (
+      <CCreateElement
+        items={navigation}
+        components={{
+          CSidebarNavDropdown,
+          CSidebarNavItem,
+          CSidebarNavTitle,
+        }}
+      />
+    );
+  }
+};
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -30,7 +90,8 @@ const Sidebar = () => {
       onShowChange={(val) => dispatch({ type: "set", sidebarShow: val })}
     >
       <CSidebarNav>
-        {AuthService.isMasterAdmin() ? (
+        <CustomSideBar />
+        {/* {AuthService.isMasterAdmin() ? (
           <CCreateElement
             items={masterAdminNavigation}
             components={{
@@ -57,7 +118,15 @@ const Sidebar = () => {
               CSidebarNavTitle,
             }}
           />
-        ) : (
+        ) :  AuthService.isDoctor() ? (
+          <CCreateElement
+          items={receptionistNav}
+          components={{
+            CSidebarNavDropdown,
+            CSidebarNavItem,
+            CSidebarNavTitle,
+          }}
+        />) :
           <CCreateElement
             items={navigation}
             components={{
@@ -66,7 +135,7 @@ const Sidebar = () => {
               CSidebarNavTitle,
             }}
           />
-        )}
+        )} */}
       </CSidebarNav>
       <CSidebarMinimizer className="c-d-md-down-none" />
     </CSidebar>
