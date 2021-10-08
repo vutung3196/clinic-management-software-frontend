@@ -276,6 +276,9 @@ const Patients = () => {
         setPatients={setPatients}
         patient={patient}
         isEditing={isEditing}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
       />
       <CreateVisitingDoctorFormAndPaymentModal
         open={doctorVisitingFormModal}

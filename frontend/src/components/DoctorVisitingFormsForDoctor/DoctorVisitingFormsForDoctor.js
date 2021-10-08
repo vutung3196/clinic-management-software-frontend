@@ -98,7 +98,8 @@ const DoctorVisitingFormsForDoctor = () => {
           },
           (error) => {
             setOpenErrorModal(true);
-            setNotificationMessage(error);
+            console.log(error);
+            setNotificationMessage("Chưa thể tiếp nhận bệnh nhân");
           }
         );
     }
@@ -157,9 +158,6 @@ const DoctorVisitingFormsForDoctor = () => {
     }
     setOpenSuccessModal(true);
     setNotificationMessage("Wow");
-    // setPatient(patient);
-    // setDoctorVisitingFormModal(true);
-    // console.log("================");
   };
   const handleCloseDoctorVisitingFormModal = () =>
     setDoctorVisitingFormModal(false);
