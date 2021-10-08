@@ -33,6 +33,8 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
   patient,
   onClose,
   setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
 }) => {
   const { register, handleSubmit, errors, formState } = useForm({
     mode: "all",
@@ -54,7 +56,6 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
   ]);
 
   const handleCreate = () => {
-    setOpenSuccessModal(true);
     patientdoctorvisitingformService
       .create(
         visitingFormCode,
@@ -66,23 +67,45 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
       )
       .then(
         (response) => {
-          console.log(response);
+          setOpenSuccessModal(true);
+          setNotificationMessage("Tạo mới phiếu khám thành công");
           onClose(false);
+          window.open(
+            "/doctorvisitingform/" + response.data.doctorVisitingFormId
+          );
+          window.open("/receipt/" + response.data.receiptId);
         },
         (error) => {
           console.log("=========");
           console.log(error.response.data.errors);
           if (error.response.data.errors !== undefined) {
-            var a = error.response.data.errors.EmailAddress;
-            var b = error.response.data.errors.FullName;
+            console.log(error.response.data.errors);
             let arr = [];
-            if (a !== undefined) {
-              arr.push(a);
+            var descriptionError = error.response.data.errors.Description;
+            if (descriptionError !== undefined) {
+              arr.push(descriptionError);
             }
-            if (b !== undefined) {
-              arr.push(b);
+            var doctorError = error.response.data.errors.DoctorId;
+            if (doctorError !== undefined) {
+              arr.push(doctorError);
             }
-            // setMessages(arr);
+
+            var paymentDescriptionError =
+              error.response.data.errors.PaymentDescription;
+
+            if (paymentDescriptionError !== undefined) {
+              arr.push(paymentDescriptionError);
+            }
+
+            var errorMessage = "";
+            for (let index = 0; index < arr.length; index++) {
+              errorMessage += arr[index];
+              if (index !== arr.length - 1) {
+                errorMessage += " và ";
+              }
+            }
+            setOpenErrorModal(true);
+            setNotificationMessage(errorMessage);
           }
         }
       );

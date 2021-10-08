@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import patientdoctorvisitingformService from "src/services/patientdoctorvisitingform/patientdoctorvisitingform.service";
 import * as Icon from "react-bootstrap-icons";
 import { CTooltip } from "@coreui/react";
+import { Helmet } from "react-helmet";
 
 const SingleDoctorVisitingFormPage = (props) => {
   const init = {
-    id: 9,
+    id: 0,
     code: "PK7489",
     description: "Xam xam",
     visitingStatus: 1,
@@ -75,7 +76,9 @@ const SingleDoctorVisitingFormPage = (props) => {
 
   return (
     <html lang="vi" class="js-focus-visible" data-js-focus-visible="">
-      <title>Hóa đơn [11732]</title>
+      <Helmet>
+        <title>Phiếu khám</title>
+      </Helmet>
       <body data-new-gr-c-s-check-loaded="14.1022.0" data-gr-ext-installed="">
         <div
           id="StayFocusd-infobar"
@@ -443,7 +446,7 @@ const SingleDoctorVisitingFormPage = (props) => {
                 "font-weight": "bold",
               }}
             >
-              <div style={{ float: "left" }}>Bệnh nhân</div>
+              <div style={{ float: "left" }}></div>
               <div style={{ float: "right" }}>
                 Người lập
                 <br />

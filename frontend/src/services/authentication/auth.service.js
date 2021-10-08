@@ -54,6 +54,7 @@ const isAdmin = () => {
 };
 
 const isReceptionist = () => {
+  console.log("bruhhhhhhh");
   var currentUser = getCurrentUser();
   if (!currentUser) {
     return false;

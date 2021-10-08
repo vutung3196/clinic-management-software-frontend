@@ -32,13 +32,13 @@ const _receptionistNav = [
     ],
   },
   {
-    _tag: "CSidebarNavDropdown",
+    _tag: "CSidebarNavItem",
     name: "Phiếu thu",
     route: "/receipts",
     icon: "cil-bell",
   },
   {
-    _tag: "CSidebarNavDropdown",
+    _tag: "CSidebarNavItem",
     name: "Dịch vụ",
     route: "/notifications",
     icon: "cil-bell",

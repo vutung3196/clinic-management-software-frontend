@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PatientService from "../../services/patient/patient.service";
+import patientdoctorvisitingformService from "src/services/patientdoctorvisitingform/patientdoctorvisitingform.service";
 import {
   CCard,
   CCardBody,
@@ -13,37 +13,43 @@ import {
 
 import CIcon from "@coreui/icons-react";
 import * as Icon from "react-bootstrap-icons";
-import PatientCreateOrEditModal from "./PatientCreateOrEditModal";
-import PatientDeleteModal from "./PatientDeleteModal";
-import CreateVisitingDoctorFormAndPaymentModal from "./CreateVisitingDoctorFormAndPaymentModal";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-
+// import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const Patients = () => {
-  const [patients, setPatients] = useState([]);
+const DoctorVisitingFormsForDoctor = () => {
+  const [doctorVisitingForms, setDoctorVisitingForms] = useState([]);
   const [details, setDetails] = useState([]);
   const [createModal, setCreateModal] = useState(false);
   const [id, setId] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
   const [detailedModal, setDetailedModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [doctorVisitingFormModal, setDoctorVisitingFormModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
-  const [notificationMessage, setNotificationMessage] = useState("");
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
 
-  const handleClose = (event, reason) => {
+  const handleCloseSuccessModal = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
 
     setOpenSuccessModal(false);
   };
+
+  const handleCloseErrorModal = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenErrorModal(false);
+  };
+
   const constPatient = {
     id: 1,
     fullName: "",
@@ -62,108 +68,139 @@ const Patients = () => {
     medicalInsuranceCode: "0312312313",
   };
 
-  const handleCloseErrorModal = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenErrorModal(false);
-  };
-
   const cursorPointerStyle = {
     cursor: "pointer",
   };
   const [patient, setPatient] = useState(constPatient);
 
-  const toggleEdit = (patient) => {
-    console.log(patient);
-    setPatient(patient);
-    setIsEditing(true);
-    setCreateModal(!createModal);
+  const toggleEdit = (row, index) => {
+    if (index > 0) {
+      setOpenErrorModal(true);
+      setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
+      return;
+    }
+    if (row.visitingStatus === 1) {
+      patientdoctorvisitingformService
+        .edit(row.id, row.code, row.description, row.doctorId, true)
+        .then(
+          (response) => {
+            let updatedForm = response.data;
+            var updateIndex = doctorVisitingForms
+              .map((item) => item.id)
+              .indexOf(row.id);
+            var a = [...doctorVisitingForms];
+            a[updateIndex] = updatedForm;
+            setDoctorVisitingForms(a);
+            setOpenSuccessModal(true);
+            setNotificationMessage(
+              "Tiếp nhận bệnh nhân " + row.patientInformation.fullName
+            );
+          },
+          (error) => {
+            setOpenErrorModal(true);
+            setNotificationMessage(error);
+          }
+        );
+    }
+
+    // console.log(patient);
+    // setPatient(patient);
+    // setIsEditing(true);
+    // setCreateModal(!createModal);
   };
 
-  const toggleDoctorVisitingForm = (patient) => {
+  const toggleDoctorVisitingForm = (row, index) => {
+    if (index > 0) {
+      setOpenErrorModal(true);
+      setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
+      return;
+    }
+    if (row.visitingStatus === 1) {
+      setOpenSuccessModal(true);
+      setNotificationMessage(
+        "Tiếp nhận bệnh nhân " + row.patientInformation.fullName
+      );
+    }
     setPatient(patient);
     setDoctorVisitingFormModal(!doctorVisitingFormModal);
   };
 
-  const toggleDelete = (patientId) => {
-    setDeleteModal(!deleteModal);
-    setId(patientId);
+  const toggleAddFirstElementToTheEndOfAQueue = (row, index) => {
+    if (index > 0) {
+      setOpenErrorModal(true);
+      setNotificationMessage("Bạn chỉ được chọn bệnh nhân đầu tiên xếp sau");
+      return;
+    }
+    patientdoctorvisitingformService.movetoend().then(
+      (response) => {
+        var arr = [...doctorVisitingForms];
+        arr.shift();
+        arr.push(response.data);
+        setDoctorVisitingForms(arr);
+        setOpenSuccessModal(true);
+        setNotificationMessage("Xếp sau bệnh nhân thành công");
+      },
+      (error) => {
+        console.log(error);
+        setOpenErrorModal(true);
+        setNotificationMessage("Xếp sau bệnh nhân không thành công");
+      }
+    );
   };
 
-  const toggleCreate = () => {
-    setPatient(constPatient);
-    setIsEditing(false);
-    setCreateModal(!createModal);
-  };
-
-  const toggleProfile = () => {};
-
-  const getRequestParams = (searchPatientName, page, pageSize) => {
-    let params = {};
-
-    if (searchPatientName) {
-      params["name"] = searchPatientName;
+  const handleOpenDoctorVisitingFormModal = (row, index) => {
+    console.log(index);
+    if (index > 0) {
+      setOpenErrorModal(true);
+      setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
+      return;
     }
-
-    if (page) {
-      params["page"] = page - 1;
-    }
-
-    if (pageSize) {
-      params["size"] = pageSize;
-    }
-
-    return params;
-  };
-
-  const handleOpenDoctorVisitingFormModal = (patient) => {
-    setPatient(patient);
-    setDoctorVisitingFormModal(true);
-    console.log("================");
+    setOpenSuccessModal(true);
+    setNotificationMessage("Wow");
+    // setPatient(patient);
+    // setDoctorVisitingFormModal(true);
+    // console.log("================");
   };
   const handleCloseDoctorVisitingFormModal = () =>
     setDoctorVisitingFormModal(false);
 
-  const retrievePatients = () => {
-    PatientService.getPatients()
+  const retrieveAll = () => {
+    patientdoctorvisitingformService
+      .getByRole()
       .then((response) => {
-        setPatients(response.data);
+        setDoctorVisitingForms(response.data);
       })
       .catch((e) => {
-        setPatients([]);
+        setDoctorVisitingForms([]);
         console.log(e);
       });
   };
 
-  useEffect(retrievePatients, []);
+  useEffect(retrieveAll, []);
 
   const fields = [
-    { key: "id", label: "MÃ BỆNH NHÂN", _style: { width: "8%" } },
-    { key: "fullName", label: "HỌ TÊN" },
-    { key: "gender", label: "GIỚI TÍNH" },
-    { key: "dateOfBirthDetail", label: "NGÀY THÁNG NĂM SINH" },
-    { key: "phoneNumber", label: "SỐ ĐIỆN THOẠI" },
-    { key: "addressCity", label: "ĐỊA CHỈ (TỈNH)" },
-    { key: "createdAt", label: "NGÀY TẠO" },
+    { key: "code", label: "MÃ PHIẾU KHÁM", _style: { width: "8%" } },
+    { key: "patientDetailedInformation", label: "TÊN BỆNH NHÂN" },
+    { key: "description", label: "MÔ TẢ" },
+    { key: "visitingStatusDisplayed", label: "TRẠNG THÁI" },
+    { key: "updatedAt", label: "GIỜ CẬP NHẬT" },
     {
       key: "doctorvisitingform",
-      label: "TẠO PHIẾU KHÁM",
-      _style: { width: "4%" },
+      label: "HỒ SƠ BỆNH NHÂN",
+      _style: { width: "5%" },
       sorter: false,
       filter: false,
     },
     {
       key: "edit",
-      label: "SỬA",
-      _style: { width: "1%" },
+      label: "TẠO HỒ SƠ Y TẾ",
+      _style: { width: "5%" },
       sorter: false,
       filter: false,
     },
     {
       key: "delete",
-      label: "XÓA",
+      label: "XẾP SAU",
       _style: { width: "1%" },
       sorter: false,
       filter: false,
@@ -175,19 +212,10 @@ const Patients = () => {
       <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>Danh sách bệnh nhân</CCardHeader>
-            <div col="2" class="mb-3 mb-xl-0 col-sm-4 col-md-2 ">
-              <CButton
-                class="btn btn-primary btn-block"
-                type="button"
-                onClick={() => toggleCreate()}
-              >
-                Thêm mới
-              </CButton>
-            </div>
+            <CCardHeader>Danh sách cần khám</CCardHeader>
             <CCardBody>
               <CDataTable
-                items={patients}
+                items={doctorVisitingForms}
                 fields={fields}
                 columnFilter
                 hover
@@ -199,7 +227,7 @@ const Patients = () => {
                 sorter
                 pagination
                 scopedSlots={{
-                  doctorvisitingform: (patient) => {
+                  doctorvisitingform: (row, index) => {
                     return (
                       <td className="py-2">
                         <Icon.PersonBadge
@@ -207,25 +235,25 @@ const Patients = () => {
                           size="22"
                           style={cursorPointerStyle}
                           onClick={() => {
-                            handleOpenDoctorVisitingFormModal(patient);
+                            handleOpenDoctorVisitingFormModal(row, index);
                           }}
                         />
                       </td>
                     );
                   },
-                  edit: (item) => {
+                  edit: (row, index) => {
                     return (
                       <td className="py-2">
                         <Icon.PencilSquare
                           name="cilpencil"
                           size="22"
                           style={cursorPointerStyle}
-                          onClick={() => toggleEdit(item)}
+                          onClick={() => toggleEdit(row, index)}
                         />
                       </td>
                     );
                   },
-                  delete: (item) => {
+                  delete: (row, index) => {
                     return (
                       <td className="py-2">
                         <CIcon
@@ -233,7 +261,7 @@ const Patients = () => {
                           size="xl"
                           style={cursorPointerStyle}
                           onClick={() => {
-                            toggleDelete(item.id);
+                            toggleAddFirstElementToTheEndOfAQueue(row, index);
                           }}
                         />
                       </td>
@@ -263,34 +291,16 @@ const Patients = () => {
           </CCard>
         </CCol>
       </CRow>
-      <PatientDeleteModal
-        modal={deleteModal}
-        id={id}
-        onClose={setDeleteModal}
-        patients={patients}
-      />
-      <PatientCreateOrEditModal
-        modal={createModal}
-        onClose={setCreateModal}
-        patients={patients}
-        setPatients={setPatients}
-        patient={patient}
-        isEditing={isEditing}
-      />
-      <CreateVisitingDoctorFormAndPaymentModal
-        open={doctorVisitingFormModal}
-        onClose={handleCloseDoctorVisitingFormModal}
-        patient={patient}
-        setOpenSuccessModal={setOpenSuccessModal}
-        setOpenErrorModal={setOpenErrorModal}
-        setNotificationMessage={setNotificationMessage}
-      />
       <Snackbar
         open={openSuccessModal}
-        autoHideDuration={6000}
-        onClose={handleClose}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccessModal}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleCloseSuccessModal}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           {notificationMessage}
         </Alert>
       </Snackbar>
@@ -311,4 +321,4 @@ const Patients = () => {
   );
 };
 
-export default Patients;
+export default DoctorVisitingFormsForDoctor;

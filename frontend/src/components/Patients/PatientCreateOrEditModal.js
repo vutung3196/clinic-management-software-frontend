@@ -1055,7 +1055,7 @@ const PatientCreateOrEditModal = ({
   const [gender, setGender] = useState("Nữ");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
-  const [addressCity, setAddressCity] = useState(top100Films[0].name);
+  const [addressCity, setAddressCity] = useState("");
   const [addressStreet, setAddressStreet] = useState("");
   const [addressDistrict, setAddressDistrict] = useState("");
   const [medicalInsuranceCode, setMedicalInsuranceCode] = useState("");
@@ -1080,7 +1080,7 @@ const PatientCreateOrEditModal = ({
       setPhoneNumber("");
       setGender("Nữ");
       setAddressDetail("");
-      setAddressCity(top100Films[0].name);
+      setAddressCity("");
       setAddressStreet("");
       setAddressDistrict("");
       setMedicalInsuranceCode("");
@@ -1327,7 +1327,7 @@ const PatientCreateOrEditModal = ({
               <TextField
                 id="state"
                 name="state"
-                label="Quận"
+                label="Quận, huyện"
                 fullWidth
                 variant="standard"
                 value={addressDistrict}
@@ -1356,7 +1356,7 @@ const PatientCreateOrEditModal = ({
               <TextField
                 id="zip"
                 name="zip"
-                label="Thành phố"
+                label="Tỉnh, thành phố"
                 fullWidth
                 variant="standard"
                 value={addressCity}

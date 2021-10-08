@@ -81,8 +81,8 @@ const movetoend = async () => {
   });
 };
 
-const deletePatient = async (patientId) => {
-  const response = await axios.delete(API_URL + patientId, config);
+const deleteById = async (id) => {
+  const response = await axios.delete(API_URL + id, config);
   return response.data;
 };
 
@@ -91,7 +91,7 @@ export default {
   getDoctorAvailabilities,
   create,
   movetoend,
-  deletePatient,
+  deleteById,
   getByRole,
   edit,
 };

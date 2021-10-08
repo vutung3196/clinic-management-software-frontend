@@ -148,14 +148,17 @@ const VisitingDoctorFirstStep = ({
             placeholder="Lý do khám"
             onChange={(e) => setDescription(e.target.value)}
           />
-          {/* <TextareaAutosize
+          {/* <Typography component="h6" align="left">
+            Lý do khám
+          </Typography>
+          <TextareaAutosize
             aria-label="empty textarea"
             minRows={3}
             required
             label="Lý do khám (bắt buộc)"
-            value={visitReason}
+            value={description}
             placeholder="Lý do khám"
-            onChange={(e) => onChangeVisitReason(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
             style={{ width: 300 }}
           /> */}
         </Grid>
