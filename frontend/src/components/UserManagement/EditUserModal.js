@@ -8,17 +8,17 @@ import {
   CModalFooter,
   CAlert,
 } from "@coreui/react";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import userService from "../../services/user/user.service";
-import TextField from "@material-ui/core/TextField";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import PhoneInput from "react-phone-number-input";
 import { useForm } from "react-hook-form";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 
 const EditUserModal = ({
   modal,
@@ -290,10 +290,11 @@ const EditUserModal = ({
           >
             Lưu
           </Button>
-          {/* <CButton color="primary" onClick={() => handleEdit(user.id)}>
-            Lưu
-          </CButton>{" "} */}
-          <CButton color="secondary" onClick={() => closeModal()}>
+          <CButton
+            color="secondary"
+            variant="contained"
+            onClick={() => closeModal()}
+          >
             Hủy
           </CButton>
         </CModalFooter>

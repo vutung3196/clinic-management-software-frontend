@@ -1,0 +1,2 @@
+import DoctorVisitingFormsForReceptionist from "./DoctorVisitingFormsForReceptionist";
+export default DoctorVisitingFormsForReceptionist;
