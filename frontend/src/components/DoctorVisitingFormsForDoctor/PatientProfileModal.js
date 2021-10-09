@@ -6,15 +6,8 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CForm,
-  CFormGroup,
-  CInputGroup,
-  CInput,
-  CDropdown,
-  CDropdownItem as option,
 } from "@coreui/react";
 import hospitalizedprofileService from "src/services/hospitalizedprofile/hospitalizedprofile.service";
-import DetailedPatientHospitalizedProfileModal from "../PatientHospitalizedProfile/DetailedPatientHospitalizedProfileModal";
 
 const PatientProfileModal = ({
   modal,
@@ -23,9 +16,10 @@ const PatientProfileModal = ({
   clinic,
   detailedPatientHospitalizedProfileModal,
   setDetailedPatientHospitalizedProfileModal,
+  setPatientHospitalizedProfileId,
 }) => {
   const [patientProfiles, setPatientProfiles] = useState([]);
-  const [] = useState(false);
+  // const [] = useState(false);
 
   const style1 = {
     width: "100px",
@@ -87,14 +81,31 @@ const PatientProfileModal = ({
     "line-height": "0.3",
   };
 
-  const PatientPrescriptionView = (props) => {
+  const style14 = {
+    cursor: "pointer",
+  };
+
+  const openDetailedHospitalizedProfileModal = (profile) => {
+    setDetailedPatientHospitalizedProfileModal(
+      !detailedPatientHospitalizedProfileModal
+    );
+    setPatientHospitalizedProfileId(profile.id);
+    onClose();
+  };
+
+  const PatientHospitalizedProfileView = (props) => {
     return props.patientProfiles !== undefined
       ? props.patientProfiles.map((entry) => (
           <tr>
             <td valign="top" align="center">
               {entry.createdAt}
             </td>
-            <td valign="top" align="center">
+            <td
+              id="td-link"
+              valign="top"
+              align="center"
+              onClick={() => openDetailedHospitalizedProfileModal(entry)}
+            >
               {entry.code}
             </td>
             <td>{entry.diseaseName}</td>
@@ -209,7 +220,7 @@ const PatientProfileModal = ({
                         <th>Mô tả</th>
                         <th style={style11}>Ngày tái khám</th>
                       </tr>
-                      <PatientPrescriptionView
+                      <PatientHospitalizedProfileView
                         patientProfiles={patientProfiles}
                       />
                     </tbody>

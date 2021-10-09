@@ -697,6 +697,11 @@ h2 {
   line-height: 1.6;
 }
 
+#td-link {
+  cursor: pointer;
+  color: blue;
+}
+
 .table_normal th {
   background: #fff;
   color: #1b2431;
@@ -1657,6 +1662,11 @@ tr {
 #dms_input_c #thongke_datetime {
   display: inline-block;
   padding: 9px 5px 6px 8px;
+}
+
+.td-link {
+  cursor: "pointer";
+  // background-color: "purple";
 }
 
 // #dms_input_c {

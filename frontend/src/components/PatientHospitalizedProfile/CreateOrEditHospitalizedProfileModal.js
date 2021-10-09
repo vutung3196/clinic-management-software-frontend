@@ -101,8 +101,8 @@ const CreateOrEditHospitalizedProfileModal = ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "80%",
-    height: "90%",
+    width: "60%",
+    // height: "90%",
     overflowX: "auto",
     bgcolor: "background.paper",
     p: 4,
@@ -118,174 +118,174 @@ const CreateOrEditHospitalizedProfileModal = ({
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <AppBar position="absolute" color="default" elevation={0}></AppBar>
+          {/* <CssBaseline /> */}
+          {/* <AppBar position="absolute" color="default" elevation={0}></AppBar> */}
           <Container component="main" maxWidth="s" sx={{ mb: 4 }}>
-            <Paper
+            {/* <Paper
               variant="outlined"
               sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-            >
-              <React.Fragment>
-                <React.Fragment>
-                  <form
-                    ref={myForm}
-                    onSubmit={handleSubmit(handleCreateOrEdit)}
-                    novalidate
-                  >
-                    <Typography component="h1" variant="h4" align="center">
-                      Hồ sơ y tế
-                    </Typography>
-                    <Typography component="h6" align="center">
-                      Mã hồ sơ: {code}
-                    </Typography>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          id="firstName"
-                          name="firstName"
-                          label="Họ và tên"
-                          fullWidth
-                          autoComplete="given-name"
-                          variant="standard"
-                          value={patient.fullName}
-                          readonly
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          id="lastName"
-                          name="lastName"
-                          label="NGÀY THÁNG NĂM SINH"
-                          fullWidth
-                          autoComplete="family-name"
-                          variant="standard"
-                          value={patient.dateOfBirthDetail}
-                          readonly
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          id="address1"
-                          name="address1"
-                          label="Giới tính"
-                          fullWidth
-                          variant="standard"
-                          value={patient.gender}
-                          readonly
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          id="address2"
-                          name="address2"
-                          label="Điện thoại"
-                          fullWidth
-                          variant="standard"
-                          value={patient.phoneNumber}
-                          readonly
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          id="city"
-                          name="city"
-                          label="Số nhà"
-                          fullWidth
-                          variant="standard"
-                          value={patient.addressDetail}
-                          readonly
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          id="state"
-                          name="state"
-                          label="Đường, phố"
-                          fullWidth
-                          variant="standard"
-                          value={patient.addressStreet}
-                          readonly
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          id="zip"
-                          name="zip"
-                          label="Quận, huyện"
-                          fullWidth
-                          variant="standard"
-                          value={patient.addressDistrict}
-                          readonly
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          id="country"
-                          name="country"
-                          label="Thành phố"
-                          fullWidth
-                          variant="standard"
-                          value={patient.addressCity}
-                          readonly
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          id="country"
-                          label="Mã số thẻ BHYT (nếu có)"
-                          fullWidth
-                          autoComplete="shipping country"
-                          variant="standard"
-                          value={patient.medicalInsuranceCode}
-                          readonly
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          id="country"
-                          name="country"
-                          fullWidth
-                          variant="standard"
-                          label="Tên bệnh"
-                          value={diseaseName}
-                          placeholder="Tên bệnh"
-                          onChange={(e) => setDiseaseName(e.target.value)}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          id="country"
-                          name="country"
-                          fullWidth
-                          variant="standard"
-                          label="Mô tả"
-                          value={description}
-                          placeholder="Mô tả"
-                          onChange={(e) => setDescription(e.target.value)}
-                        />
-                      </Grid>
+            > */}
+            <React.Fragment>
+              <React.Fragment sx={style}>
+                <form
+                  ref={myForm}
+                  onSubmit={handleSubmit(handleCreateOrEdit)}
+                  novalidate
+                >
+                  <Typography component="h2" variant="h5" align="center">
+                    Hồ sơ y tế
+                  </Typography>
+                  <Typography component="h6" align="center">
+                    Mã hồ sơ: {code}
+                  </Typography>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="firstName"
+                        name="firstName"
+                        label="Họ và tên"
+                        fullWidth
+                        autoComplete="given-name"
+                        variant="standard"
+                        value={patient.fullName}
+                        readonly
+                      />
                     </Grid>
-                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                      <Button
-                        variant="contained"
-                        // type="submit"
-                        onClick={handleCreateOrEdit}
-                        sx={{ mt: 3, ml: 1 }}
-                      >
-                        LƯU
-                      </Button>
-                      <Button
-                        variant="contained"
-                        onClick={onClose}
-                        sx={{ mt: 3, ml: 1 }}
-                      >
-                        HỦY
-                      </Button>
-                    </Box>
-                  </form>
-                </React.Fragment>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="lastName"
+                        name="lastName"
+                        label="NGÀY THÁNG NĂM SINH"
+                        fullWidth
+                        autoComplete="family-name"
+                        variant="standard"
+                        value={patient.dateOfBirthDetail}
+                        readonly
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="address1"
+                        name="address1"
+                        label="Giới tính"
+                        fullWidth
+                        variant="standard"
+                        value={patient.gender}
+                        readonly
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="address2"
+                        name="address2"
+                        label="Điện thoại"
+                        fullWidth
+                        variant="standard"
+                        value={patient.phoneNumber}
+                        readonly
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="city"
+                        name="city"
+                        label="Số nhà"
+                        fullWidth
+                        variant="standard"
+                        value={patient.addressDetail}
+                        readonly
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="state"
+                        name="state"
+                        label="Đường, phố"
+                        fullWidth
+                        variant="standard"
+                        value={patient.addressStreet}
+                        readonly
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="zip"
+                        name="zip"
+                        label="Quận, huyện"
+                        fullWidth
+                        variant="standard"
+                        value={patient.addressDistrict}
+                        readonly
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="country"
+                        name="country"
+                        label="Thành phố"
+                        fullWidth
+                        variant="standard"
+                        value={patient.addressCity}
+                        readonly
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="country"
+                        label="Mã số thẻ BHYT (nếu có)"
+                        fullWidth
+                        autoComplete="shipping country"
+                        variant="standard"
+                        value={patient.medicalInsuranceCode}
+                        readonly
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="country"
+                        name="country"
+                        fullWidth
+                        variant="standard"
+                        label="Tên bệnh"
+                        value={diseaseName}
+                        placeholder="Tên bệnh"
+                        onChange={(e) => setDiseaseName(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="country"
+                        name="country"
+                        fullWidth
+                        variant="standard"
+                        label="Mô tả"
+                        value={description}
+                        placeholder="Mô tả"
+                        onChange={(e) => setDescription(e.target.value)}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                      variant="contained"
+                      // type="submit"
+                      onClick={handleCreateOrEdit}
+                      sx={{ mt: 3, ml: 1 }}
+                    >
+                      LƯU
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={onClose}
+                      sx={{ mt: 3, ml: 1 }}
+                    >
+                      HỦY
+                    </Button>
+                  </Box>
+                </form>
               </React.Fragment>
-            </Paper>
+            </React.Fragment>
+            {/* </Paper> */}
           </Container>
         </ThemeProvider>
         {/* <DetailedPatientHospitalizedProfileModal

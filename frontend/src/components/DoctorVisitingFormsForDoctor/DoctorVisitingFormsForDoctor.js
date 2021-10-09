@@ -18,6 +18,7 @@ import MuiAlert from "@mui/material/Alert";
 import CreateOrEditHospitalizedProfileModal from "../PatientHospitalizedProfile";
 import PatientProfileModal from "./PatientProfileModal";
 import DetailedPatientHospitalizedProfileModal from "../PatientHospitalizedProfile/DetailedPatientHospitalizedProfileModal";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 // import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -38,6 +39,8 @@ const DoctorVisitingFormsForDoctor = () => {
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
   const [hospitalizedProfile, setHospitalizedProfile] = React.useState("");
+  const [patientHospitalizedProfileId, setPatientHospitalizedProfileId] =
+    React.useState("");
   const [clinic, setClinic] = React.useState("");
   const [
     detailedPatientHospitalizedProfileModal,
@@ -294,9 +297,8 @@ const DoctorVisitingFormsForDoctor = () => {
                   delete: (row, index) => {
                     return (
                       <td className="py-2">
-                        <CIcon
-                          name="cilTrash"
-                          size="xl"
+                        <ArrowDownwardIcon
+                          fontSize="small"
                           style={cursorPointerStyle}
                           onClick={() => {
                             toggleAddFirstElementToTheEndOfAQueue(row, index);
@@ -376,13 +378,20 @@ const DoctorVisitingFormsForDoctor = () => {
         onClose={setPatientProfileModal}
         patient={patient}
         clinic={clinic}
+        detailedPatientHospitalizedProfileModal={
+          detailedPatientHospitalizedProfileModal
+        }
+        setDetailedPatientHospitalizedProfileModal={
+          setDetailedPatientHospitalizedProfileModal
+        }
+        setPatientHospitalizedProfileId={setPatientHospitalizedProfileId}
       />
       <DetailedPatientHospitalizedProfileModal
         modal={detailedPatientHospitalizedProfileModal}
         onClose={setDetailedPatientHospitalizedProfileModal}
         patient={patient}
-        // clinic={clinic}
-        // patientHospitalizedProfileId={patientHospitalizedProfileId}
+        clinic={clinic}
+        patientHospitalizedProfileId={patientHospitalizedProfileId}
       />
     </>
   );
