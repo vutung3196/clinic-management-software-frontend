@@ -15,6 +15,9 @@ import CIcon from "@coreui/icons-react";
 import * as Icon from "react-bootstrap-icons";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import CreateOrEditHospitalizedProfileModal from "../PatientHospitalizedProfile";
+import PatientProfileModal from "./PatientProfileModal";
+
 // import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -28,11 +31,13 @@ const DoctorVisitingFormsForDoctor = () => {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
-  const [detailedModal, setDetailedModal] = useState(false);
+  const [patientProfileModal, setPatientProfileModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [doctorVisitingFormModal, setDoctorVisitingFormModal] = useState(false);
+  const [hospitalizedModal, setHospitalizedModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
+  const [hospitalizedProfile, setHospitalizedProfile] = React.useState("");
+  const [clinic, setClinic] = React.useState("");
 
   const handleCloseSuccessModal = (event, reason) => {
     if (reason === "clickaway") {
@@ -73,7 +78,8 @@ const DoctorVisitingFormsForDoctor = () => {
   };
   const [patient, setPatient] = useState(constPatient);
 
-  const toggleEdit = (row, index) => {
+  const toggleCreateHospitalizedProfile = (row, index) => {
+    console.log(row);
     if (index > 0) {
       setOpenErrorModal(true);
       setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
@@ -103,6 +109,9 @@ const DoctorVisitingFormsForDoctor = () => {
           }
         );
     }
+    setPatient(row.patientInformation);
+    setHospitalizedProfile(row);
+    setHospitalizedModal(!hospitalizedModal);
 
     // console.log(patient);
     // setPatient(patient);
@@ -123,7 +132,7 @@ const DoctorVisitingFormsForDoctor = () => {
       );
     }
     setPatient(patient);
-    setDoctorVisitingFormModal(!doctorVisitingFormModal);
+    setHospitalizedModal(!hospitalizedModal);
   };
 
   const toggleAddFirstElementToTheEndOfAQueue = (row, index) => {
@@ -149,18 +158,42 @@ const DoctorVisitingFormsForDoctor = () => {
     );
   };
 
-  const handleOpenDoctorVisitingFormModal = (row, index) => {
+  const toggleOpenPatientProfileModal = (row, index) => {
     console.log(index);
     if (index > 0) {
       setOpenErrorModal(true);
       setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
       return;
     }
-    setOpenSuccessModal(true);
-    setNotificationMessage("Wow");
+    if (row.visitingStatus === 1) {
+      patientdoctorvisitingformService
+        .edit(row.id, row.code, row.description, row.doctorId, true)
+        .then(
+          (response) => {
+            let updatedForm = response.data;
+            var updateIndex = doctorVisitingForms
+              .map((item) => item.id)
+              .indexOf(row.id);
+            var a = [...doctorVisitingForms];
+            a[updateIndex] = updatedForm;
+            setDoctorVisitingForms(a);
+            setOpenSuccessModal(true);
+            setNotificationMessage(
+              "Tiếp nhận bệnh nhân " + row.patientInformation.fullName
+            );
+          },
+          (error) => {
+            setOpenErrorModal(true);
+            console.log(error);
+            setNotificationMessage("Chưa thể tiếp nhận bệnh nhân");
+          }
+        );
+    }
+    setClinic(row.clinicInformation);
+    setPatientProfileModal(!patientProfileModal);
+    setPatient(row.patientInformation);
   };
-  const handleCloseDoctorVisitingFormModal = () =>
-    setDoctorVisitingFormModal(false);
+  const handleCloseHospitalizedProfileModal = () => setHospitalizedModal(false);
 
   const retrieveAll = () => {
     patientdoctorvisitingformService
@@ -190,7 +223,7 @@ const DoctorVisitingFormsForDoctor = () => {
       filter: false,
     },
     {
-      key: "edit",
+      key: "createhospitalizedprofile",
       label: "TẠO HỒ SƠ Y TẾ",
       _style: { width: "5%" },
       sorter: false,
@@ -233,20 +266,22 @@ const DoctorVisitingFormsForDoctor = () => {
                           size="22"
                           style={cursorPointerStyle}
                           onClick={() => {
-                            handleOpenDoctorVisitingFormModal(row, index);
+                            toggleOpenPatientProfileModal(row, index);
                           }}
                         />
                       </td>
                     );
                   },
-                  edit: (row, index) => {
+                  createhospitalizedprofile: (row, index) => {
                     return (
                       <td className="py-2">
                         <Icon.PencilSquare
                           name="cilpencil"
                           size="22"
                           style={cursorPointerStyle}
-                          onClick={() => toggleEdit(row, index)}
+                          onClick={() =>
+                            toggleCreateHospitalizedProfile(row, index)
+                          }
                         />
                       </td>
                     );
@@ -315,6 +350,22 @@ const DoctorVisitingFormsForDoctor = () => {
           {notificationMessage}
         </Alert>
       </Snackbar>
+      <CreateOrEditHospitalizedProfileModal
+        open={hospitalizedModal}
+        onClose={handleCloseHospitalizedProfileModal}
+        patient={patient}
+        hospitalizedProfile={hospitalizedProfile}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
+        isEditing={false}
+      />
+      <PatientProfileModal
+        modal={patientProfileModal}
+        onClose={setPatientProfileModal}
+        patient={patient}
+        clinic={clinic}
+      />
     </>
   );
 };

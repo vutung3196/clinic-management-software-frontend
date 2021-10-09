@@ -1,0 +1,2 @@
+import CreateOrEditHospitalizedProfileModal from "./CreateOrEditHospitalizedProfileModal";
+export default CreateOrEditHospitalizedProfileModal;

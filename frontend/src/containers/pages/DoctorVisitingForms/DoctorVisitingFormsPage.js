@@ -10,7 +10,7 @@ const DoctorVisitingFormsPage = () => {
   return (
     <div>
       <Helmet>
-        <title>Phiếu khám</title>
+        <title>Danh sách phiếu khám</title>
       </Helmet>
       <div className="c-app c-default-layout">
         <Sidebar />
