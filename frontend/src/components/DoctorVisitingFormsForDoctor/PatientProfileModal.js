@@ -14,9 +14,18 @@ import {
   CDropdownItem as option,
 } from "@coreui/react";
 import hospitalizedprofileService from "src/services/hospitalizedprofile/hospitalizedprofile.service";
+import DetailedPatientHospitalizedProfileModal from "../PatientHospitalizedProfile/DetailedPatientHospitalizedProfileModal";
 
-const PatientProfileModal = ({ modal, onClose, patient, clinic }) => {
+const PatientProfileModal = ({
+  modal,
+  onClose,
+  patient,
+  clinic,
+  detailedPatientHospitalizedProfileModal,
+  setDetailedPatientHospitalizedProfileModal,
+}) => {
   const [patientProfiles, setPatientProfiles] = useState([]);
+  const [] = useState(false);
 
   const style1 = {
     width: "100px",
@@ -183,7 +192,7 @@ const PatientProfileModal = ({ modal, onClose, patient, clinic }) => {
               <div id="d_ck_2002" class="presc-ck"></div>
 
               <div style={style7}>
-                <h2>Lịch sử khám bệnh</h2>
+                <h2>Danh sách hồ sơ y tế</h2>
                 <div style={style8}>
                   <table
                     cellpadding="0"

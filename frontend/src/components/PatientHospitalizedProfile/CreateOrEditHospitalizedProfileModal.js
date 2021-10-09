@@ -12,6 +12,7 @@ import hospitalizedprofileService from "src/services/hospitalizedprofile/hospita
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import DetailedPatientHospitalizedProfileModal from "../PatientHospitalizedProfile/DetailedPatientHospitalizedProfileModal";
 
 const CreateOrEditHospitalizedProfileModal = ({
   open,
@@ -24,6 +25,8 @@ const CreateOrEditHospitalizedProfileModal = ({
   hospitalizedProfiles,
   setHospitalizedProfiles,
   isEditing,
+  detailedPatientHospitalizedProfileModal,
+  setDetailedPatientHospitalizedProfileModal,
 }) => {
   console.log("====");
   const { register, handleSubmit, errors, formState } = useForm({
@@ -34,12 +37,18 @@ const CreateOrEditHospitalizedProfileModal = ({
   const [diseaseName, setDiseaseName] = React.useState("");
   const [code, setCode] = React.useState("");
 
+  const [patientHospitalizedProfileId, setPatientHospitalizedProfileId] =
+    React.useState(0);
   const handleCreateOrEdit = () => {
     if (isEditing === false) {
       hospitalizedprofileService
         .create(patient.id, diseaseName, description, null, code)
         .then(
           (response) => {
+            setPatientHospitalizedProfileId(response.data.id);
+            setDetailedPatientHospitalizedProfileModal(
+              !detailedPatientHospitalizedProfileModal
+            );
             setOpenSuccessModal(true);
             setNotificationMessage("Tạo mới hồ sơ y tế thành công");
             setCode("");
@@ -279,6 +288,13 @@ const CreateOrEditHospitalizedProfileModal = ({
             </Paper>
           </Container>
         </ThemeProvider>
+        {/* <DetailedPatientHospitalizedProfileModal
+          modal={detailedPatientHospitalizedProfileModal}
+          onClose={setDetailedPatientHospitalizedProfileModal}
+          patient={patient}
+          // clinic={clinic}
+          // patientHospitalizedProfileId={patientHospitalizedProfileId}
+        /> */}
       </Box>
     </Modal>
   );

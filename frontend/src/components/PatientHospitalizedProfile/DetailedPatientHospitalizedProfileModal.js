@@ -13,23 +13,19 @@ import {
   CDropdown,
   CDropdownItem as option,
 } from "@coreui/react";
-import * as Icon from "react-bootstrap-icons";
-import { Link } from "react-router-dom";
-import ViewImageModal from "../FilesUpload/ViewImageModal";
+// import * as Icon from "react-bootstrap-icons";
+// import { Link } from "react-router-dom";
+// import ViewImageModal from "../FilesUpload/ViewImageModal";
+// import hospitalizedprofileService from "src/services/hospitalizedprofile/hospitalizedprofile.service";
 
 const DetailedPatientHospitalizedProfileModal = ({
   modal,
   onClose,
   patient,
-  patientProfile,
 }) => {
-  console.log("modal is ");
-  console.log(modal);
-  console.log(onClose);
-  console.log(patient);
-  console.log("****************");
-  console.log(patientProfile);
   const [viewImageModal, setViewImageModal] = useState(false);
+  const [patientHospitalizedProfile, setPatientHospitalizedProfile] =
+    useState(false);
   const [currentFile, setCurrentFile] = useState("");
 
   const style1 = {
@@ -92,85 +88,99 @@ const DetailedPatientHospitalizedProfileModal = ({
     "line-height": "0.3",
   };
 
-  const PatientPrescriptionView = (props) => {
-    return props.patientProfile !== undefined &&
-      props.patientProfile.patientPrescriptions !== undefined
-      ? props.patientProfile.patientPrescriptions.map((entry) => (
-          <tr>
-            <td valign="top" align="center">
-              {entry.createdAt}
-            </td>
-            <td valign="top" align="center">
-              <Link
-                to={{
-                  pathname:
-                    "/singleprescription/" + entry.id + "/" + patient.id,
-                  id: entry.id,
-                  patientId: patient.id,
-                }}
-                target="_blank"
-              >
-                {entry.patientPrescriptionCode}
-              </Link>
-            </td>
-            <td>{entry.diagnosedDescription}</td>
-            <td>{entry.doctorSuggestion}</td>
-            <td valign="top" align="center">
-              {entry.revisitDate}
-            </td>
-          </tr>
-        ))
-      : "";
-  };
+  // const getDetailedPatientHospitalizedProfile = () => {
+  //   hospitalizedprofileService
+  //     .getById(patientHospitalizedProfileId)
+  //     .then((response) => {
+  //       setPatientHospitalizedProfile(response.data);
+  //     })
+  //     .catch((e) => {
+  //       setPatientHospitalizedProfile("");
+  //       console.log(e);
+  //     });
+  // };
 
-  const DiseaseStagesView = (props) => {
-    return props.patientProfile !== undefined &&
-      props.patientProfile.diseaseStages !== undefined
-      ? props.patientProfile.diseaseStages.map((entry) => (
-          <tr>
-            <td valign="top" align="center">
-              {entry.createdAt}
-            </td>
-            <td>
-              <div>{entry.description}</div>
-            </td>
-          </tr>
-        ))
-      : "";
-  };
+  // useEffect(getDetailedPatientHospitalizedProfile, [modal]);
 
-  const showViewImageModal = (file) => {
-    setCurrentFile(file);
-    setViewImageModal(!viewImageModal);
-  };
+  // const PatientPrescriptionView = (props) => {
+  //   // return props.patientProfile !== undefined &&
+  //   //   props.patientProfile.patientPrescriptions !== undefined
+  //   //   ? props.patientProfile.patientPrescriptions.map((entry) => (
+  //   //       <tr>
+  //   //         <td valign="top" align="center">
+  //   //           {entry.createdAt}
+  //   //         </td>
+  //   //         <td valign="top" align="center">
+  //   //           <Link
+  //   //             to={{
+  //   //               pathname:
+  //   //                 "/singleprescription/" + entry.id + "/" + patient.id,
+  //   //               id: entry.id,
+  //   //               patientId: patient.id,
+  //   //             }}
+  //   //             target="_blank"
+  //   //           >
+  //   //             {entry.patientPrescriptionCode}
+  //   //           </Link>
+  //   //         </td>
+  //   //         <td>{entry.diagnosedDescription}</td>
+  //   //         <td>{entry.doctorSuggestion}</td>
+  //   //         <td valign="top" align="center">
+  //   //           {entry.revisitDate}
+  //   //         </td>
+  //   //       </tr>
+  //   //     ))
+  //   //   : "";
+  // };
 
-  const PatientFilesView = (props) => {
-    return props.patientProfile !== undefined &&
-      props.patientProfile.imageFiles !== undefined
-      ? props.patientProfile.imageFiles.map((entry) => (
-          <tr>
-            <td valign="top" align="center">
-              {entry.createdAt}
-            </td>
-            <td>{entry.name}</td>
-            <td>{entry.description}</td>
-            <td align="center">
-              <Icon.Image
-                class="icon-cursor"
-                onClick={() => {
-                  showViewImageModal(entry);
-                }}
-              />
-            </td>
-          </tr>
-        ))
-      : "";
-  };
+  // const LabOrderFormsView = (props) => {
+  //   // return props.patientProfile !== undefined &&
+  //   //   props.patientProfile.diseaseStages !== undefined
+  //   //   ? props.patientProfile.diseaseStages.map((entry) => (
+  //   //       <tr>
+  //   //         <td valign="top" align="center">
+  //   //           {entry.createdAt}
+  //   //         </td>
+  //   //         <td>
+  //   //           <div>{entry.description}</div>
+  //   //         </td>
+  //   //       </tr>
+  //   //     ))
+  //   //   : "";
+  // };
+
+  // const showViewImageModal = (file) => {
+  //   setCurrentFile(file);
+  //   setViewImageModal(!viewImageModal);
+  // };
+
+  // const LabTestsView = (props) => {
+  //   // return props.patientProfile !== undefined &&
+  //   //   props.patientProfile.imageFiles !== undefined
+  //   //   ? props.patientProfile.imageFiles.map((entry) => (
+  //   //       <tr>
+  //   //         <td valign="top" align="center">
+  //   //           {entry.createdAt}
+  //   //         </td>
+  //   //         <td>{entry.name}</td>
+  //   //         <td>{entry.description}</td>
+  //   //         <td align="center">
+  //   //           <Icon.Image
+  //   //             class="icon-cursor"
+  //   //             onClick={() => {
+  //   //               showViewImageModal(entry);
+  //   //             }}
+  //   //           />
+  //   //         </td>
+  //   //       </tr>
+  //   //     ))
+  //   //   : "";
+  // };
 
   return (
     <CModal show={modal} onClose={onClose} size="xl">
       <CModalHeader closeButton>
-        <CModalTitle>HỒ SƠ SỨC KHỎE </CModalTitle>
+        <CModalTitle>HỒ SƠ Y TẾ </CModalTitle>
       </CModalHeader>
       <CModalBody>
         <div data-new-gr-c-s-check-loaded="14.1019.0" data-gr-ext-installed="">
@@ -184,7 +194,7 @@ const DetailedPatientHospitalizedProfileModal = ({
               </div>
               <div>
                 <div class="head-div-1" data-darkreader-inline-color="">
-                  Hồ Sơ Sức Khỏe
+                  Hồ Sơ y tế
                 </div>
               </div>
               <div id="d_lr">
@@ -196,64 +206,40 @@ const DetailedPatientHospitalizedProfileModal = ({
                         <tr>
                           <td style={style1}>Họ tên:</td>
                           <td class="s">:</td>
-                          <td>
-                            <strong>{patient.fullName}</strong>
-                          </td>
+                          <td>{/* <strong>{patient.fullName}</strong> */}</td>
                         </tr>
                         <tr>
                           <td>Tuổi / Năm sinh</td>
                           <td class="s">:</td>
-                          <td>
-                            {patient.age} ({patient.yearOfBirth})
-                          </td>
+                          <td>{/* {patient.age} ({patient.yearOfBirth}) */}</td>
                         </tr>
                         <tr>
                           <td>Giới tính</td>
                           <td class="s">:</td>
-                          <td>{patient.gender}</td>
+                          {/* <td>{patient.gender}</td> */}
                         </tr>
                         <tr>
                           <td>Điện thoại</td>
                           <td class="s">:</td>
-                          <td>{patient.phoneNumber}</td>
+                          {/* <td>{patient.phoneNumber}</td> */}
                         </tr>
                         <tr>
                           <td valign="top">Địa chỉ</td>
                           <td valign="top" class="s">
                             :
                           </td>
-                          <td>{patient.addressCity}</td>
+                          {/* <td>{patient.addressCity}</td> */}
                         </tr>
                         <tr>
                           <td valign="top">Nghề nghiệp</td>
                           <td valign="top" class="s">
                             :
                           </td>
-                          <td>{patient.occupation}</td>
+                          {/* <td>{patient.occupation}</td> */}
                         </tr>
                       </tbody>
                     </table>
                   </center>
-                </div>
-              </div>
-              <div style={style5}>
-                <h2>Diễn tiến bệnh</h2>
-                <div style={style6}>
-                  <table
-                    cellpadding="0"
-                    cellspacing="1"
-                    border="0"
-                    class="table_normal"
-                    width="100%"
-                  >
-                    <tbody>
-                      <tr>
-                        <th style={style4}>Ngày</th>
-                        <th>Nội dung</th>
-                      </tr>
-                      <DiseaseStagesView patientProfile={patientProfile} />
-                    </tbody>
-                  </table>
                 </div>
               </div>
 
@@ -277,16 +263,41 @@ const DetailedPatientHospitalizedProfileModal = ({
                         <th>Lời dặn</th>
                         <th style={style11}>Ngày tái khám</th>
                       </tr>
-                      <PatientPrescriptionView
-                        patientProfile={patientProfile}
-                      />
+                      {/* <PatientPrescriptionView
+                        patientProfile={patientHospitalizedProfile}
+                      /> */}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div style={style5}>
+                <h2>Phiếu chỉ định</h2>
+                <div style={style6}>
+                  <table
+                    cellpadding="0"
+                    cellspacing="1"
+                    border="0"
+                    class="table_normal"
+                    width="100%"
+                  >
+                    <tbody>
+                      <tr>
+                        <th style={style4}>Ngày</th>
+                        <th style={style4}>Mã phiếu chỉ định</th>
+                        <th>Chỉ định</th>
+                        <th>Kết quả</th>
+                      </tr>
+                      {/* <LabOrderFormsView
+                        patientProfile={patientHospitalizedProfile}
+                      /> */}
                     </tbody>
                   </table>
                 </div>
               </div>
 
               <div style={style7}>
-                <h2>File liên quan</h2>
+                <h2>Phiếu xét nghiệm</h2>
                 <div style={style8}>
                   <table
                     cellpadding="0"
@@ -298,11 +309,13 @@ const DetailedPatientHospitalizedProfileModal = ({
                     <tbody>
                       <tr>
                         <th style={style4}>Ngày</th>
-                        <th style={style13}>Tiêu đề file</th>
-                        <th>Ghi chú</th>
-                        <th>Xem</th>
+                        <th style={style4}>Tên xét nghiệm</th>
+                        <th>Ảnh (nếu có)</th>
+                        <th>Kết quả</th>
                       </tr>
-                      <PatientFilesView patientProfile={patientProfile} />
+                      {/* <LabTestsView
+                        patientProfile={patientHospitalizedProfile}
+                      /> */}
                     </tbody>
                   </table>
                 </div>
@@ -311,13 +324,19 @@ const DetailedPatientHospitalizedProfileModal = ({
           </div>
         </div>
 
-        <ViewImageModal
+        {/* <ViewImageModal
           modal={viewImageModal}
           onClose={setViewImageModal}
           file={currentFile}
-        />
+        /> */}
       </CModalBody>
       <CModalFooter>
+        <CButton color="secondary" onClick={() => onClose(false)}>
+          Kê đơn
+        </CButton>
+        <CButton color="secondary" onClick={() => onClose(false)}>
+          Tạo phiếu chỉ định
+        </CButton>
         <CButton color="secondary" onClick={() => onClose(false)}>
           THOÁT
         </CButton>

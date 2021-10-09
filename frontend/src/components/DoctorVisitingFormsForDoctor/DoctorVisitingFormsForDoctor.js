@@ -17,6 +17,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import CreateOrEditHospitalizedProfileModal from "../PatientHospitalizedProfile";
 import PatientProfileModal from "./PatientProfileModal";
+import DetailedPatientHospitalizedProfileModal from "../PatientHospitalizedProfile/DetailedPatientHospitalizedProfileModal";
 
 // import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -38,6 +39,10 @@ const DoctorVisitingFormsForDoctor = () => {
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
   const [hospitalizedProfile, setHospitalizedProfile] = React.useState("");
   const [clinic, setClinic] = React.useState("");
+  const [
+    detailedPatientHospitalizedProfileModal,
+    setDetailedPatientHospitalizedProfileModal,
+  ] = React.useState(false);
 
   const handleCloseSuccessModal = (event, reason) => {
     if (reason === "clickaway") {
@@ -359,12 +364,25 @@ const DoctorVisitingFormsForDoctor = () => {
         setOpenErrorModal={setOpenErrorModal}
         setNotificationMessage={setNotificationMessage}
         isEditing={false}
+        detailedPatientHospitalizedProfileModal={
+          detailedPatientHospitalizedProfileModal
+        }
+        setDetailedPatientHospitalizedProfileModal={
+          setDetailedPatientHospitalizedProfileModal
+        }
       />
       <PatientProfileModal
         modal={patientProfileModal}
         onClose={setPatientProfileModal}
         patient={patient}
         clinic={clinic}
+      />
+      <DetailedPatientHospitalizedProfileModal
+        modal={detailedPatientHospitalizedProfileModal}
+        onClose={setDetailedPatientHospitalizedProfileModal}
+        patient={patient}
+        // clinic={clinic}
+        // patientHospitalizedProfileId={patientHospitalizedProfileId}
       />
     </>
   );
