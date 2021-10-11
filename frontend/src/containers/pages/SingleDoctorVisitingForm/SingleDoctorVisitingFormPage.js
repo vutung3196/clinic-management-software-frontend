@@ -123,8 +123,8 @@ const SingleDoctorVisitingFormPage = (props) => {
               padding: "20px",
               "margin-bottom": "20px",
               "box-shadow": "2px 3px 3px #888",
-              "border-top": "1px solid #ddd",
-              "border-left": "1px solid #ddd",
+              border: "1px solid #ddd",
+              // "border-left": "1px solid #ddd",
             }}
           >
             <div class="dochead2">

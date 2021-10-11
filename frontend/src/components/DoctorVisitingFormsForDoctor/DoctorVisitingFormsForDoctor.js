@@ -11,7 +11,6 @@ import {
   CCollapse,
 } from "@coreui/react";
 
-import CIcon from "@coreui/icons-react";
 import * as Icon from "react-bootstrap-icons";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -19,6 +18,7 @@ import CreateOrEditHospitalizedProfileModal from "../PatientHospitalizedProfile"
 import PatientProfileModal from "./PatientProfileModal";
 import DetailedPatientHospitalizedProfileModal from "../PatientHospitalizedProfile/DetailedPatientHospitalizedProfileModal";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArticleIcon from "@mui/icons-material/Article";
 
 // import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -31,10 +31,8 @@ const DoctorVisitingFormsForDoctor = () => {
   const [createModal, setCreateModal] = useState(false);
   const [id, setId] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
 
   const [patientProfileModal, setPatientProfileModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
   const [hospitalizedModal, setHospitalizedModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
@@ -120,27 +118,6 @@ const DoctorVisitingFormsForDoctor = () => {
     setPatient(row.patientInformation);
     setHospitalizedProfile(row);
     setHospitalizedModal(!hospitalizedModal);
-
-    // console.log(patient);
-    // setPatient(patient);
-    // setIsEditing(true);
-    // setCreateModal(!createModal);
-  };
-
-  const toggleDoctorVisitingForm = (row, index) => {
-    if (index > 0) {
-      setOpenErrorModal(true);
-      setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
-      return;
-    }
-    if (row.visitingStatus === 1) {
-      setOpenSuccessModal(true);
-      setNotificationMessage(
-        "Tiếp nhận bệnh nhân " + row.patientInformation.fullName
-      );
-    }
-    setPatient(patient);
-    setHospitalizedModal(!hospitalizedModal);
   };
 
   const toggleAddFirstElementToTheEndOfAQueue = (row, index) => {
@@ -168,11 +145,11 @@ const DoctorVisitingFormsForDoctor = () => {
 
   const toggleOpenPatientProfileModal = (row, index) => {
     console.log(index);
-    if (index > 0) {
-      setOpenErrorModal(true);
-      setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
-      return;
-    }
+    // if (index > 0) {
+    //   setOpenErrorModal(true);
+    //   setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
+    //   return;
+    // }
     if (row.visitingStatus === 1) {
       patientdoctorvisitingformService
         .edit(row.id, row.code, row.description, row.doctorId, true)
@@ -224,16 +201,23 @@ const DoctorVisitingFormsForDoctor = () => {
     { key: "visitingStatusDisplayed", label: "TRẠNG THÁI" },
     { key: "updatedAt", label: "GIỜ CẬP NHẬT" },
     {
+      key: "view",
+      label: "XEM",
+      _style: { width: "1%" },
+      sorter: false,
+      filter: false,
+    },
+    {
       key: "doctorvisitingform",
       label: "HỒ SƠ BỆNH NHÂN",
-      _style: { width: "5%" },
+      _style: { width: "3%" },
       sorter: false,
       filter: false,
     },
     {
       key: "createhospitalizedprofile",
       label: "TẠO HỒ SƠ Y TẾ",
-      _style: { width: "5%" },
+      _style: { width: "3%" },
       sorter: false,
       filter: false,
     },
@@ -245,6 +229,11 @@ const DoctorVisitingFormsForDoctor = () => {
       filter: false,
     },
   ];
+
+  const rowsPerPageOption = {
+    label: "Số bản ghi trên trang",
+    values: [5, 10, 20],
+  };
 
   return (
     <>
@@ -261,11 +250,23 @@ const DoctorVisitingFormsForDoctor = () => {
                 striped
                 bordered
                 size="sm"
-                itemsPerPageSelect
+                itemsPerPageSelect={rowsPerPageOption}
                 itemsPerPage={10}
                 sorter
                 pagination
                 scopedSlots={{
+                  view: (row, index) => {
+                    return (
+                      <td className="py-2">
+                        <ArticleIcon
+                          style={cursorPointerStyle}
+                          onClick={() => {
+                            window.open("/doctorvisitingform/" + row.id);
+                          }}
+                        />
+                      </td>
+                    );
+                  },
                   doctorvisitingform: (row, index) => {
                     return (
                       <td className="py-2">

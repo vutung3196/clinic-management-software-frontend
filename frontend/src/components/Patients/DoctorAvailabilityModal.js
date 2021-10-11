@@ -63,6 +63,7 @@ const DoctorAvailabilityModal = ({
   };
 
   const selectDoctor = (row) => {
+    console.log(row);
     setDoctorName(row.doctorName);
     setDoctorId(row.doctorId);
     console.log(row);

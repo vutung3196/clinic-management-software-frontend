@@ -25,6 +25,8 @@ import PhoneInput from "react-phone-number-input";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import Autocomplete from "@mui/material/Autocomplete";
+import Input from "@material-ui/core/Input";
+import Typography from "@mui/material/Typography";
 
 const PatientCreateOrEditModal = ({
   modal,
@@ -1154,31 +1156,41 @@ const PatientCreateOrEditModal = ({
           onClose(false);
         },
         (error) => {
-          console.log(error.response.data.errors);
-          let arr = [];
-          var error1 = error.response.data.errors.AddressStreet;
-          if (error1 !== undefined) {
-            arr.push(error1);
-          }
-          var error2 = error.response.data.errors.MedicalInsuranceCode;
-          if (error2 !== undefined) {
-            arr.push(error2);
-          }
-
-          var error3 = error.response.data.errors.AddressDetail;
-          if (error3 !== undefined) {
-            arr.push(error3);
-          }
-
-          var errorMessage = "";
-          for (let index = 0; index < arr.length; index++) {
-            errorMessage += arr[index];
-            if (index !== arr.length - 1) {
-              errorMessage += " và ";
+          if (error.response.data.errors !== undefined) {
+            let arr = [];
+            var error1 = error.response.data.errors.AddressStreet;
+            if (error1 !== undefined) {
+              arr.push(error1);
             }
+            var error2 = error.response.data.errors.MedicalInsuranceCode;
+            if (error2 !== undefined) {
+              arr.push(error2);
+            }
+
+            var error3 = error.response.data.errors.AddressDetail;
+            if (error3 !== undefined) {
+              arr.push(error3);
+            }
+
+            var error4 = error.response.data.errors.EmailAddress;
+            var error5 = error.response.data.errors.FullName;
+            if (error4 !== undefined) {
+              arr.push(error4);
+            }
+            if (error5 !== undefined) {
+              arr.push(error5);
+            }
+
+            var errorMessage = "";
+            for (let index = 0; index < arr.length; index++) {
+              errorMessage += arr[index];
+              if (index !== arr.length - 1) {
+                errorMessage += " và ";
+              }
+            }
+            setOpenErrorModal(true);
+            setNotificationMessage(errorMessage);
           }
-          setOpenErrorModal(true);
-          setNotificationMessage(errorMessage);
         }
       );
     } else {
@@ -1201,20 +1213,45 @@ const PatientCreateOrEditModal = ({
           patients[updateIndex] = updatedPatient;
           setPatients(patients);
           setMessages([]);
+          setOpenSuccessModal(true);
+          setNotificationMessage("Cập nhật bệnh nhân thành công");
           onClose(false);
         },
         (error) => {
           if (error.response.data.errors !== undefined) {
-            var a = error.response.data.errors.EmailAddress;
-            var b = error.response.data.errors.FullName;
             let arr = [];
-            if (a !== undefined) {
-              arr.push(a);
+            var error1 = error.response.data.errors.AddressStreet;
+            if (error1 !== undefined) {
+              arr.push(error1);
             }
-            if (b !== undefined) {
-              arr.push(b);
+            var error2 = error.response.data.errors.MedicalInsuranceCode;
+            if (error2 !== undefined) {
+              arr.push(error2);
             }
-            setMessages(arr);
+
+            var error3 = error.response.data.errors.AddressDetail;
+            if (error3 !== undefined) {
+              arr.push(error3);
+            }
+
+            var error4 = error.response.data.errors.EmailAddress;
+            var error5 = error.response.data.errors.FullName;
+            if (error4 !== undefined) {
+              arr.push(error4);
+            }
+            if (error5 !== undefined) {
+              arr.push(error5);
+            }
+
+            var errorMessage = "";
+            for (let index = 0; index < arr.length; index++) {
+              errorMessage += arr[index];
+              if (index !== arr.length - 1) {
+                errorMessage += " và ";
+              }
+            }
+            setOpenErrorModal(true);
+            setNotificationMessage(errorMessage);
           }
         }
       );
@@ -1317,7 +1354,7 @@ const PatientCreateOrEditModal = ({
               <TextField
                 id="address2"
                 name="address2"
-                label="Số nhà"
+                label="Số nhà, ngõ"
                 fullWidth
                 autoComplete="shipping address-line2"
                 variant="standard"
@@ -1370,9 +1407,13 @@ const PatientCreateOrEditModal = ({
                 )}
                 value={addressCity}
                 onChange={(event, newValue) => {
-                  setAddressCity(newValue.name);
-                  setProvinces(newValue.districts);
-                  setAddressDistrict(newValue.districts[0]);
+                  if (newValue != null) {
+                    setAddressCity(newValue.name);
+                    if (newValue.districts !== null) {
+                      setProvinces(newValue.districts);
+                      setAddressDistrict(newValue.districts[0]);
+                    }
+                  }
                 }}
                 getOptionLabel={(option) => {
                   if (typeof option === "string") {
@@ -1388,6 +1429,7 @@ const PatientCreateOrEditModal = ({
             <Grid item xs={12} sm={12}>
               <TextField
                 id="insurance-code"
+                type="number"
                 name="insurance-code"
                 label="Mã số thẻ BHYT (nếu có)"
                 fullWidth

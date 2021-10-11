@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import receiptService from "src/services/receipt/receipt.service";
 import * as Icon from "react-bootstrap-icons";
 import { CTooltip } from "@coreui/react";
+import { Helmet } from "react-helmet";
 
 const SingleReceiptPage = (props) => {
   const init = {
@@ -83,7 +84,9 @@ const SingleReceiptPage = (props) => {
 
   return (
     <html lang="vi" class="js-focus-visible" data-js-focus-visible="">
-      <title>Hóa đơn [11732]</title>
+      <Helmet>
+        <title>Phiếu thu</title>
+      </Helmet>
       <body data-new-gr-c-s-check-loaded="14.1022.0" data-gr-ext-installed="">
         <div
           id="StayFocusd-infobar"
@@ -128,8 +131,9 @@ const SingleReceiptPage = (props) => {
               padding: "20px",
               "margin-bottom": "20px",
               "box-shadow": "2px 3px 3px #888",
-              "border-top": "1px solid #ddd",
-              "border-left": "1px solid #ddd",
+              border: "1px solid #ddd",
+              // "border-top": "1px solid #ddd",
+              // "border-left": "1px solid #ddd",
             }}
           >
             <div class="dochead2">

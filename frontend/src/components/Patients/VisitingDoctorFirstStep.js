@@ -171,7 +171,6 @@ const VisitingDoctorFirstStep = ({
             fullWidth
             variant="standard"
             value={doctorName}
-            placeholder="Lý do khám"
             onClick={() => handleOpenDoctorVisitingFormModal()}
           />
         </Grid>

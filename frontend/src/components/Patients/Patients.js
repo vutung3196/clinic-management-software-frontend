@@ -18,6 +18,7 @@ import PatientDeleteModal from "./PatientDeleteModal";
 import CreateVisitingDoctorFormAndPaymentModal from "./CreateVisitingDoctorFormAndPaymentModal";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+// import { CSmartTable } from "@coreui/react";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -170,6 +171,11 @@ const Patients = () => {
     },
   ];
 
+  const rowsPerPageOption = {
+    label: "Số bản ghi trên trang",
+    values: [5, 10, 20],
+  };
+
   return (
     <>
       <CRow>
@@ -194,8 +200,8 @@ const Patients = () => {
                 striped
                 bordered
                 size="sm"
-                itemsPerPageSelect
-                itemsPerPage={10}
+                itemsPerPageSelect={rowsPerPageOption}
+                itemsPerPage={5}
                 sorter
                 pagination
                 scopedSlots={{
@@ -268,6 +274,9 @@ const Patients = () => {
         id={id}
         onClose={setDeleteModal}
         patients={patients}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
       />
       <PatientCreateOrEditModal
         modal={createModal}

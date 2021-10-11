@@ -51,6 +51,8 @@ const EditDoctorVisitingFormModal = ({
         .then(
           (response) => {
             let updatedForm = response.data;
+            updatedForm.doctorName = doctorName;
+            console.log(updatedForm);
             var updateIndex = doctorVisitingForms
               .map((item) => item.id)
               .indexOf(doctorVisitingForm.id);
@@ -108,8 +110,8 @@ const EditDoctorVisitingFormModal = ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "80%",
-    height: "90%",
+    width: "60%",
+    // height: "90%",
     overflowX: "auto",
     bgcolor: "background.paper",
     p: 4,
@@ -121,50 +123,50 @@ const EditDoctorVisitingFormModal = ({
           <CssBaseline />
           <AppBar position="absolute" color="default" elevation={0}></AppBar>
           <Container component="main" maxWidth="s" sx={{ mb: 4 }}>
-            <Paper
+            {/* <Paper
               variant="outlined"
               sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-            >
+            > */}
+            <React.Fragment>
               <React.Fragment>
-                <React.Fragment>
-                  <form
-                    ref={myForm}
-                    onSubmit={handleSubmit(handleEdit)}
-                    novalidate
-                  >
-                    {
-                      <VisitingDoctorFirstStep
-                        patient={patient}
-                        description={description}
-                        setDescription={setDescription}
-                        doctorId={doctorId}
-                        doctorName={doctorName}
-                        setDoctorName={setDoctorName}
-                        setDoctorId={setDoctorId}
-                        visitingFormCode={visitingFormCode}
-                      />
-                    }
-                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                      <Button
-                        variant="contained"
-                        // type="submit"
-                        onClick={handleEdit}
-                        sx={{ mt: 3, ml: 1 }}
-                      >
-                        LƯU
-                      </Button>
-                      <Button
-                        variant="contained"
-                        onClick={onClose}
-                        sx={{ mt: 3, ml: 1 }}
-                      >
-                        HỦY
-                      </Button>
-                    </Box>
-                  </form>
-                </React.Fragment>
+                <form
+                  ref={myForm}
+                  onSubmit={handleSubmit(handleEdit)}
+                  novalidate
+                >
+                  {
+                    <VisitingDoctorFirstStep
+                      patient={patient}
+                      description={description}
+                      setDescription={setDescription}
+                      doctorId={doctorId}
+                      doctorName={doctorName}
+                      setDoctorName={setDoctorName}
+                      setDoctorId={setDoctorId}
+                      visitingFormCode={visitingFormCode}
+                    />
+                  }
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                      variant="contained"
+                      // type="submit"
+                      onClick={handleEdit}
+                      sx={{ mt: 3, ml: 1 }}
+                    >
+                      LƯU
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={onClose}
+                      sx={{ mt: 3, ml: 1 }}
+                    >
+                      HỦY
+                    </Button>
+                  </Box>
+                </form>
               </React.Fragment>
-            </Paper>
+            </React.Fragment>
+            {/* </Paper> */}
           </Container>
         </ThemeProvider>
       </Box>
