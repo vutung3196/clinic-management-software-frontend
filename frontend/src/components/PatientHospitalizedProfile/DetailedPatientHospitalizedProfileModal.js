@@ -25,8 +25,8 @@ const DetailedPatientHospitalizedProfileModal = ({
   patient,
   clinic,
   patientHospitalizedProfileId,
+  patientDoctorVisitingFormId,
 }) => {
-  console.log("now it is:");
   console.log(patientHospitalizedProfileId);
   const [viewImageModal, setViewImageModal] = useState(false);
   const [patientHospitalizedProfile, setPatientHospitalizedProfile] =
@@ -143,49 +143,59 @@ const DetailedPatientHospitalizedProfileModal = ({
   //     : "";
   // };
 
-  // const LabOrderFormsView = (props) => {
-  //   // return props.patientProfile !== undefined &&
-  //   //   props.patientProfile.diseaseStages !== undefined
-  //   //   ? props.patientProfile.diseaseStages.map((entry) => (
-  //   //       <tr>
-  //   //         <td valign="top" align="center">
-  //   //           {entry.createdAt}
-  //   //         </td>
-  //   //         <td>
-  //   //           <div>{entry.description}</div>
-  //   //         </td>
-  //   //       </tr>
-  //   //     ))
-  //   //   : "";
-  // };
+  const LabOrderFormsView = (props) => {
+    return props.patientProfile !== undefined &&
+      props.patientProfile.labOrderForms !== undefined
+      ? props.patientProfile.labOrderForms.map((entry) => (
+          <tr>
+            <td valign="top" align="center">
+              {entry.createdAt}
+            </td>
+            <td>
+              <div>{entry.code}</div>
+            </td>
+            <td>
+              <div>{entry.doctorVisitingFormCode}</div>
+            </td>
+            <td>
+              <div>{entry.description}</div>
+            </td>
+          </tr>
+        ))
+      : "";
+  };
 
   // const showViewImageModal = (file) => {
   //   setCurrentFile(file);
   //   setViewImageModal(!viewImageModal);
   // };
 
-  // const LabTestsView = (props) => {
-  //   // return props.patientProfile !== undefined &&
-  //   //   props.patientProfile.imageFiles !== undefined
-  //   //   ? props.patientProfile.imageFiles.map((entry) => (
-  //   //       <tr>
-  //   //         <td valign="top" align="center">
-  //   //           {entry.createdAt}
-  //   //         </td>
-  //   //         <td>{entry.name}</td>
-  //   //         <td>{entry.description}</td>
-  //   //         <td align="center">
-  //   //           <Icon.Image
-  //   //             class="icon-cursor"
-  //   //             onClick={() => {
-  //   //               showViewImageModal(entry);
-  //   //             }}
-  //   //           />
-  //   //         </td>
-  //   //       </tr>
-  //   //     ))
-  //   //   : "";
-  // };
+  const LabTestsView = (props) => {
+    return props.patientProfile !== undefined &&
+      props.patientProfile.labTests !== undefined
+      ? props.patientProfile.labTests.map((entry) => (
+          <tr>
+            <td valign="top" align="center">
+              {entry.createdAt}
+            </td>
+            <td align="center">{entry.name}</td>
+            <td align="center">{entry.description}</td>
+            <td align="center">
+              {entry.status}
+
+              {/* <Icon.Image
+                class="icon-cursor"
+                onClick={() => {
+                  showViewImageModal(entry);
+                }}
+              /> */}
+            </td>
+            <td align="center"></td>
+            <td align="center">{entry.result}</td>
+          </tr>
+        ))
+      : "";
+  };
 
   return (
     <CModal show={modal} onClose={onClose} size="xl">
@@ -300,12 +310,12 @@ const DetailedPatientHospitalizedProfileModal = ({
                         <th style={style4}>Ngày</th>
                         <th style={style4}>Mã phiếu chỉ định</th>
                         <th style={style4}>Mã phiếu khám</th>
-                        <th>Chỉ định</th>
-                        <th>Kết quả</th>
+                        <th>Mô tả chỉ định</th>
+                        {/* <th>Kết quả</th> */}
                       </tr>
-                      {/* <LabOrderFormsView
+                      <LabOrderFormsView
                         patientProfile={patientHospitalizedProfile}
-                      /> */}
+                      />
                     </tbody>
                   </table>
                 </div>
@@ -325,12 +335,14 @@ const DetailedPatientHospitalizedProfileModal = ({
                       <tr>
                         <th style={style4}>Ngày</th>
                         <th style={style4}>Tên xét nghiệm</th>
+                        <th>Mô tả</th>
+                        <th>Trạng thái</th>
                         <th>Ảnh (nếu có)</th>
                         <th>Kết quả</th>
                       </tr>
-                      {/* <LabTestsView
+                      <LabTestsView
                         patientProfile={patientHospitalizedProfile}
-                      /> */}
+                      />
                     </tbody>
                   </table>
                 </div>
@@ -342,6 +354,9 @@ const DetailedPatientHospitalizedProfileModal = ({
         <LabOrderFormModal
           modal={labOrderFormModal}
           onClose={setLabOrderFormModal}
+          patient={patient}
+          patientHospitalizedProfileId={patientHospitalizedProfileId}
+          patientDoctorVisitingFormId={patientDoctorVisitingFormId}
         />
       </CModalBody>
       <CModalFooter>

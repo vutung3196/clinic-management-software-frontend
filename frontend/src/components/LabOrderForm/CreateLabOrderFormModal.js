@@ -22,58 +22,42 @@ import {
   CAlert,
 } from "@coreui/react";
 import * as Icon from "react-bootstrap-icons";
-import authService from "../../services/authentication/auth.service";
 
-import "react-datepicker/dist/react-datepicker.css";
-
-import DatePicker from "react-datepicker";
-import MedicationElementComponent from "./MedicationElementComponent";
-// import PrescriptionService from "../../services/prescription/prescription.service";
-// import MedicationSelection from "../MedicationSelection";
-// import PrescriptionHistory from "../PrescriptionHistory";
-// import FilesUpload from "../FilesUpload";
-// import DiseaseStage from "./DiseaseStage";
-// import clinicService from "src/services/clinicservice/clinic.service";
+import MedicalServiceElementComponent from "./MedicalServiceElementComponent";
+import FilesUpload from "../FilesUpload";
+import laborderformService from "src/services/laborderform/laborderform.service";
+import MedicalServiceSelection from "../MedicalServiceSelection";
+import authService from "src/services/authentication/auth.service";
 
 const CreateLabOrderFormModal = ({
   patientId,
   patient,
   modal,
   onClose,
-  prescriptionsHistory,
-  setPrescriptionHistory,
-  files,
-  setFiles,
-  diseaseStages,
-  setDiseaseStages,
-  prescription,
-  containEdit,
-  prescriptions,
-  setPrescriptions,
+  patientHospitalizedProfileId,
+  patientDoctorVisitingFormId,
 }) => {
   const a = {
     index: 0,
-    medicationId: "",
+    id: "",
     name: "",
-    number: "",
-    usage: "",
+    quantity: 0,
+    description: "",
   };
   const initialArray = [a];
-  const [numberMedicationChildren, setNumberMedicationChildren] = useState(1);
+  const [numberMedicalServicesChildren, setNumberMedicalServicesChildren] =
+    useState(1);
 
   const [date, setDate] = useState("");
 
-  // Create prescription model
-  const [visitReason, setVisitReason] = useState("");
-  const [diagnosedDescription, setDiagnosedDescription] = useState("");
-  const [revisitDate, setRevisitDate] = useState(new Date());
-  const [doctorSuggestion, setDoctorSuggestion] = useState("");
-  const [medicationList, setMedicationList] = useState([]);
-  const [patientPrescritionsHistory, setPatientPrescritionsHistory] = useState(
-    []
-  );
-  const [clinicName, setClinicName] = useState("");
-  const [messages, setMessages] = useState([]);
+  // Create lab order form model
+  const [description, setDescription] = useState("");
+  const [labTests, setLabTests] = useState([]);
+  const [code, setCode] = useState("");
+  const [day, setDay] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+  const [doctorName, setDoctorName] = useState("");
 
   const retrieveClinicInformation = () => {
     // var currentUser = authService.getCurrentUser();
@@ -90,21 +74,34 @@ const CreateLabOrderFormModal = ({
     //   });
   };
 
-  // useEffect(() => {
-  //   setPatientPrescritionsHistory(prescriptionsHistory);
-  //   setMedicationList(prescription.medicationInformation);
-  //   setRevisitDate(new Date(prescription.revisitDate));
-  //   var arr = prescription.createdAt.split("/");
-  //   var date = {
-  //     day: arr[1],
-  //     month: arr[0],
-  //     year: arr[2],
-  //   };
-  //   setDate(date);
-  //   console.log("real medication list is");
-  //   console.log(medicationList);
-  //   retrieveClinicInformation();
-  // }, [prescriptionsHistory, prescription.medicationInformation]);
+  useEffect(() => {
+    var dateObj = new Date();
+    var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    var day = dateObj.getUTCDate();
+    var year = dateObj.getUTCFullYear();
+    setDay(day);
+    setMonth(month);
+    setYear(year);
+
+    var currentMillis = new Date().getUTCMilliseconds();
+    setCode("CĐ" + patient.id.toString() + currentMillis.toString());
+    var currentUser = authService.getCurrentUser();
+    console.log(currentUser);
+    setDoctorName(currentUser.fullName);
+    //   setPatientPrescritionsHistory(prescriptionsHistory);
+    //   setMedicationList(prescription.medicationInformation);
+    //   setRevisitDate(new Date(prescription.revisitDate));
+    //   var arr = prescription.createdAt.split("/");
+    //   var date = {
+    //     day: arr[1],
+    //     month: arr[0],
+    //     year: arr[2],
+    //   };
+    //   setDate(date);
+    //   console.log("real medication list is");
+    //   console.log(medicationList);
+    //   retrieveClinicInformation();
+  }, [patient.id, modal]);
 
   const cursorPointerStyle = {
     cursor: "pointer",
@@ -121,136 +118,108 @@ const CreateLabOrderFormModal = ({
           shape="square"
           size="sm"
           onClick={() => {
-            createPrescription();
+            createLabOrderForm();
           }}
         >
-          Lưu
+          Lưu và in
         </CButton>
       );
     }
   };
 
-  const removeMedication = (index) => {
-    medicationList.splice(index, 1);
+  const removeMedicalService = (index) => {
+    labTests.splice(index, 1);
     var updatedMedicationList = [];
-    for (let i = 0; i < medicationList.length; i++) {
-      var a = medicationList[i];
+    for (let i = 0; i < labTests.length; i++) {
+      var a = labTests[i];
       updatedMedicationList.push(a);
     }
-    setMedicationList(updatedMedicationList);
-    setNumberMedicationChildren(medicationList.length);
+    setLabTests(updatedMedicationList);
+    setNumberMedicalServicesChildren(labTests.length);
   };
 
   const closeModal = () => {
-    prescription.diagnosedDescription = "";
-    prescription.visitReason = "";
-    prescription.doctorSuggestion = "";
-    setVisitReason("");
-    setDiagnosedDescription("");
-    setDoctorSuggestion("");
-    setMedicationList(initialArray);
-    setNumberMedicationChildren(0);
-    setFiles([]);
-    setPrescriptionHistory([]);
-    if (setDiseaseStages !== undefined) {
-      setDiseaseStages([]);
-    }
-    setMessages([]);
+    setDescription("");
+    setLabTests(initialArray);
+    setNumberMedicalServicesChildren(0);
     onClose(false);
   };
 
-  const onAddMedicationElement = () => {
+  const onAddMedicalServiceElement = () => {
     var a = {
-      index: numberMedicationChildren,
+      index: numberMedicalServicesChildren,
       id: 0,
-      quantity: 0,
-      number: 0,
+      // number: 0,
       usage: null,
-      name: null,
+      name: "",
     };
-    setNumberMedicationChildren(numberMedicationChildren + 1);
-    setMedicationList((prev) => [...medicationList, a]);
+    setNumberMedicalServicesChildren(numberMedicalServicesChildren + 1);
+    setLabTests((prev) => [...labTests, a]);
   };
 
-  const onChangeVisitReason = (visitReason) => {
-    setVisitReason(visitReason);
-    prescription.visitReason = visitReason;
+  const onChangeDescription = (description) => {
+    setDescription(description);
   };
 
-  const onChangeDiagnosedDescription = (diagnosedDescription) => {
-    console.log(diagnosedDescription);
-    setDiagnosedDescription(diagnosedDescription);
-    prescription.diagnosedDescription = diagnosedDescription;
-  };
-
-  const onChangeDoctorSuggestion = (suggestion) => {
-    console.log(suggestion);
-    setDoctorSuggestion(suggestion);
-    prescription.doctorSuggestion = suggestion;
-  };
-
-  const createPrescription = () => {
+  const createLabOrderForm = () => {
     // console.log(medicationList);
-    // var medicationInformation = [];
-    // for (let i = 0; i < medicationList.length; i++) {
-    //   if (medicationList[i].name === "") {
-    //     continue;
-    //   }
-    //   var a = {
-    //     medicationId: medicationList[i].id,
-    //     number: parseInt(medicationList[i].number),
-    //     usage: medicationList[i].usage,
-    //     name: medicationList[i].name,
-    //   };
-    //   medicationInformation.push(a);
-    // }
-    // console.log(medicationInformation);
-    // PrescriptionService.addPrescription(
-    //   patientId,
-    //   visitReason,
-    //   diagnosedDescription,
-    //   revisitDate,
-    //   doctorSuggestion,
-    //   null,
-    //   medicationInformation
-    // ).then(
-    //   (response) => {
-    //     setVisitReason("");
-    //     setDiagnosedDescription("");
-    //     setDoctorSuggestion("");
-    //     setMedicationList(initialArray);
-    //     setNumberMedicationChildren(0);
-    //     setMessages([]);
-    //     onClose(false);
-    //   },
-    //   (error) => {
-    //     console.log("=========");
-    //     console.log(error.response.data);
-    //     console.log("ahahah");
-    //     if (error.response.data.errors !== undefined) {
-    //       var a = error.response.data.errors.DiagnosedDescription;
-    //       let arr = [];
-    //       if (a !== undefined) {
-    //         arr.push(a);
-    //       }
-    //       setMessages(arr);
-    //     }
-    //     if (typeof error.response.data === "string") {
-    //       let b = error.response.data;
-    //       let arr = [];
-    //       if (b !== undefined) {
-    //         arr.push(b);
-    //       }
-    //       setMessages(arr);
-    //     }
-    //   }
-    // );
+    var labTestInformation = [];
+    for (let i = 0; i < labTests.length; i++) {
+      if (labTests[i].name === "") {
+        continue;
+      }
+      var a = {
+        medicalServiceId: labTests[i].id,
+        // quantity: parseInt(labTests[i].quantity),
+        description: labTests[i].description,
+        name: labTests[i].name,
+      };
+      labTestInformation.push(a);
+    }
+    console.log(labTestInformation);
+    laborderformService
+      .create(
+        description,
+        labTestInformation,
+        patientHospitalizedProfileId,
+        code,
+        patientDoctorVisitingFormId
+      )
+      .then(
+        (response) => {
+          setDescription("");
+          setLabTests(initialArray);
+          setNumberMedicalServicesChildren(0);
+          onClose(false);
+        },
+        (error) => {
+          console.log("=========");
+          console.log(error.response.data);
+          console.log("ahahah");
+          // if (error.response.data.errors !== undefined) {
+          //   var a = error.response.data.errors.DiagnosedDescription;
+          //   let arr = [];
+          //   if (a !== undefined) {
+          //     arr.push(a);
+          //   }
+          //   setMessages(arr);
+          // }
+          // if (typeof error.response.data === "string") {
+          //   let b = error.response.data;
+          //   let arr = [];
+          //   if (b !== undefined) {
+          //     arr.push(b);
+          //   }
+          //   setMessages(arr);
+          // }
+        }
+      );
   };
 
   return (
     <CModal show={modal} onClose={closeModal} size="xl">
       <CModalHeader closeButton>
-        <CModalTitle>KÊ ĐƠN</CModalTitle>
+        <CModalTitle>Phiếu chỉ định</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <div>
@@ -258,27 +227,36 @@ const CreateLabOrderFormModal = ({
             <CContainer>
               <CRow className="justify-content-center">
                 <CCol md="1" lg="2" xl="3">
-                  <CCard className="mx-1">
-                    {/* <DiseaseStage
-                      diseaseStages={diseaseStages}
-                      setDiseaseStages={setDiseaseStages}
-                      patientId={patientId}
-                    /> */}
-                  </CCard>
-                  {/* <MedicationSelection
-                    medications={medicationList}
-                    setMedications={setMedicationList}
-                    setNumberMedicationChildren={setNumberMedicationChildren}
-                    numberMedicationChildren={numberMedicationChildren}
-                  /> */}
+                  <MedicalServiceSelection
+                    medicalServiceList={labTests}
+                    setMedicalServiceList={setLabTests}
+                    setNumberMedicalServicesChildren={
+                      setNumberMedicalServicesChildren
+                    }
+                    numberMedicalServicesChildren={
+                      numberMedicalServicesChildren
+                    }
+                  />
                 </CCol>
                 <CCol md="9" lg="7" xl="6">
                   <CCard className="mx-1" id="ioc66_sec2">
                     <CCardBody className="p-4">
                       <CForm>
                         <div>
-                          <h3 className="ioc66h">Đơn thuốc</h3>
+                          <h3 className="ioc66h">Phiếu chỉ định</h3>
                         </div>
+                        <CRow>
+                          <CCol>
+                            <p
+                              className="text"
+                              style={{
+                                "text-align": "center",
+                              }}
+                            >
+                              Mã phiếu: <b>{code}</b>
+                            </p>
+                          </CCol>
+                        </CRow>
                         <CRow>
                           <CCol>
                             <p className="text">
@@ -287,7 +265,8 @@ const CreateLabOrderFormModal = ({
                           </CCol>
                           <CCol>
                             <p className="text">
-                              Năm sinh: <b>{patient.yearOfBirth}</b>
+                              Ngày tháng năm sinh:{" "}
+                              <b>{patient.dateOfBirthDetail}</b>
                             </p>
                           </CCol>
                         </CRow>
@@ -306,26 +285,32 @@ const CreateLabOrderFormModal = ({
                         <CRow>
                           <CCol>
                             <p className="text">
-                              Địa chỉ: <b>{patient.addressCity}</b>
+                              Địa chỉ (tỉnh): <b>{patient.addressCity}</b>
+                            </p>
+                          </CCol>
+                        </CRow>
+                        <CRow>
+                          <CCol>
+                            <p className="text">
+                              Mã số thẻ BHYT (nếu có):{" "}
+                              <b>{patient.medicalInsuranceCode}</b>
                             </p>
                           </CCol>
                         </CRow>
                         <CRow>
                           <CFormControl className="mb-3">
                             {/* <CCol> */}
-                            <h8 className="text ahihi td-ioc66">Lý do khám:</h8>
+                            <h8 className="text ahihi td-ioc66">Mô tả:</h8>
                             {/* </CCol> */}
                             {/* <CCol> */}
                             <input
                               type="text"
                               placeholder=""
                               id="ioc66_d_reason"
-                              value={prescription.visitReason}
+                              value={description}
                               onChange={(e) =>
-                                onChangeVisitReason(e.target.value)
+                                onChangeDescription(e.target.value)
                               }
-                              // value={visitReason}
-                              // onChange={onChangeVisitReason}
                               class="ioc_textbox txt-dot fullwidth td-ioc66"
                             ></input>
                           </CFormControl>
@@ -333,31 +318,23 @@ const CreateLabOrderFormModal = ({
                         <CRow>
                           {/* <CCol> */}
                           <CFormControl className="mb-3">
-                            <h8 className="text ahihi td-ioc66">Chẩn đoán:</h8>
-                            <input
-                              type="text"
-                              placeholder=""
-                              id="ioc66_d_reason"
-                              value={prescription.diagnosedDescription}
-                              onChange={(e) =>
-                                onChangeDiagnosedDescription(e.target.value)
-                              }
-                              class="ioc_textbox txt-dot fullwidth td-ioc66"
-                            />
+                            <h8 className="text ahihi td-ioc66">Dịch vụ:</h8>
                           </CFormControl>
                         </CRow>
                         <CRow>
                           <div id="ioc66_list">
                             <ul id="ioc66_list_c" class="poproduct_option_none">
-                              {medicationList.map((entry, index) => (
+                              {labTests.map((entry, index) => (
                                 <div class="ioc66i">
                                   {
-                                    <MedicationElementComponent
+                                    <MedicalServiceElementComponent
                                       index={index}
-                                      removeMedication={removeMedication}
-                                      setMedications={setMedicationList}
-                                      medications={medicationList}
-                                      medication={entry}
+                                      removeMedicalService={
+                                        removeMedicalService
+                                      }
+                                      setMedicalServices={setLabTests}
+                                      medicalServices={labTests}
+                                      medicalService={entry}
                                     />
                                   }
                                 </div>
@@ -372,7 +349,7 @@ const CreateLabOrderFormModal = ({
                                 size="22"
                                 style={cursorPointerStyle}
                                 onClick={() => {
-                                  onAddMedicationElement();
+                                  onAddMedicalServiceElement();
                                 }}
                               />
                               <div class="clear"></div>
@@ -382,48 +359,20 @@ const CreateLabOrderFormModal = ({
                         </CRow>
                         <CRow>
                           <CCol>
-                            <CFormControl className="mb-3">
-                              <h8 className="text">Ngày tái khám: </h8>
-                              <DatePicker
-                                class="ioc_textbox txt-dot"
-                                selected={revisitDate}
-                                onChange={(selected) => {
-                                  let AdjusteddateValue = new Date(
-                                    selected.getTime() -
-                                      selected.getTimezoneOffset() * 60000
-                                  );
-                                  setRevisitDate(AdjusteddateValue);
-                                }}
-                              />
-                            </CFormControl>
-                          </CCol>
-                        </CRow>
-                        <CRow>
-                          <CCol>
-                            <div>
-                              <h8 className="text">Lời dặn:</h8>
-                            </div>
-                            <div>
-                              <textarea
-                                id="ioc66_d_loidan"
-                                class="suggestion-style ioc_textbox ioc66loidan ui-autocomplete-input"
-                                rows="4"
-                                value={prescription.doctorSuggestion}
-                                onChange={(e) =>
-                                  onChangeDoctorSuggestion(e.target.value)
-                                }
-                                autocomplete="off"
-                              ></textarea>
-                            </div>
-                          </CCol>
-                          <CCol>
-                            <div class="r">
-                              <div class="d">
-                                Ngày {date.day} Tháng {date.month} Năm{" "}
-                                {date.year}
+                            <div class="ioc66_foot">
+                              {/* <div class="r">
+                              <div class="d">Ngày 11 Tháng 10 Năm 2021</div>
+                              <div class="p">Người lập</div>
+                              <div class="b">Phòng Khám ABC</div>
+                            </div> */}
+                              <div class="r">
+                                <div class="d">
+                                  Ngày {day} Tháng {month} Năm {year}
+                                </div>
+                                <div class="p">Người lập</div>
+                                <div class="b">{doctorName}</div>
+                                {/* <div class="clear"></div> */}
                               </div>
-                              <div class="p">BÁC SĨ</div>
-                              <div class="b">{clinicName}</div>
                             </div>
                           </CCol>
                         </CRow>
@@ -432,18 +381,12 @@ const CreateLabOrderFormModal = ({
                   </CCard>
                 </CCol>
                 <CCol md="1" lg="3" xl="3">
-                  {/* <PrescriptionHistory
-                    patientPrescritionsHistory={patientPrescritionsHistory}
-                    setMedicationList={setMedicationList}
-                    setDoctorSuggestion={setDoctorSuggestion}
-                    setNumberMedicationChildren={setNumberMedicationChildren}
-                  />
                   <FilesUpload
                     modal={modal}
                     patientId={patientId}
-                    files={files}
-                    setFiles={setFiles}
-                  /> */}
+                    //  files={files}
+                    //  setFiles={setFiles}
+                  />
                 </CCol>
               </CRow>
             </CContainer>
@@ -451,7 +394,7 @@ const CreateLabOrderFormModal = ({
         </div>
       </CModalBody>
       <CModalFooter>
-        <CreateButton display={containEdit} />
+        <CreateButton />
         <CButton
           color="primary"
           variant="outline"

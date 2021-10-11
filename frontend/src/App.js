@@ -15,6 +15,7 @@ import PatientsPage from "./containers/pages/Patients";
 import SingleReceiptPage from "./containers/pages/SingleReceipt";
 import SingleDoctorVisitingFormPage from "./containers/pages/SingleDoctorVisitingForm";
 import DoctorVisitingFormsPage from "./containers/pages/DoctorVisitingForms";
+import SingleLabOrderFormPage from "./containers/pages/SingleLabOrderForm";
 
 import authService from "./services/authentication/auth.service";
 
@@ -84,6 +85,10 @@ const App = () => {
           <PrivateRoute
             path="/receipt/:id"
             component={SingleReceiptPage}
+          ></PrivateRoute>
+          <PrivateRoute
+            path="/laborderform/:id"
+            component={SingleLabOrderFormPage}
           ></PrivateRoute>
           <PrivateRoute
             path="/doctorvisitingform/:id"

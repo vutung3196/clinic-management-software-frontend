@@ -27,6 +27,7 @@ const CreateOrEditHospitalizedProfileModal = ({
   isEditing,
   detailedPatientHospitalizedProfileModal,
   setDetailedPatientHospitalizedProfileModal,
+  setHospitalizedProfileId,
 }) => {
   console.log("====");
   const { register, handleSubmit, errors, formState } = useForm({
@@ -45,7 +46,9 @@ const CreateOrEditHospitalizedProfileModal = ({
         .create(patient.id, diseaseName, description, null, code)
         .then(
           (response) => {
+            console.log(response.data.id);
             setPatientHospitalizedProfileId(response.data.id);
+            setHospitalizedProfileId(response.data.id);
             setDetailedPatientHospitalizedProfileModal(
               !detailedPatientHospitalizedProfileModal
             );

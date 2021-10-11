@@ -115,6 +115,7 @@ const DoctorVisitingFormsForDoctor = () => {
           }
         );
     }
+    setId(row.id);
     setPatient(row.patientInformation);
     setHospitalizedProfile(row);
     setHospitalizedModal(!hospitalizedModal);
@@ -145,6 +146,8 @@ const DoctorVisitingFormsForDoctor = () => {
 
   const toggleOpenPatientProfileModal = (row, index) => {
     console.log(index);
+    console.log("========");
+    console.log(row.id);
     // if (index > 0) {
     //   setOpenErrorModal(true);
     //   setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
@@ -174,6 +177,7 @@ const DoctorVisitingFormsForDoctor = () => {
           }
         );
     }
+    setId(row.id);
     setClinic(row.clinicInformation);
     setPatientProfileModal(!patientProfileModal);
     setPatient(row.patientInformation);
@@ -373,6 +377,7 @@ const DoctorVisitingFormsForDoctor = () => {
         setDetailedPatientHospitalizedProfileModal={
           setDetailedPatientHospitalizedProfileModal
         }
+        setHospitalizedProfileId={setId}
       />
       <PatientProfileModal
         modal={patientProfileModal}
@@ -393,6 +398,7 @@ const DoctorVisitingFormsForDoctor = () => {
         patient={patient}
         clinic={clinic}
         patientHospitalizedProfileId={patientHospitalizedProfileId}
+        patientDoctorVisitingFormId={id}
       />
     </>
   );
