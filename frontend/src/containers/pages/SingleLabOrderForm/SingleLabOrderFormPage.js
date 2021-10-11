@@ -386,6 +386,39 @@ const SingleLabOrderFormPage = (props) => {
                       {labOrderInformation.description}
                     </td>
                   </tr>
+                  <tr>
+                    <td
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Trạng thái
+                    </td>
+                    <td
+                      class="s"
+                      valign="top"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      colspan="4"
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {labOrderInformation.status}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -486,6 +519,7 @@ const SingleLabOrderFormPage = (props) => {
                 <br />
                 <br />
                 <br />
+                Người lập
               </div>
               <div class="clear"></div>
             </div>

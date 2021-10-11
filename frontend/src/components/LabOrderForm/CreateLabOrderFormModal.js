@@ -59,21 +59,6 @@ const CreateLabOrderFormModal = ({
   const [year, setYear] = useState("");
   const [doctorName, setDoctorName] = useState("");
 
-  const retrieveClinicInformation = () => {
-    // var currentUser = authService.getCurrentUser();
-    // console.log("=====");
-    // console.log(currentUser);
-    // clinicService
-    //   .getClinicInformation(currentUser.clinicId)
-    //   .then((response) => {
-    //     var clinic = response.data;
-    //     setClinicName(clinic.name);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
-  };
-
   useEffect(() => {
     var dateObj = new Date();
     var month = dateObj.getUTCMonth() + 1; //months from 1-12
@@ -88,19 +73,6 @@ const CreateLabOrderFormModal = ({
     var currentUser = authService.getCurrentUser();
     console.log(currentUser);
     setDoctorName(currentUser.fullName);
-    //   setPatientPrescritionsHistory(prescriptionsHistory);
-    //   setMedicationList(prescription.medicationInformation);
-    //   setRevisitDate(new Date(prescription.revisitDate));
-    //   var arr = prescription.createdAt.split("/");
-    //   var date = {
-    //     day: arr[1],
-    //     month: arr[0],
-    //     year: arr[2],
-    //   };
-    //   setDate(date);
-    //   console.log("real medication list is");
-    //   console.log(medicationList);
-    //   retrieveClinicInformation();
   }, [patient.id, modal]);
 
   const cursorPointerStyle = {

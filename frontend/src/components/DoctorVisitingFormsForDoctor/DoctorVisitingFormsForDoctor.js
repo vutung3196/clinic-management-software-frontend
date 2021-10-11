@@ -82,7 +82,7 @@ const DoctorVisitingFormsForDoctor = () => {
   const cursorPointerStyle = {
     cursor: "pointer",
   };
-  const [patient, setPatient] = useState(constPatient);
+  const [patient, setPatient] = useState("");
 
   const toggleCreateHospitalizedProfile = (row, index) => {
     console.log(row);

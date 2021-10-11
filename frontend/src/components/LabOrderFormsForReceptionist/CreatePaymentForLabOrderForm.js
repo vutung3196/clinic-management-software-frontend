@@ -12,23 +12,49 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const VisitingDoctorSecondStep = ({
+const CreatePaymentForLabOrderForm = ({
+  open,
+  handleClose,
   patient,
-  paymentDescription,
-  setPaymentDescription,
-  medicalServices,
-  total,
-  paymentCode,
+  labTests,
 }) => {
-  const onChangeDescription = (value) => {
-    setPaymentDescription(value);
+  console.log(patient);
+  const theme = createTheme();
+
+  const [paymentDescription, setPaymentDescription] = React.useState("");
+  const [total, setTotal] = React.useState(0);
+  const [paymentCode, setPaymentCode] = React.useState("");
+
+  React.useEffect(() => {
+    var currentMillis = new Date().getUTCMilliseconds();
+    setPaymentCode("PT" + patient.id + currentMillis.toString());
+    var total = 0;
+    for (var i = 0; i < labTests.length; i++) {
+      total = total + labTests[i].price;
+    }
+    setTotal(total);
+  }, [patient, labTests]);
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "80%",
+    height: "70%",
+    overflowX: "auto",
+    bgcolor: "background.paper",
+    p: 4,
   };
 
   return (
-    <React.Fragment>
-      <Box>
+    <Modal open={open} onClose={handleClose}>
+      <Box sx={style}>
+        <ThemeProvider theme={theme}></ThemeProvider>
         <Typography component="h1" variant="h4" align="center">
           Phiếu thu
         </Typography>
@@ -125,7 +151,7 @@ const VisitingDoctorSecondStep = ({
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {medicalServices.map((row, index) => (
+                    {labTests.map((row, index) => (
                       <TableRow
                         key={row.name}
                         sx={{
@@ -137,9 +163,9 @@ const VisitingDoctorSecondStep = ({
                           {index + 1}
                         </TableCell>
                         <TableCell>{row.name}</TableCell>
-                        <TableCell>{row.quantity}</TableCell>
-                        <TableCell>{row.basePrice}</TableCell>
-                        <TableCell>{row.total}</TableCell>
+                        <TableCell>1</TableCell>
+                        <TableCell>{row.price}</TableCell>
+                        <TableCell>{row.price}</TableCell>
                       </TableRow>
                     ))}
                     <TableRow>
@@ -164,7 +190,7 @@ const VisitingDoctorSecondStep = ({
               fullWidth
               variant="standard"
               value={paymentDescription}
-              onChange={(e) => onChangeDescription(e.target.value)}
+              onChange={(e) => setPaymentDescription(e.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
@@ -173,10 +199,9 @@ const VisitingDoctorSecondStep = ({
             </Typography>
           </Grid>
         </Grid>
-        {/* </Box> */}
       </Box>
-    </React.Fragment>
+    </Modal>
   );
 };
 
-export default VisitingDoctorSecondStep;
+export default CreatePaymentForLabOrderForm;
