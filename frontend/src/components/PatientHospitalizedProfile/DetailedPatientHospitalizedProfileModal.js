@@ -17,6 +17,7 @@ import {
 import { Link } from "react-router-dom";
 // import ViewImageModal from "../FilesUpload/ViewImageModal";
 import hospitalizedprofileService from "src/services/hospitalizedprofile/hospitalizedprofile.service";
+import LabOrderFormModal from "../LabOrderForm";
 
 const DetailedPatientHospitalizedProfileModal = ({
   modal,
@@ -31,6 +32,7 @@ const DetailedPatientHospitalizedProfileModal = ({
   const [patientHospitalizedProfile, setPatientHospitalizedProfile] =
     useState(false);
   const [currentFile, setCurrentFile] = useState("");
+  const [labOrderFormModal, setLabOrderFormModal] = useState(false);
 
   const style1 = {
     width: "100px",
@@ -337,17 +339,19 @@ const DetailedPatientHospitalizedProfileModal = ({
           </div>
         </div>
 
-        {/* <ViewImageModal
-          modal={viewImageModal}
-          onClose={setViewImageModal}
-          file={currentFile}
-        /> */}
+        <LabOrderFormModal
+          modal={labOrderFormModal}
+          onClose={setLabOrderFormModal}
+        />
       </CModalBody>
       <CModalFooter>
         <CButton color="secondary" onClick={() => onClose(false)}>
           Kê đơn
         </CButton>
-        <CButton color="secondary" onClick={() => onClose(false)}>
+        <CButton
+          color="secondary"
+          onClick={() => setLabOrderFormModal(!labOrderFormModal)}
+        >
           Tạo phiếu chỉ định
         </CButton>
         <CButton color="secondary" onClick={() => onClose(false)}>
