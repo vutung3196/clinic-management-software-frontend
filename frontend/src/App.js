@@ -17,6 +17,7 @@ import SingleDoctorVisitingFormPage from "./containers/pages/SingleDoctorVisitin
 import DoctorVisitingFormsPage from "./containers/pages/DoctorVisitingForms";
 import SingleLabOrderFormPage from "./containers/pages/SingleLabOrderForm";
 import LabOrderFormsPage from "./containers/pages/LabOrderForms";
+import LabTestsPage from "./containers/pages/LabTests";
 
 import authService from "./services/authentication/auth.service";
 
@@ -25,6 +26,7 @@ import AdminRoute from "./utils/adminRoute";
 import MasterAdminRoute from "./utils/masterAdminRoute";
 import ReceptionistRoute from "./utils/receptionistRoute";
 import DoctorRoute from "./utils/doctorRoute";
+import TestSpecialistRoute from "./utils/testSpecialistRoute";
 import DoctorAndReceptionistRoute from "./utils/doctorAndReceptionistRoute/doctorAndReceptionistRoute";
 
 const loading = (
@@ -83,6 +85,12 @@ const App = () => {
             props
             component={DoctorVisitingFormsPage}
           ></DoctorAndReceptionistRoute>
+          <TestSpecialistRoute
+            exact
+            path="/labtests"
+            props
+            component={LabTestsPage}
+          ></TestSpecialistRoute>
           <PrivateRoute
             path="/receipt/:id"
             component={SingleReceiptPage}

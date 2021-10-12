@@ -19,6 +19,7 @@ import navigation from "../../containers/_nav";
 import adminNavigation from "../../containers/_adminNav";
 import masterAdminNavigation from "../../containers/_masterAdminNav";
 import receptionistNav from "src/containers/_receptionistNav";
+import testSpecialistNav from "src/containers/_testSpecialistNav";
 import doctorNav from "src/containers/_doctorNav";
 
 export const CustomSideBar = () => {
@@ -66,10 +67,10 @@ export const CustomSideBar = () => {
         }}
       />
     );
-  } else {
+  } else if (AuthService.isTestSpecialist()) {
     return (
       <CCreateElement
-        items={navigation}
+        items={testSpecialistNav}
         components={{
           CSidebarNavDropdown,
           CSidebarNavItem,
@@ -77,6 +78,15 @@ export const CustomSideBar = () => {
         }}
       />
     );
+  } else {
+    <CCreateElement
+      items={navigation}
+      components={{
+        CSidebarNavDropdown,
+        CSidebarNavItem,
+        CSidebarNavTitle,
+      }}
+    />;
   }
 };
 

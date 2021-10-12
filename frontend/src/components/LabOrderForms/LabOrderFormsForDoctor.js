@@ -7,23 +7,15 @@ import {
   CCol,
   CDataTable,
   CRow,
-  CButton,
-  CCollapse,
 } from "@coreui/react";
 
-import CIcon from "@coreui/icons-react";
 import * as Icon from "react-bootstrap-icons";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 import ArticleIcon from "@mui/icons-material/Article";
-import CreatePaymentForLabOrderForm from "./CreatePaymentForLabOrderForm";
+import SingleLabOrderFormModal from "./SingleLabOrderFormModal";
 
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-const LabOrderFormsForReceptionist = () => {
-  const [labOrderForm, setLabOrderForms] = useState([]);
+const LabOrderFormsForDoctor = () => {
+  const [labOrderForms, setLabOrderForms] = useState([]);
+  const [labOrderForm, setLabOrderForm] = useState([]);
   const [doctorVisitingForm, setDoctorVisitingForm] = useState("");
   const [details, setDetails] = useState([]);
   const [createModal, setCreateModal] = useState(false);
@@ -37,8 +29,10 @@ const LabOrderFormsForReceptionist = () => {
   const [doctorVisitingFormModal, setDoctorVisitingFormModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
+  const [detailedModal, setDetailedModal] = React.useState(false);
 
   const handleClosePaymentModal = () => setPaymentModal(false);
+  const handleCloseDetailedModal = () => setDetailedModal(false);
 
   const handleCloseSuccessModal = (event, reason) => {
     if (reason === "clickaway") {
@@ -61,10 +55,18 @@ const LabOrderFormsForReceptionist = () => {
   };
   const [patient, setPatient] = useState("");
 
-  const toggleEdit = (row) => {
+  const toggleCreatePayment = (row) => {
+    if (row.status === "Đã thanh toán") {
+      setOpenErrorModal(true);
+      setNotificationMessage("Phiếu chỉ định này đã được thanh toán");
+      return;
+    }
+    console.log("+++++");
+    console.log(row);
     setPatient(row.patientInformation);
-    setDoctorVisitingForm(row);
+    setId(row.id);
     setLabTests(row.labTests);
+    setLabOrderForm(row);
     setPaymentModal(true);
   };
 
@@ -80,6 +82,8 @@ const LabOrderFormsForReceptionist = () => {
     laborderformService
       .getByRole()
       .then((response) => {
+        console.log("really");
+        console.log(response.data);
         setLabOrderForms(response.data);
       })
       .catch((e) => {
@@ -93,7 +97,7 @@ const LabOrderFormsForReceptionist = () => {
   const fields = [
     {
       key: "code",
-      label: "MÃ PHIẾU KHÁM",
+      label: "MÃ PHIẾU CHỈ ĐỊNH",
       _style: { width: "8%" },
     },
     { key: "patientDetailedInformation", label: "THÔNG TIN BỆNH NHÂN" },
@@ -104,29 +108,37 @@ const LabOrderFormsForReceptionist = () => {
     {
       key: "view",
       label: "XEM",
-      _style: { width: "5%" },
+      _style: { width: "2%" },
       sorter: false,
       filter: false,
     },
     {
-      key: "edit",
-      label: "Tạo phiếu thu",
-      _style: { width: "5%" },
+      key: "print",
+      label: "IN",
+      _style: { width: "3%" },
       sorter: false,
       filter: false,
     },
-    // {
-    //   key: "delete",
-    //   label: "XÓA",
-    //   _style: { width: "1%" },
-    //   sorter: false,
-    //   filter: false,
-    // },
+    {
+      key: "delete",
+      label: "XÓA",
+      _style: { width: "3%" },
+      sorter: false,
+      filter: false,
+    },
   ];
 
   const rowsPerPageOption = {
     label: "Số bản ghi trên trang",
     values: [5, 10, 20],
+  };
+
+  const toggleView = (row) => {
+    setPatient(row.patientInformation);
+    setId(row.id);
+    setLabTests(row.labTests);
+    setLabOrderForm(row);
+    setDetailedModal(true);
   };
 
   return (
@@ -137,7 +149,7 @@ const LabOrderFormsForReceptionist = () => {
             <CCardHeader>Danh sách cần khám</CCardHeader>
             <CCardBody>
               <CDataTable
-                items={labOrderForm}
+                items={labOrderForms}
                 fields={fields}
                 columnFilter
                 hover
@@ -155,96 +167,53 @@ const LabOrderFormsForReceptionist = () => {
                         <ArticleIcon
                           style={cursorPointerStyle}
                           onClick={() => {
+                            toggleView(row);
+                          }}
+                        />
+                      </td>
+                    );
+                  },
+                  print: (row) => {
+                    return (
+                      <td className="py-2">
+                        <Icon.Printer
+                          size="23"
+                          style={cursorPointerStyle}
+                          onClick={() => {
                             window.open("/laborderform/" + row.id);
                           }}
                         />
                       </td>
                     );
                   },
-                  edit: (row) => {
+                  delete: (row) => {
                     return (
                       <td className="py-2">
-                        <Icon.PencilSquare
-                          name="cilpencil"
-                          size="22"
+                        <Icon.Printer
+                          size="23"
                           style={cursorPointerStyle}
-                          onClick={() => toggleEdit(row)}
+                          onClick={() => {
+                            window.open("/laborderform/" + row.id);
+                          }}
                         />
                       </td>
                     );
                   },
-                  // delete: (row) => {
-                  //   return (
-                  //     <td className="py-2">
-                  //       <CIcon
-                  //         name="cilTrash"
-                  //         size="xl"
-                  //         style={cursorPointerStyle}
-                  //         onClick={() => {
-                  //           toggleDelete(row);
-                  //         }}
-                  //       />
-                  //     </td>
-                  //   );
-                  // },
                 }}
               ></CDataTable>
             </CCardBody>
           </CCard>
         </CCol>
       </CRow>
-      <Snackbar
-        open={openSuccessModal}
-        autoHideDuration={3000}
-        onClose={handleCloseSuccessModal}
-      >
-        <Alert
-          onClose={handleCloseSuccessModal}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          {notificationMessage}
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={openErrorModal}
-        autoHideDuration={3000}
-        onClose={handleCloseErrorModal}
-      >
-        <Alert
-          onClose={handleCloseErrorModal}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {notificationMessage}
-        </Alert>
-      </Snackbar>
-      <CreatePaymentForLabOrderForm
-        open={paymentModal}
-        onClose={handleClosePaymentModal}
-        patient={patient}
+      <SingleLabOrderFormModal
+        open={detailedModal}
+        onClose={handleCloseDetailedModal}
         labTests={labTests}
-      />
-      {/* <EditDoctorVisitingFormModal
-        open={doctorVisitingFormModal}
-        onClose={handleCloseDoctorVisitingFormModal}
         patient={patient}
-        doctorVisitingForm={doctorVisitingForm}
-        doctorVisitingForms={labOrderForm}
-        setDoctorVisitingForms={setLabOrderForms}
-        setOpenSuccessModal={setOpenSuccessModal}
-        setOpenErrorModal={setOpenErrorModal}
-        setNotificationMessage={setNotificationMessage}
-        isEditing={true}
+        labOrderForm={labOrderForm}
       />
-      <DoctorVisitingFormDeleteModal
-        modal={deleteModal}
-        id={id}
-        onClose={setDeleteModal}
-        doctorVisitingForms={labOrderForm}
-      /> */}
     </>
   );
 };
 
-export default LabOrderFormsForReceptionist;
+export default LabOrderFormsForDoctor;

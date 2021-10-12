@@ -1,8 +1,7 @@
 import axios from "axios";
 import authHeader from "../authentication/auth.header";
 
-const API_URL = "http://localhost:57679/api/laborderform/";
-const API_URL_BY_ROLE = "http://localhost:57679/api/laborderform/byrole";
+const API_URL = "http://localhost:57679/api/labtest/";
 
 const config = {
   headers: { Authorization: `Bearer ${authHeader()}` },
@@ -13,8 +12,11 @@ const getById = async (id) => {
   return response.data;
 };
 
-const getByRole = async (id) => {
-  const response = await axios.get(API_URL_BY_ROLE, config);
+const getByStatus = async (status) => {
+  const response = await axios.get(
+    API_URL + "bystatus?status=" + status,
+    config
+  );
   return response.data;
 };
 
@@ -74,6 +76,6 @@ export default {
   getById,
   create,
   deleteById,
-  getByRole,
   createPayment,
+  getByStatus,
 };

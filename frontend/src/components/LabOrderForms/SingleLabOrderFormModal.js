@@ -15,30 +15,16 @@ import TableRow from "@mui/material/TableRow";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 
-const CreatePaymentForLabOrderForm = ({
+const SingleLabOrderFormModal = ({
   open,
-  handleClose,
-  patient,
+  onClose,
   labTests,
+  patient,
+  labOrderForm,
 }) => {
-  console.log(patient);
   const theme = createTheme();
-
-  const [paymentDescription, setPaymentDescription] = React.useState("");
-  const [total, setTotal] = React.useState(0);
-  const [paymentCode, setPaymentCode] = React.useState("");
-
-  React.useEffect(() => {
-    var currentMillis = new Date().getUTCMilliseconds();
-    setPaymentCode("PT" + patient.id + currentMillis.toString());
-    var total = 0;
-    for (var i = 0; i < labTests.length; i++) {
-      total = total + labTests[i].price;
-    }
-    setTotal(total);
-  }, [patient, labTests]);
-
   const style = {
     position: "absolute",
     top: "50%",
@@ -52,14 +38,14 @@ const CreatePaymentForLabOrderForm = ({
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={onClose}>
       <Box sx={style}>
         <ThemeProvider theme={theme}></ThemeProvider>
         <Typography component="h1" variant="h4" align="center">
-          Phiếu thu
+          Phiếu chỉ định
         </Typography>
         <Typography component="h6" align="center">
-          Mã phiếu: {paymentCode}
+          Mã phiếu: {labOrderForm.code}
         </Typography>
         {/* <Box > */}
         <Grid container spacing={3}>
@@ -128,11 +114,44 @@ const CreatePaymentForLabOrderForm = ({
               readonly
             />
           </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              id="city"
+              name="city"
+              label="Ghi chú"
+              fullWidth
+              variant="standard"
+              value={labOrderForm.description}
+              readonly
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              id="city"
+              name="city"
+              label="Trạng thái"
+              fullWidth
+              variant="standard"
+              value={labOrderForm.status}
+              readonly
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              id="city"
+              name="city"
+              label="Bác sĩ chỉ định"
+              fullWidth
+              variant="standard"
+              value={labOrderForm.doctorName}
+              readonly
+            />
+          </Grid>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography gutterBottom sx={{ mt: 2 }}>
-              Dịch vụ
+              Xét nghiệm
             </Typography>
             <div className="aaa">
               <TableContainer>
@@ -144,10 +163,8 @@ const CreatePaymentForLabOrderForm = ({
                   <TableHead>
                     <TableRow>
                       <TableCell>STT</TableCell>
-                      <TableCell>Dịch vụ</TableCell>
-                      <TableCell>Số lượng</TableCell>
-                      <TableCell>Đơn giá</TableCell>
-                      <TableCell>Tổng cộng</TableCell>
+                      <TableCell>Chỉ định</TableCell>
+                      <TableCell>Mô tả</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -163,17 +180,13 @@ const CreatePaymentForLabOrderForm = ({
                           {index + 1}
                         </TableCell>
                         <TableCell>{row.name}</TableCell>
-                        <TableCell>1</TableCell>
-                        <TableCell>{row.price}</TableCell>
-                        <TableCell>{row.price}</TableCell>
+                        <TableCell>{row.description}</TableCell>
                       </TableRow>
                     ))}
                     <TableRow>
                       <TableCell rowSpan={3} />
                       <TableCell rowSpan={3} />
                       <TableCell rowSpan={3} />
-                      <TableCell align="">Tổng tiền: </TableCell>
-                      <TableCell>{total}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -182,26 +195,18 @@ const CreatePaymentForLabOrderForm = ({
           </Grid>
         </Grid>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              id="firstName"
-              name="firstName"
-              label="Ghi chú"
-              fullWidth
-              variant="standard"
-              value={paymentDescription}
-              onChange={(e) => setPaymentDescription(e.target.value)}
-            />
-          </Grid>
           <Grid item xs={12}>
-            <Typography gutterBottom>
-              Ngày thu tiền: {new Date().toLocaleDateString("vn-VI")}
-            </Typography>
+            <Typography>Ngày tạo: {labOrderForm.createdAt}</Typography>
           </Grid>
         </Grid>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button variant="contained" onClick={onClose} sx={{ mt: 3, ml: 1 }}>
+            THOÁT
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );
 };
 
-export default CreatePaymentForLabOrderForm;
+export default SingleLabOrderFormModal;
