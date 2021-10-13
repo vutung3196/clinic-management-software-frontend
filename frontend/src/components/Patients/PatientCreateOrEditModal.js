@@ -10,21 +10,21 @@ import {
 import { Alert } from "reactstrap";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import Stack from "@mui/material/Stack";
 import PatientService from "../../services/patient/patient.service";
-import Grid from "@mui/material/Grid";
 import { vi } from "date-fns/locale";
 import PhoneInput from "react-phone-number-input";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import Autocomplete from "@mui/material/Autocomplete";
+import Grid from "@mui/material/Grid";
 import Input from "@material-ui/core/Input";
 import Typography from "@mui/material/Typography";
 
@@ -1061,8 +1061,8 @@ const PatientCreateOrEditModal = ({
   const [phoneNumber, setPhoneNumber] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   const [addressCity, setAddressCity] = useState("");
-  const [addressStreet, setAddressStreet] = useState("");
   const [addressDistrict, setAddressDistrict] = useState("");
+  const [addressStreet, setAddressStreet] = useState("");
   const [medicalInsuranceCode, setMedicalInsuranceCode] = useState("");
   const [provinces, setProvinces] = useState([]);
   const [dateOfBirth, handleDateOfBirthChange] = useState(new Date());

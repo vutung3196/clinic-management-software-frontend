@@ -2,6 +2,11 @@ import axios from "axios";
 import authHeader from "../authentication/auth.header";
 
 const API_URL = "http://localhost:57679/api/labtest/";
+const API_DISEASE = "http://localhost:57679/api/disease/";
+const MOVE_TO_END_QUEUE_API_URL =
+  "http://localhost:57679/api/labtest/movetoend";
+const MOVE_TO_BEGINNING_QUEUE_API_URL =
+  "http://localhost:57679/api/labtest/movetobeginning";
 
 const config = {
   headers: { Authorization: `Bearer ${authHeader()}` },
@@ -9,6 +14,11 @@ const config = {
 
 const getById = async (id) => {
   const response = await axios.get(API_URL + id, config);
+  return response.data;
+};
+
+const getDiseases = async () => {
+  const response = await axios.get(API_DISEASE);
   return response.data;
 };
 
@@ -20,25 +30,33 @@ const getByStatus = async (status) => {
   return response.data;
 };
 
-const create = (
-  description,
-  labTests,
-  patientHospitalizedProfileId,
-  code,
-  patientDoctorVisitingFormId
-) => {
+const edit = (id, result, status, currentPageStatus) => {
   return axios
-    .post(
-      API_URL,
+    .put(
+      API_URL + id,
       {
-        description,
-        labTests,
-        patientHospitalizedProfileId,
-        code,
-        patientDoctorVisitingFormId,
+        result,
+        status,
+        currentPageStatus,
       },
       config
     )
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const movetoend = (id) => {
+  return axios
+    .put(MOVE_TO_END_QUEUE_API_URL, { id }, config)
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const movetobeginning = (id) => {
+  return axios
+    .put(MOVE_TO_BEGINNING_QUEUE_API_URL, { id }, config)
     .then((response) => {
       return response.data;
     });
@@ -74,8 +92,11 @@ const deleteById = async (id) => {
 
 export default {
   getById,
-  create,
+  edit,
   deleteById,
   createPayment,
   getByStatus,
+  movetoend,
+  movetobeginning,
+  getDiseases,
 };

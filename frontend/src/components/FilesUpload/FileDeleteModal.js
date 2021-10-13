@@ -9,7 +9,16 @@ import {
 } from "@coreui/react";
 import fileService from "src/services/file/file.service";
 
-const FileDeleteModal = ({ modal, onClose, file, files, setFiles }) => {
+const FileDeleteModal = ({
+  modal,
+  onClose,
+  file,
+  files,
+  setFiles,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
+}) => {
   const handleDelete = () => {
     fileService.deleteFile(file.id).then(
       () => {
@@ -17,13 +26,15 @@ const FileDeleteModal = ({ modal, onClose, file, files, setFiles }) => {
         var removeIndex = files.map((item) => item.id).indexOf(file.id);
         ~removeIndex && files.splice(removeIndex, 1);
         setFiles(files);
+        setOpenSuccessModal(true);
+        setNotificationMessage("Xóa ảnh thành công");
         onClose(false);
       },
       (error) => {
         console.log("=========");
         console.log(error.response);
-        // setLoading(false);
-        // setMessage(resMessage);
+        setOpenErrorModal(true);
+        setNotificationMessage("Xóa ảnh không thành công");
       }
     );
   };

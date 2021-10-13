@@ -28,6 +28,7 @@ import FilesUpload from "../FilesUpload";
 import laborderformService from "src/services/laborderform/laborderform.service";
 import MedicalServiceSelection from "../MedicalServiceSelection";
 import authService from "src/services/authentication/auth.service";
+import Button from "@mui/material/Button";
 
 const CreateLabOrderFormModal = ({
   patientId,
@@ -84,17 +85,18 @@ const CreateLabOrderFormModal = ({
       return "";
     } else {
       return (
-        <CButton
+        <Button
           color="primary"
-          variant="outline"
+          variant="contained"
           shape="square"
           size="sm"
+          sx={{ mt: 3, ml: 1 }}
           onClick={() => {
             createLabOrderForm();
           }}
         >
           Lưu và in
-        </CButton>
+        </Button>
       );
     }
   };
@@ -210,7 +212,7 @@ const CreateLabOrderFormModal = ({
                     }
                   />
                 </CCol>
-                <CCol md="9" lg="7" xl="6">
+                <CCol md="9" lg="7" xl="7">
                   <CCard className="mx-1" id="ioc66_sec2">
                     <CCardBody className="p-4">
                       <CForm>
@@ -352,14 +354,14 @@ const CreateLabOrderFormModal = ({
                     </CCardBody>
                   </CCard>
                 </CCol>
-                <CCol md="1" lg="3" xl="3">
+                {/* <CCol md="1" lg="3" xl="3">
                   <FilesUpload
                     modal={modal}
                     patientId={patientId}
                     //  files={files}
                     //  setFiles={setFiles}
                   />
-                </CCol>
+                </CCol> */}
               </CRow>
             </CContainer>
           </div>
@@ -367,17 +369,18 @@ const CreateLabOrderFormModal = ({
       </CModalBody>
       <CModalFooter>
         <CreateButton />
-        <CButton
+        <Button
           color="primary"
-          variant="outline"
+          variant="contained"
           shape="square"
           size="sm"
+          sx={{ mt: 3, ml: 1 }}
           onClick={() => {
             closeModal();
           }}
         >
           Hủy
-        </CButton>
+        </Button>
       </CModalFooter>
     </CModal>
   );

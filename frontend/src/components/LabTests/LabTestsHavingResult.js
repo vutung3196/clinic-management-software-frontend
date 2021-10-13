@@ -8,7 +8,6 @@ import {
   CDataTable,
   CRow,
 } from "@coreui/react";
-
 import * as Icon from "react-bootstrap-icons";
 import ArticleIcon from "@mui/icons-material/Article";
 import Box from "@mui/material/Box";
@@ -17,7 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import labtestService from "src/services/labtest/labtest.service";
-
+import EditLabTestModal from "./EditLabTestModal";
 const LabTestsHavingResult = ({ status }) => {
   const [labTests, setLabTests] = useState([]);
   const [labOrderForm, setLabOrderForm] = useState([]);
@@ -27,6 +26,7 @@ const LabTestsHavingResult = ({ status }) => {
   const [id, setId] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [labTestModal, setLabTestModal] = useState(false);
 
   const [paymentModal, setPaymentModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -34,6 +34,25 @@ const LabTestsHavingResult = ({ status }) => {
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
   const [detailedModal, setDetailedModal] = React.useState(false);
+  const constPatient = {
+    id: 1,
+    fullName: "",
+    emailAddress: "tungvu3196@gmail.com",
+    phoneNumber: "31231231",
+    occupation: null,
+    gender: "Nữ",
+    createdAt: "09/24/2021",
+    updatedAt: null,
+    addressDetail: "59/102",
+    addressCity: "Hanoi",
+    addressStreet: "Truong Chinh",
+    addressDistrict: "Dong Da",
+    dateOfBirth: "2021-10-04T09:00:53",
+    dateOfBirthDetail: "10/04/2021",
+    medicalInsuranceCode: "0312312313",
+  };
+  const [patient, setPatient] = useState(constPatient);
+  const [labTest, setLabTest] = useState("");
 
   const handleClosePaymentModal = () => setPaymentModal(false);
   const handleCloseDetailedModal = () => setDetailedModal(false);
@@ -57,7 +76,37 @@ const LabTestsHavingResult = ({ status }) => {
   const cursorPointerStyle = {
     cursor: "pointer",
   };
-  const [patient, setPatient] = useState("");
+
+  const toggleEdit = (row, index) => {
+    if (index > 0) {
+      labtestService.movetobeginning(row.id).then(
+        (response) => {
+          var arr = [...labTests];
+          var removeIndex = index;
+          ~removeIndex && arr.splice(removeIndex, 1);
+          const newArray = [row].concat(arr); // [ 4, 3, 2, 1 ]
+          for (var i = 0; i < arr.length; i++) {
+            newArray[i].index = i + 1;
+          }
+          setLabTests(newArray);
+          setOpenSuccessModal(true);
+          setNotificationMessage("Xếp phiếu xét nghiệm lên đầu thành công");
+        },
+        (error) => {
+          console.log(error);
+          setOpenErrorModal(true);
+          setNotificationMessage(
+            "Xếp sau phiếu xét nghiệm lên đầu không thành công"
+          );
+        }
+      );
+    }
+    setPatient(row.patientInformation);
+    setId(row.id);
+    setLabTests(row.labTests);
+    setLabTest(row);
+    setLabTestModal(!labTestModal);
+  };
 
   const toggleCreatePayment = (row) => {
     if (row.status === "Đã thanh toán") {
@@ -87,7 +136,6 @@ const LabTestsHavingResult = ({ status }) => {
       .getByStatus(status)
       .then((response) => {
         console.log("really");
-        console.log(response.data);
         setLabTests(response.data);
       })
       .catch((e) => {
@@ -110,8 +158,8 @@ const LabTestsHavingResult = ({ status }) => {
     { key: "doctorName", label: "Chỉ định" },
     { key: "description", label: "MÔ TẢ" },
     { key: "doctorName", label: "Bác sĩ chỉ định" },
-    { key: "status", label: "TRẠNG THÁI" },
-    { key: "updatedAt", label: "GIỜ CẬP NHẬT" },
+    { key: "statusDisplayed", label: "TRẠNG THÁI" },
+    { key: "createdAt", label: "GIỜ CẬP NHẬT" },
     {
       key: "view",
       label: "CẬP NHẬT",
@@ -156,13 +204,13 @@ const LabTestsHavingResult = ({ status }) => {
         sorter
         pagination
         scopedSlots={{
-          view: (row) => {
+          view: (row, index) => {
             return (
               <td className="py-2">
                 <ArticleIcon
                   style={cursorPointerStyle}
                   onClick={() => {
-                    toggleView(row);
+                    toggleEdit(row, index);
                   }}
                 />
               </td>
@@ -175,7 +223,7 @@ const LabTestsHavingResult = ({ status }) => {
                   size="23"
                   style={cursorPointerStyle}
                   onClick={() => {
-                    window.open("/laborderform/" + row.id);
+                    window.open("/labtest/" + row.id);
                   }}
                 />
               </td>
@@ -183,6 +231,17 @@ const LabTestsHavingResult = ({ status }) => {
           },
         }}
       ></CDataTable>
+      <EditLabTestModal
+        patient={patient}
+        modal={labTestModal}
+        onClose={setLabTestModal}
+        labTest={labTest}
+        labTests={labTests}
+        setLabTests={setLabTests}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
+      />
     </>
   );
 };

@@ -1,19 +1,9 @@
-import React, { useState, useEffect } from "react";
-import laborderformService from "src/services/laborderform/laborderform.service";
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CDataTable,
-  CRow,
-} from "@coreui/react";
+import React from "react";
+import { CCard, CCardBody, CCardHeader, CCol, CRow } from "@coreui/react";
 import LabTestsHavingResult from "./LabTestsHavingResult";
 import LabTestsNeededToBePerformed from "./LabTestsNeededToBePerformed";
 import LabTestsWaitingForResult from "./LabTestsWaitingForResult";
 
-import * as Icon from "react-bootstrap-icons";
-import ArticleIcon from "@mui/icons-material/Article";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -21,8 +11,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 export const CustomLabTests = ({ status }) => {
-  console.log("================================================");
-  console.log(status);
   if (status === 1) {
     return <LabTestsNeededToBePerformed status={status} />;
   } else if (status === 2) {
@@ -36,12 +24,6 @@ export const CustomLabTests = ({ status }) => {
 
 const LabTests = () => {
   const [status, setStatus] = React.useState(1);
-
-  const setInitStatus = () => {
-    setStatus(1);
-  };
-
-  // useEffect(setStatus(1), [status]);
 
   const handleChangeStatus = (event) => {
     setStatus(event.target.value);

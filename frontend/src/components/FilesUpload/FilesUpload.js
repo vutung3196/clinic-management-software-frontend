@@ -2,11 +2,11 @@ import { CButton, CInput, CCardHeader, CCard } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import * as Icon from "react-bootstrap-icons";
 import { useState, useEffect } from "react";
-// import FileUploadModalV2 from "./FileUploadModalV2";
-// import fileService from "src/services/file/file.service";
-// import ViewImageModal from "./ViewImageModal";
-// import FileUpdateModal from "./FileUpdateModal";
-// import FileDeleteModal from "./FileDeleteModal";
+import FileUploadModal from "./FileUploadModal";
+import fileService from "src/services/file/file.service";
+import ViewImageModal from "./ViewImageModal";
+import FileUpdateModal from "./FileUpdateModal";
+import FileDeleteModal from "./FileDeleteModal";
 
 const style1 = {
   position: "relative",
@@ -25,7 +25,16 @@ const styleFile = {
   float: "left",
 };
 
-const FilesUpload = ({ modal, patientId, files, setFiles }) => {
+const FilesUpload = ({
+  modal,
+  patientId,
+  files,
+  setFiles,
+  labTestId,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
+}) => {
   const [uploadModal, setUploadModal] = useState(false);
   const [uploadFiles, setUploadFiles] = useState([]);
   const [currentFile, setCurrentFile] = useState("");
@@ -40,16 +49,16 @@ const FilesUpload = ({ modal, patientId, files, setFiles }) => {
   };
 
   const retrieveFiles = () => {
-    // fileService
-    //   .get(patientId)
-    //   .then((response) => {
-    //     console.log(response);
-    //     setFiles(response.data);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //     setFiles([]);
-    //   });
+    fileService
+      .getByLabTestId(labTestId)
+      .then((response) => {
+        console.log(response);
+        setFiles(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+        setFiles([]);
+      });
   };
 
   const toggleEditModal = (entry) => {
@@ -83,41 +92,47 @@ const FilesUpload = ({ modal, patientId, files, setFiles }) => {
           <div class="slimScrollDiv">
             <div class="b box66h slimScrollDiv-element">
               <ul class="file-list-c">
-                {/* {files.map((entry) => (
-                  <li>
-                    <div class="i">
-                      <d>{entry.createdAt}</d>
-                      <div class="icons-file-list">
-                        <Icon.Image
-                          onClick={() => {
-                            showViewModal(entry);
-                          }}
-                        ></Icon.Image>
-                        <Icon.PencilSquare
-                          class="icon-pencil-square"
-                          onClick={() => toggleEditModal(entry)}
-                        />
-                        <Icon.Trash
-                          class="icon-trash"
-                          onClick={() => toggleDeleteModal(entry)}
-                        />
-                      </div>
-                      <t></t>
-                      <h class="file-jpg">{entry.name}</h>
-                      <div class="n"></div>
-                    </div>
-                  </li>
-                ))} */}
+                {files !== undefined && files.length > 0
+                  ? files.map((entry) => (
+                      <li>
+                        <div class="i">
+                          <d>{entry.createdAt}</d>
+                          <div class="icons-file-list">
+                            <Icon.Image
+                              onClick={() => {
+                                showViewModal(entry);
+                              }}
+                            ></Icon.Image>
+                            <Icon.PencilSquare
+                              class="icon-pencil-square"
+                              onClick={() => toggleEditModal(entry)}
+                            />
+                            <Icon.Trash
+                              class="icon-trash"
+                              onClick={() => toggleDeleteModal(entry)}
+                            />
+                          </div>
+                          <t></t>
+                          <h class="file-jpg">{entry.name}</h>
+                          <div class="n"></div>
+                        </div>
+                      </li>
+                    ))
+                  : ""}
               </ul>
             </div>
           </div>
         </div>
       </CCard>
-      {/* <FileUploadModalV2
+      <FileUploadModal
         modal={uploadModal}
         onClose={setUploadModal}
         patientId={patientId}
         retrieveFiles={retrieveFiles}
+        labTestId={labTestId}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
       />
       <ViewImageModal
         modal={viewModal}
@@ -137,7 +152,10 @@ const FilesUpload = ({ modal, patientId, files, setFiles }) => {
         file={file}
         files={files}
         setFiles={setFiles}
-      /> */}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
+      />
     </div>
   );
 };

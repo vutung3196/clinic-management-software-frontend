@@ -15,9 +15,11 @@ import {
 } from "@coreui/react";
 // import * as Icon from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
+import CreatePrescriptionModal from "../Prescription";
 // import ViewImageModal from "../FilesUpload/ViewImageModal";
 import hospitalizedprofileService from "src/services/hospitalizedprofile/hospitalizedprofile.service";
 import LabOrderFormModal from "../LabOrderForm";
+import Button from "@mui/material/Button";
 
 const DetailedPatientHospitalizedProfileModal = ({
   modal,
@@ -33,6 +35,7 @@ const DetailedPatientHospitalizedProfileModal = ({
     useState(false);
   const [currentFile, setCurrentFile] = useState("");
   const [labOrderFormModal, setLabOrderFormModal] = useState(false);
+  const [prescriptionModal, setPrescriptionModal] = useState(false);
 
   const style1 = {
     width: "100px",
@@ -358,20 +361,45 @@ const DetailedPatientHospitalizedProfileModal = ({
           patientHospitalizedProfileId={patientHospitalizedProfileId}
           patientDoctorVisitingFormId={patientDoctorVisitingFormId}
         />
+        <CreatePrescriptionModal
+          modal={prescriptionModal}
+          onClose={setPrescriptionModal}
+          patient={patient}
+          patientHospitalizedProfileId={patientHospitalizedProfileId}
+          patientDoctorVisitingFormId={patientDoctorVisitingFormId}
+        />
       </CModalBody>
       <CModalFooter>
-        <CButton color="secondary" onClick={() => onClose(false)}>
+        <Button
+          color="primary"
+          variant="contained"
+          shape="square"
+          size="sm"
+          sx={{ mt: 3, ml: 1 }}
+          onClick={() => setPrescriptionModal(!prescriptionModal)}
+        >
           Kê đơn
-        </CButton>
-        <CButton
-          color="secondary"
+        </Button>
+        <Button
+          color="primary"
+          variant="contained"
+          shape="square"
+          size="sm"
+          sx={{ mt: 3, ml: 1 }}
           onClick={() => setLabOrderFormModal(!labOrderFormModal)}
         >
           Tạo phiếu chỉ định
-        </CButton>
-        <CButton color="secondary" onClick={() => onClose(false)}>
+        </Button>
+        <Button
+          color="primary"
+          variant="contained"
+          shape="square"
+          size="sm"
+          sx={{ mt: 3, ml: 1 }}
+          onClick={() => onClose(false)}
+        >
           THOÁT
-        </CButton>
+        </Button>
       </CModalFooter>
     </CModal>
   );

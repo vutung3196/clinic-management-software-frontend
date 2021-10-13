@@ -92,7 +92,9 @@ const CreateOrEditHospitalizedProfileModal = ({
 
   React.useEffect(() => {
     var currentMillis = new Date().getUTCMilliseconds();
-    setCode("YT" + patient.id.toString() + currentMillis.toString());
+    if (patient !== null) {
+      setCode("YT" + patient.id.toString() + currentMillis.toString());
+    }
   }, [open]);
 
   const theme = createTheme();

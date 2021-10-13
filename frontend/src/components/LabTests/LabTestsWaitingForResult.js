@@ -11,22 +11,41 @@ import {
 
 import * as Icon from "react-bootstrap-icons";
 import ArticleIcon from "@mui/icons-material/Article";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import labtestService from "src/services/labtest/labtest.service";
+import EditLabTestModal from "./EditLabTestModal";
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 const LabTestsWaitingForResult = ({ status }) => {
+  const constPatient = {
+    id: 1,
+    fullName: "",
+    emailAddress: "tungvu3196@gmail.com",
+    phoneNumber: "31231231",
+    occupation: null,
+    gender: "Nữ",
+    createdAt: "09/24/2021",
+    updatedAt: null,
+    addressDetail: "59/102",
+    addressCity: "Hanoi",
+    addressStreet: "Truong Chinh",
+    addressDistrict: "Dong Da",
+    dateOfBirth: "2021-10-04T09:00:53",
+    dateOfBirthDetail: "10/04/2021",
+    medicalInsuranceCode: "0312312313",
+  };
+  const [labTest, setLabTest] = useState([]);
   const [labTests, setLabTests] = useState([]);
-  const [labOrderForm, setLabOrderForm] = useState([]);
   const [doctorVisitingForm, setDoctorVisitingForm] = useState("");
   const [details, setDetails] = useState([]);
   const [createModal, setCreateModal] = useState(false);
   const [id, setId] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [labTestModal, setLabTestModal] = useState(false);
 
   const [paymentModal, setPaymentModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -34,9 +53,7 @@ const LabTestsWaitingForResult = ({ status }) => {
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
   const [detailedModal, setDetailedModal] = React.useState(false);
-
-  const handleClosePaymentModal = () => setPaymentModal(false);
-  const handleCloseDetailedModal = () => setDetailedModal(false);
+  const [patient, setPatient] = useState(constPatient);
 
   const handleCloseSuccessModal = (event, reason) => {
     if (reason === "clickaway") {
@@ -56,22 +73,6 @@ const LabTestsWaitingForResult = ({ status }) => {
 
   const cursorPointerStyle = {
     cursor: "pointer",
-  };
-  const [patient, setPatient] = useState("");
-
-  const toggleCreatePayment = (row) => {
-    if (row.status === "Đã thanh toán") {
-      setOpenErrorModal(true);
-      setNotificationMessage("Phiếu chỉ định này đã được thanh toán");
-      return;
-    }
-    console.log("+++++");
-    console.log(row);
-    setPatient(row.patientInformation);
-    setId(row.id);
-    setLabTests(row.labTests);
-    setLabOrderForm(row);
-    setPaymentModal(true);
   };
 
   const toggleDelete = (row) => {
@@ -107,10 +108,10 @@ const LabTestsWaitingForResult = ({ status }) => {
     { key: "patientDetailedInformation", label: "THÔNG TIN BỆNH NHÂN" },
     { key: "doctorName", label: "Bác sĩ khám" },
     { key: "description", label: "MÔ TẢ" },
-    { key: "status", label: "TRẠNG THÁI" },
+    { key: "statusDisplayed", label: "TRẠNG THÁI" },
     { key: "createdAt", label: "GIỜ CẬP NHẬT" },
     {
-      key: "view",
+      key: "edit",
       label: "CẬP NHẬT",
       _style: { width: "2%" },
       sorter: false,
@@ -130,59 +131,106 @@ const LabTestsWaitingForResult = ({ status }) => {
     values: [5, 10, 20],
   };
 
-  const toggleView = (row) => {
+  // const toggleView = (row) => {
+  //   setPatient(row.patientInformation);
+  //   setId(row.id);
+  //   setLabTests(row.labTests);
+  //   setLabOrderForm(row);
+  //   setDetailedModal(true);
+  // };
+
+  const toggleEdit = (row) => {
     setPatient(row.patientInformation);
     setId(row.id);
     setLabTests(row.labTests);
-    setLabOrderForm(row);
-    setDetailedModal(true);
+    setLabTest(row);
+    setLabTestModal(!labTestModal);
   };
 
-  const handleChangeStatus = (event) => {
-    // setStatus(event.target.value);
-  };
+  // const handleChangeStatus = (event) => {
+  //   // setStatus(event.target.value);
+  // };
 
   return (
-    <CDataTable
-      items={labTests}
-      fields={fields}
-      columnFilter
-      hover
-      striped
-      bordered
-      size="sm"
-      itemsPerPageSelect={rowsPerPageOption}
-      itemsPerPage={10}
-      sorter
-      pagination
-      scopedSlots={{
-        view: (row) => {
-          return (
-            <td className="py-2">
-              <ArticleIcon
-                style={cursorPointerStyle}
-                onClick={() => {
-                  toggleView(row);
-                }}
-              />
-            </td>
-          );
-        },
-        print: (row) => {
-          return (
-            <td className="py-2">
-              <Icon.Printer
-                size="23"
-                style={cursorPointerStyle}
-                onClick={() => {
-                  window.open("/laborderform/" + row.id);
-                }}
-              />
-            </td>
-          );
-        },
-      }}
-    ></CDataTable>
+    <>
+      <CDataTable
+        items={labTests}
+        fields={fields}
+        columnFilter
+        hover
+        striped
+        bordered
+        size="sm"
+        itemsPerPageSelect={rowsPerPageOption}
+        itemsPerPage={10}
+        sorter
+        pagination
+        scopedSlots={{
+          edit: (row) => {
+            return (
+              <td className="py-2">
+                <ArticleIcon
+                  style={cursorPointerStyle}
+                  onClick={() => {
+                    toggleEdit(row);
+                  }}
+                />
+              </td>
+            );
+          },
+          print: (row) => {
+            return (
+              <td className="py-2">
+                <Icon.Printer
+                  size="23"
+                  style={cursorPointerStyle}
+                  onClick={() => {
+                    window.open("/laborderform/" + row.id);
+                  }}
+                />
+              </td>
+            );
+          },
+        }}
+      ></CDataTable>
+      <Snackbar
+        open={openSuccessModal}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccessModal}
+      >
+        <Alert
+          onClose={handleCloseSuccessModal}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {notificationMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openErrorModal}
+        autoHideDuration={3000}
+        onClose={handleCloseErrorModal}
+      >
+        <Alert
+          onClose={handleCloseErrorModal}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {notificationMessage}
+        </Alert>
+      </Snackbar>
+      <EditLabTestModal
+        patient={patient}
+        modal={labTestModal}
+        onClose={setLabTestModal}
+        labTest={labTest}
+        labTests={labTests}
+        setLabTests={setLabTests}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
+      />
+    </>
   );
 };
 

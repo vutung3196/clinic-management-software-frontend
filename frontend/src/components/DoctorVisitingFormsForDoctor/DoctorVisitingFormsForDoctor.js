@@ -30,12 +30,13 @@ const DoctorVisitingFormsForDoctor = () => {
   const [details, setDetails] = useState([]);
   const [createModal, setCreateModal] = useState(false);
   const [id, setId] = useState("");
+  const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
+  const [openErrorModal, setOpenErrorModal] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
 
   const [patientProfileModal, setPatientProfileModal] = useState(false);
   const [hospitalizedModal, setHospitalizedModal] = useState(false);
-  const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
-  const [openErrorModal, setOpenErrorModal] = React.useState(false);
+
   const [hospitalizedProfile, setHospitalizedProfile] = React.useState("");
   const [patientHospitalizedProfileId, setPatientHospitalizedProfileId] =
     React.useState("");
@@ -82,15 +83,15 @@ const DoctorVisitingFormsForDoctor = () => {
   const cursorPointerStyle = {
     cursor: "pointer",
   };
-  const [patient, setPatient] = useState("");
+  const [patient, setPatient] = useState(constPatient);
 
   const toggleCreateHospitalizedProfile = (row, index) => {
     console.log(row);
-    if (index > 0) {
-      setOpenErrorModal(true);
-      setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
-      return;
-    }
+    // if (index > 0) {
+    //   setOpenErrorModal(true);
+    //   setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
+    //   return;
+    // }
     if (row.visitingStatus === 1) {
       patientdoctorvisitingformService
         .edit(row.id, row.code, row.description, row.doctorId, true)
@@ -122,15 +123,15 @@ const DoctorVisitingFormsForDoctor = () => {
   };
 
   const toggleAddFirstElementToTheEndOfAQueue = (row, index) => {
-    if (index > 0) {
-      setOpenErrorModal(true);
-      setNotificationMessage("Bạn chỉ được chọn bệnh nhân đầu tiên xếp sau");
-      return;
-    }
-    patientdoctorvisitingformService.movetoend().then(
+    patientdoctorvisitingformService.movetoend(row.id).then(
       (response) => {
         var arr = [...doctorVisitingForms];
-        arr.shift();
+        var removeIndex = index;
+        ~removeIndex && arr.splice(removeIndex, 1);
+        arr.push(row);
+        for (var i = 0; i < arr.length; i++) {
+          arr[i].index = i + 1;
+        }
         arr.push(response.data);
         setDoctorVisitingForms(arr);
         setOpenSuccessModal(true);

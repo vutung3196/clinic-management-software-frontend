@@ -12,16 +12,17 @@ import { useDropzone } from "react-dropzone";
 import Dropzone from "react-dropzone";
 import fileService from "src/services/file/file.service";
 import * as Icon from "react-bootstrap-icons";
-import { Cloudinary } from "@cloudinary/base";
 
-const FileUploadModal = ({ modal, onClose, patientId, retrieveFiles }) => {
-  const cld = new Cloudinary({
-    cloud: {
-      cloudName: "dzftzmcxb",
-      apiKey: "532316945833619",
-      apiSecret: "cC6N_UJXJwWYJoAlkOk0wN5znTA",
-    },
-  });
+const FileUploadModal = ({
+  modal,
+  onClose,
+  patientId,
+  retrieveFiles,
+  labTestId,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
+}) => {
   const {
     getRootProps,
     getInputProps,
@@ -31,6 +32,7 @@ const FileUploadModal = ({ modal, onClose, patientId, retrieveFiles }) => {
   } = useDropzone({ accept: "image/*" });
   const init = [];
   const [readyFiles, setReadyFiles] = useState(init);
+  const [currentData, setCurrentData] = useState("");
 
   const setCloseModal = () => {
     setReadyFiles(init);
@@ -40,7 +42,16 @@ const FileUploadModal = ({ modal, onClose, patientId, retrieveFiles }) => {
   const uploadImage = (file) => {
     const data = new FormData();
     data.append("file", file);
-    data.append("upload_preset", "tutorial");
+    data.append("upload_preset", "xdf93shk");
+    var today = new Date();
+    var date =
+      today.getFullYear() +
+      "-" +
+      (today.getMonth() + 1) +
+      "-" +
+      today.getDate();
+
+    data.append("folder", "hapham/" + date);
     data.append("cloud_name", "dzftzmcxb");
     fetch("  https://api.cloudinary.com/v1_1/dzftzmcxb/image/upload", {
       method: "post",
@@ -48,74 +59,36 @@ const FileUploadModal = ({ modal, onClose, patientId, retrieveFiles }) => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log("sdasdsadad");
         console.log(data);
-        // setUrl(data.url)
+        setCurrentData(data);
+        setReadyFiles((prev) => [...readyFiles, data]);
       })
       .catch((err) => console.log(err));
   };
 
   const onDrop = (files) => {
-    var a = files[0];
     files.map((file) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        //store result into your state array.
-        var image = {
-          base64: event.target.result.replace(
-            /^data:image\/[a-z]+;base64,/,
-            ""
-          ),
-          name: file.name,
-          size: file.size,
-        };
-        setReadyFiles((prev) => [...readyFiles, image]);
-        console.log(event.target.result);
-      };
-      reader.readAsDataURL(file);
+      uploadImage(file);
     });
   };
 
-  function getBase64(file) {
-    return new Promise((resolve, reject) => {
-      var reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = function () {
-        resolve(reader.result);
-      };
-      reader.onerror = function (error) {
-        reject(error);
-      };
-    });
-  }
-
   const upload = async () => {
-    var medicalImageFiles = [];
-    readyFiles.forEach((file) => {
-      var element = {
-        medicalImageFileBase64: file.base64,
-        name: file.name,
-        path: "",
-        description: "",
-      };
-      medicalImageFiles.push(element);
-    });
-    console.log(medicalImageFiles);
-    fileService.upload(patientId, medicalImageFiles).then(
+    fileService.upload(labTestId, readyFiles).then(
       (response) => {
         // go to the dashboard page
         console.log("upload successfully");
-        console.log(response);
+        setOpenSuccessModal(true);
+        setNotificationMessage("Ảnh tải lên thành công");
         setTimeout(() => {
           retrieveFiles();
-        }, 3000);
+        }, 1000);
       },
       (error) => {
         console.log("=========");
+        setOpenErrorModal(true);
+        setNotificationMessage("Ảnh tải lên không thành công");
         console.log(error.response);
         const resMessage = error.response.data;
-        // setLoading(false);
-        // setMessage(resMessage);
       }
     );
     setCloseModal(false);
@@ -154,7 +127,6 @@ const FileUploadModal = ({ modal, onClose, patientId, retrieveFiles }) => {
   };
 
   const handleSubmit = (files, allFiles) => {
-    console.log(files.map((f) => f.meta));
     allFiles.forEach((f) => f.remove());
   };
 
@@ -188,7 +160,6 @@ const FileUploadModal = ({ modal, onClose, patientId, retrieveFiles }) => {
           <Dropzone
             dropzoneActive={{ borderColor: "green" }}
             accept="image/jpg,image/jpeg,image/png"
-            // onChangeStatus={handleChangeStatus}
             onSubmit={handleSubmit}
             onDrop={(acceptedFiles) => {
               onDrop(acceptedFiles);
@@ -211,7 +182,7 @@ const FileUploadModal = ({ modal, onClose, patientId, retrieveFiles }) => {
               <ul className="list-group mt-2">
                 {readyFiles.map((entry, index) => (
                   <li className="list-group-item list-group-item-success">
-                    {entry.name} - {entry.size} B
+                    {entry.original_filename} - {entry.bytes} B
                     <Icon.Trash
                       style={styleRemove}
                       onClick={() => {
