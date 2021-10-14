@@ -23,6 +23,14 @@ const getByLabTestId = async (id) => {
   return response.data;
 };
 
+const getByVisitingForm = async (id) => {
+  const response = await axios.get(
+    API_URL + "/byvisitingform" + "?visitingFormId=" + id,
+    config
+  );
+  return response.data;
+};
+
 const edit = async (id, fileName, description) => {
   const response = await axios.put(
     API_URL + "/" + id,
@@ -45,4 +53,5 @@ export default {
   getByLabTestId,
   edit,
   deleteFile,
+  getByVisitingForm,
 };

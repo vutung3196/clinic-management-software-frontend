@@ -398,6 +398,7 @@ const EditLabTestModal = ({
                     setOpenSuccessModal={setOpenSuccessModal}
                     setOpenErrorModal={setOpenErrorModal}
                     setNotificationMessage={setNotificationMessage}
+                    isPrescriptionModal={false}
                   />
                 </CCol>
               </CRow>

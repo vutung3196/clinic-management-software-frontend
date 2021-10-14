@@ -13,6 +13,7 @@ import UserManagementPage from "./containers/pages/UserManagement";
 import InformationManagementPage from "./containers/pages/InformationManagement";
 import PatientsPage from "./containers/pages/Patients";
 import SingleReceiptPage from "./containers/pages/SingleReceipt";
+import SinglePrescriptionPage from "./containers/pages/SinglePrescription";
 import SingleDoctorVisitingFormPage from "./containers/pages/SingleDoctorVisitingForm";
 import DoctorVisitingFormsPage from "./containers/pages/DoctorVisitingForms";
 import SingleLabOrderFormPage from "./containers/pages/SingleLabOrderForm";
@@ -111,6 +112,10 @@ const App = () => {
           <PrivateRoute
             path="/labtest/:id"
             component={SingleLabTestPage}
+          ></PrivateRoute>
+          <PrivateRoute
+            path="/prescription/:id"
+            component={SinglePrescriptionPage}
           ></PrivateRoute>
           <PrivateRoute path="/" component={Main}></PrivateRoute>
         </Switch>

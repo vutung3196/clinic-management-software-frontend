@@ -28,6 +28,9 @@ const DetailedPatientHospitalizedProfileModal = ({
   clinic,
   patientHospitalizedProfileId,
   patientDoctorVisitingFormId,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
 }) => {
   console.log(patientHospitalizedProfileId);
   const [viewImageModal, setViewImageModal] = useState(false);
@@ -367,6 +370,9 @@ const DetailedPatientHospitalizedProfileModal = ({
           patient={patient}
           patientHospitalizedProfileId={patientHospitalizedProfileId}
           patientDoctorVisitingFormId={patientDoctorVisitingFormId}
+          setOpenSuccessModal={setOpenSuccessModal}
+          setOpenErrorModal={setOpenErrorModal}
+          setNotificationMessage={setNotificationMessage}
         />
       </CModalBody>
       <CModalFooter>

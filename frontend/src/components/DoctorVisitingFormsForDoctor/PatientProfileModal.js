@@ -123,6 +123,7 @@ const PatientProfileModal = ({
       .getByPatient(patient.id)
       .then((response) => {
         setPatientProfiles(response.data);
+        console.log(response.data);
       })
       .catch((e) => {
         setPatientProfiles([]);

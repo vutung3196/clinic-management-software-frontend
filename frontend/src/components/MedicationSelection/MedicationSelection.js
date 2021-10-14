@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { CCard, CCardHeader } from "@coreui/react";
-import medicationService from "../../services/medication/medication.service";
-import authService from "../../services/authentication/auth.service";
+import medicationService from "src/services/medicationservice/medication.service";
 
 const MedicationSelection = ({
-  medications,
-  setMedications,
+  medicationList,
+  setMedicationList,
   setNumberMedicationChildren,
   numberMedicationChildren,
 }) => {
+  console.log("here is the selection");
   const [allMedications, setAllMedications] = useState([]);
   const [medicationsByGroup, setMedicationsByGroup] = useState([]);
-
-  const retrieveAllMedications = () => {
-    var currentUser = authService.getCurrentUser();
+  console.log(medicationList);
+  const retrieveAllMedicalServices = () => {
     medicationService
-      .getCurrentMedicationFromClinic(currentUser.clinicId)
+      .get()
       .then((response) => {
+        console.log("============================");
+        console.log(response.data);
         setAllMedications(response.data);
       })
       .catch((e) => {
@@ -26,36 +27,51 @@ const MedicationSelection = ({
   };
 
   useEffect(() => {
-    retrieveAllMedications();
+    retrieveAllMedicalServices();
   }, []);
 
   const getMedicationItems = (medications) => {
     setMedicationsByGroup(medications);
   };
 
-  const addMedicationItem = (medication) => {
-    var newMedication = {
+  const addMedicalServiceItem = (medicalService) => {
+    var newMedicalService = {
       index: numberMedicationChildren,
-      id: medication.id,
-      quantity: 0,
-      usage: medication.usage,
-      name: medication.name,
+      id: medicalService.id,
+      quantity: medicalService.quantity,
+      name: medicalService.name,
+      usage: medicalService.usage,
     };
     if (
-      medications !== undefined &&
-      medications[medications.length - 1] !== undefined &&
-      medications[medications.length - 1].id === 0
+      medicationList !== undefined &&
+      medicationList[medicationList.length - 1] !== undefined &&
+      medicationList[medicationList.length - 1].id === 0
     ) {
-      let items = [...medications];
+      let items = [...medicationList];
       let item = { ...items[items.length - 1] };
-      item = newMedication;
-      if (medications.length === 1) {
+      item = newMedicalService;
+      if (medicationList.length === 1) {
         item.index = 0;
       }
       items[items.length - 1] = item;
-      setMedications(items);
+      setMedicationList(items);
     } else {
-      setMedications((prev) => [...medications, newMedication]);
+      var result = medicationList.find((obj) => {
+        return obj.id === medicalService.id;
+      });
+      if (result !== undefined) {
+        let item = result;
+        item.quantity = parseInt(item.quantity) + 1;
+        if (medicationList.length === 1) {
+          item.index = 0;
+        }
+        var a = [...medicationList];
+        var updateIndex = a.map((item) => item.id).indexOf(result.id);
+        a[updateIndex] = item;
+        setMedicationList(a);
+        return;
+      }
+      setMedicationList((prev) => [...medicationList, newMedicalService]);
       setNumberMedicationChildren(numberMedicationChildren + 1);
     }
   };
@@ -124,7 +140,7 @@ const MedicationSelection = ({
                     unit="Viên"
                     class="medication-li"
                     use="Sáng: 0 viên - Trưa 0 viên - Chiều 0 viên"
-                    onClick={() => addMedicationItem(entry)}
+                    onClick={() => addMedicalServiceItem(entry)}
                   >
                     {entry.name}
                   </li>

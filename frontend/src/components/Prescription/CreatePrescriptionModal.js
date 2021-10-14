@@ -32,10 +32,12 @@ import FilesUpload from "../FilesUpload";
 import laborderformService from "src/services/laborderform/laborderform.service";
 import { vi } from "date-fns/locale";
 import DiagnosedDescriptionModal from "./DiagnosedDescriptionModal";
-
-import MedicalServiceSelection from "../MedicalServiceSelection";
+import MedicationElementComponent from "./MedicationElementComponent";
+import MedicationSelection from "../MedicationSelection";
 import authService from "src/services/authentication/auth.service";
 import Button from "@mui/material/Button";
+import prescriptionService from "src/services/prescription/prescription.service";
+import fileService from "src/services/file/file.service";
 
 const CreatePrescriptionModal = ({
   patientId,
@@ -44,6 +46,9 @@ const CreatePrescriptionModal = ({
   onClose,
   patientHospitalizedProfileId,
   patientDoctorVisitingFormId,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
 }) => {
   const a = {
     index: 0,
@@ -68,12 +73,13 @@ const CreatePrescriptionModal = ({
 
   // Create lab order form model
   const [description, setDescription] = useState("");
-  const [labTests, setLabTests] = useState([]);
+  const [medicationList, setMedicationList] = useState([]);
   const [code, setCode] = useState("");
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [doctorName, setDoctorName] = useState("");
+  const [files, setFiles] = useState([]);
 
   useEffect(() => {
     var dateObj = new Date();
@@ -84,12 +90,21 @@ const CreatePrescriptionModal = ({
     setMonth(month);
     setYear(year);
     handleRevisitDateChange(new Date());
-
+    // get all files of current doctor visiting form id
     var currentMillis = new Date().getUTCMilliseconds();
-    setCode("CĐ" + patient.id.toString() + currentMillis.toString());
+    setCode("ĐT" + patient.id.toString() + currentMillis.toString());
     var currentUser = authService.getCurrentUser();
-    console.log(currentUser);
     setDoctorName(currentUser.fullName);
+    fileService
+      .getByVisitingForm(patientDoctorVisitingFormId)
+      .then((response) => {
+        console.log(response);
+        setFiles(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+        setFiles([]);
+      });
   }, [patient.id, modal]);
 
   const cursorPointerStyle = {
@@ -108,7 +123,7 @@ const CreatePrescriptionModal = ({
           size="sm"
           sx={{ mt: 3, ml: 1 }}
           onClick={() => {
-            createLabOrderForm();
+            createPrescription();
           }}
         >
           Lưu và in
@@ -118,19 +133,19 @@ const CreatePrescriptionModal = ({
   };
 
   const removeMedicalService = (index) => {
-    labTests.splice(index, 1);
+    medicationList.splice(index, 1);
     var updatedMedicationList = [];
-    for (let i = 0; i < labTests.length; i++) {
-      var a = labTests[i];
+    for (let i = 0; i < medicationList.length; i++) {
+      var a = medicationList[i];
       updatedMedicationList.push(a);
     }
-    setLabTests(updatedMedicationList);
-    setNumberMedicalServicesChildren(labTests.length);
+    setMedicationList(updatedMedicationList);
+    setNumberMedicalServicesChildren(medicationList.length);
   };
 
   const closeModal = () => {
     setDescription("");
-    setLabTests(initialArray);
+    setMedicationList(initialArray);
     setNumberMedicalServicesChildren(0);
     onClose(false);
   };
@@ -144,48 +159,61 @@ const CreatePrescriptionModal = ({
       name: "",
     };
     setNumberMedicalServicesChildren(numberMedicalServicesChildren + 1);
-    setLabTests((prev) => [...labTests, a]);
+    setMedicationList((prev) => [...medicationList, a]);
   };
 
   const onChangeDescription = (description) => {
     setDescription(description);
   };
 
-  const createLabOrderForm = () => {
+  const createPrescription = () => {
     // console.log(medicationList);
-    var labTestInformation = [];
-    for (let i = 0; i < labTests.length; i++) {
-      if (labTests[i].name === "") {
+    var medicationsInformation = [];
+    for (let i = 0; i < medicationList.length; i++) {
+      if (medicationList[i].name === "") {
         continue;
       }
       var a = {
-        medicalServiceId: labTests[i].id,
-        // quantity: parseInt(labTests[i].quantity),
-        description: labTests[i].description,
-        name: labTests[i].name,
+        medicalServiceId: medicationList[i].id,
+        quantity: parseInt(medicationList[i].quantity),
+        usage: medicationList[i].usage,
+        name: medicationList[i].name,
       };
-      labTestInformation.push(a);
+      medicationsInformation.push(a);
     }
-    console.log(labTestInformation);
-    laborderformService
+
+    prescriptionService
       .create(
-        description,
-        labTestInformation,
+        diagnosedDescription,
+        revisitDate,
+        doctorSuggestion,
+        medicationsInformation,
         patientHospitalizedProfileId,
+        patient.medicalInsuranceCode,
         code,
         patientDoctorVisitingFormId
       )
       .then(
         (response) => {
           setDescription("");
-          setLabTests(initialArray);
+          setMedicationList(initialArray);
           setNumberMedicalServicesChildren(0);
+          setOpenSuccessModal(true);
+          setNotificationMessage("Tạo đơn thuốc thành công");
+          window.open("/prescription/" + response.data);
           onClose(false);
+
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 3000);
+          // onCloseDetailedModal(false);
         },
         (error) => {
           console.log("=========");
           console.log(error.response.data);
           console.log("ahahah");
+          setOpenErrorModal(true);
+          setNotificationMessage("Tạo đơn thuốc không thành công");
           // if (error.response.data.errors !== undefined) {
           //   var a = error.response.data.errors.DiagnosedDescription;
           //   let arr = [];
@@ -217,15 +245,13 @@ const CreatePrescriptionModal = ({
             <CContainer>
               <CRow className="justify-content-center">
                 <CCol md="1" lg="2" xl="3">
-                  <MedicalServiceSelection
-                    medicalServiceList={labTests}
-                    setMedicalServiceList={setLabTests}
-                    setNumberMedicalServicesChildren={
+                  <MedicationSelection
+                    medicationList={medicationList}
+                    setMedicationList={setMedicationList}
+                    setNumberMedicationChildren={
                       setNumberMedicalServicesChildren
                     }
-                    numberMedicalServicesChildren={
-                      numberMedicalServicesChildren
-                    }
+                    numberMedicationChildren={numberMedicalServicesChildren}
                   />
                 </CCol>
                 <CCol md="9" lg="7" xl="6">
@@ -328,21 +354,21 @@ const CreatePrescriptionModal = ({
                         <CRow>
                           <div id="ioc66_list">
                             <ul id="ioc66_list_c" class="poproduct_option_none">
-                              {/* {labTests.map((entry, index) => (
+                              {medicationList.map((entry, index) => (
                                 <div class="ioc66i">
                                   {
-                                    <MedicalServiceElementComponent
+                                    <MedicationElementComponent
                                       index={index}
                                       removeMedicalService={
                                         removeMedicalService
                                       }
-                                      setMedicalServices={setLabTests}
-                                      medicalServices={labTests}
+                                      setMedicalServices={setMedicationList}
+                                      medicalServices={medicationList}
                                       medicalService={entry}
                                     />
                                   }
                                 </div>
-                              ))} */}
+                              ))}
                             </ul>
                           </div>
                         </CRow>
@@ -433,8 +459,10 @@ const CreatePrescriptionModal = ({
                   <FilesUpload
                     modal={modal}
                     patientId={patientId}
-                    //  files={files}
-                    //  setFiles={setFiles}
+                    isPrescriptionModal={true}
+                    visitingFormId={patientDoctorVisitingFormId}
+                    files={files}
+                    setFiles={setFiles}
                   />
                 </CCol>
               </CRow>

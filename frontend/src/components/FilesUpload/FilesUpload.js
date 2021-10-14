@@ -34,7 +34,11 @@ const FilesUpload = ({
   setOpenSuccessModal,
   setOpenErrorModal,
   setNotificationMessage,
+  isPrescriptionModal,
+  visitingFormId,
 }) => {
+  console.log("LOL");
+  console.log(isPrescriptionModal);
   const [uploadModal, setUploadModal] = useState(false);
   const [uploadFiles, setUploadFiles] = useState([]);
   const [currentFile, setCurrentFile] = useState("");
@@ -79,14 +83,18 @@ const FilesUpload = ({
             <div class="background-box" style={styleFile}>
               Files
             </div>
-            <div id="ioc66upload" class="icon-upload" title="Tải lên">
-              <Icon.Upload
-                id="icon-upload-button"
-                width="16"
-                height="16"
-                onClick={() => setUploadModal(!uploadModal)}
-              />
-            </div>
+            {isPrescriptionModal === false ? (
+              <div id="ioc66upload" class="icon-upload" title="Tải lên">
+                <Icon.Upload
+                  id="icon-upload-button"
+                  width="16"
+                  height="16"
+                  onClick={() => setUploadModal(!uploadModal)}
+                />
+              </div>
+            ) : (
+              ""
+            )}
             <div class="clear"></div>
           </div>
           <div class="slimScrollDiv">
@@ -103,14 +111,20 @@ const FilesUpload = ({
                                 showViewModal(entry);
                               }}
                             ></Icon.Image>
-                            <Icon.PencilSquare
-                              class="icon-pencil-square"
-                              onClick={() => toggleEditModal(entry)}
-                            />
-                            <Icon.Trash
-                              class="icon-trash"
-                              onClick={() => toggleDeleteModal(entry)}
-                            />
+                            {isPrescriptionModal === false ? (
+                              <>
+                                <Icon.PencilSquare
+                                  class="icon-pencil-square"
+                                  onClick={() => toggleEditModal(entry)}
+                                />
+                                <Icon.Trash
+                                  class="icon-trash"
+                                  onClick={() => toggleDeleteModal(entry)}
+                                />
+                              </>
+                            ) : (
+                              ""
+                            )}
                           </div>
                           <t></t>
                           <h class="file-jpg">{entry.name}</h>

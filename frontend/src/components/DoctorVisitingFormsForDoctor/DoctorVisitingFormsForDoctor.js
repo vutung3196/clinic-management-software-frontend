@@ -400,6 +400,9 @@ const DoctorVisitingFormsForDoctor = () => {
         clinic={clinic}
         patientHospitalizedProfileId={patientHospitalizedProfileId}
         patientDoctorVisitingFormId={id}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
       />
     </>
   );
