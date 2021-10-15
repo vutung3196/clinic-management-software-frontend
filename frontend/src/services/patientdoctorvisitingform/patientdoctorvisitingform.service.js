@@ -4,6 +4,9 @@ import authHeader from "../authentication/auth.header";
 const API_URL = "http://localhost:57679/api/PatientVisitingDoctorForm/";
 const MOVE_TO_END_QUEUE_API_URL =
   "http://localhost:57679/api/PatientVisitingDoctorForm/movetoend";
+
+const MOVE_TO_BEGINNING_QUEUE_API_URL =
+  "http://localhost:57679/api/PatientVisitingDoctorForm/movetobeginning";
 const DOCTOR_AVAILABILITY_FORM_URL =
   "http://localhost:57679/api/PatientVisitingDoctorForm/doctoravailability";
 
@@ -75,14 +78,22 @@ const edit = (
     });
 };
 
-const movetoend = async () => {
+const movetoend = async (id) => {
   return axios.put(MOVE_TO_END_QUEUE_API_URL, {}, config).then((response) => {
     return response.data;
   });
 };
 
+const movetobeginning = async (id) => {
+  return axios
+    .put(MOVE_TO_BEGINNING_QUEUE_API_URL, { id }, config)
+    .then((response) => {
+      return response.data;
+    });
+};
+
 const deleteById = async (id) => {
-  const response = await axios.delete(API_URL + id, config);
+  const response = await axios.delete(API_URL + { id }, config);
   return response.data;
 };
 
@@ -94,4 +105,5 @@ export default {
   deleteById,
   getByRole,
   edit,
+  movetobeginning,
 };

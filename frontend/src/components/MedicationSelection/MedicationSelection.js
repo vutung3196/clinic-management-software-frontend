@@ -8,7 +8,6 @@ const MedicationSelection = ({
   setNumberMedicationChildren,
   numberMedicationChildren,
 }) => {
-  console.log("here is the selection");
   const [allMedications, setAllMedications] = useState([]);
   const [medicationsByGroup, setMedicationsByGroup] = useState([]);
   console.log(medicationList);

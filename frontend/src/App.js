@@ -20,6 +20,7 @@ import SingleLabOrderFormPage from "./containers/pages/SingleLabOrderForm";
 import LabOrderFormsPage from "./containers/pages/LabOrderForms";
 import LabTestsPage from "./containers/pages/LabTests";
 import SingleLabTestPage from "./containers/pages/SingleLabTest";
+import PatientHospitalizedProfilesPage from "./containers/pages/PatientHospitalizedProfiles";
 
 import authService from "./services/authentication/auth.service";
 
@@ -86,6 +87,12 @@ const App = () => {
             path="/doctorvisitingforms"
             props
             component={DoctorVisitingFormsPage}
+          ></DoctorAndReceptionistRoute>
+          <DoctorAndReceptionistRoute
+            exact
+            path="/patienthospitalizedprofiles"
+            props
+            component={PatientHospitalizedProfilesPage}
           ></DoctorAndReceptionistRoute>
           <TestSpecialistRoute
             exact

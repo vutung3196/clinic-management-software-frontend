@@ -14,10 +14,13 @@ import {
 import * as Icon from "react-bootstrap-icons";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Typography from "@mui/material/Typography";
+
 import CreateOrEditHospitalizedProfileModal from "../PatientHospitalizedProfile";
 import PatientProfileModal from "./PatientProfileModal";
 import DetailedPatientHospitalizedProfileModal from "../PatientHospitalizedProfile/DetailedPatientHospitalizedProfileModal";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArticleIcon from "@mui/icons-material/Article";
 
 // import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -87,12 +90,12 @@ const DoctorVisitingFormsForDoctor = () => {
 
   const toggleCreateHospitalizedProfile = (row, index) => {
     console.log(row);
-    // if (index > 0) {
-    //   setOpenErrorModal(true);
-    //   setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
-    //   return;
-    // }
-    if (row.visitingStatus === 1) {
+    if (index > 0) {
+      setOpenErrorModal(true);
+      setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
+      return;
+    }
+    if (index === 0 && row.visitingStatus === 1) {
       patientdoctorvisitingformService
         .edit(row.id, row.code, row.description, row.doctorId, true)
         .then(
@@ -122,7 +125,7 @@ const DoctorVisitingFormsForDoctor = () => {
     setHospitalizedModal(!hospitalizedModal);
   };
 
-  const toggleAddFirstElementToTheEndOfAQueue = (row, index) => {
+  const toggleAddAnElementToTheEndOfAQueue = (row, index) => {
     patientdoctorvisitingformService.movetoend(row.id).then(
       (response) => {
         var arr = [...doctorVisitingForms];
@@ -145,15 +148,31 @@ const DoctorVisitingFormsForDoctor = () => {
     );
   };
 
+  const toggleAddAnElementToTheBeginningOfAQueue = (row, index) => {
+    patientdoctorvisitingformService.movetobeginning(row.id).then(
+      (response) => {
+        var arr = [...doctorVisitingForms];
+        var removeIndex = index;
+        ~removeIndex && arr.splice(removeIndex, 1);
+        arr = [row].concat(arr);
+        setDoctorVisitingForms(arr);
+        setOpenSuccessModal(true);
+        setNotificationMessage("Xếp bệnh nhân lên đầu thành công");
+      },
+      (error) => {
+        console.log(error);
+        setOpenErrorModal(true);
+        setNotificationMessage("Xếp bệnh nhân lên đầu không thành công");
+      }
+    );
+  };
+
   const toggleOpenPatientProfileModal = (row, index) => {
-    console.log(index);
-    console.log("========");
-    console.log(row.id);
-    // if (index > 0) {
-    //   setOpenErrorModal(true);
-    //   setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
-    //   return;
-    // }
+    if (index > 0) {
+      setOpenErrorModal(true);
+      setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");
+      return;
+    }
     if (row.visitingStatus === 1) {
       patientdoctorvisitingformService
         .edit(row.id, row.code, row.description, row.doctorId, true)
@@ -189,6 +208,11 @@ const DoctorVisitingFormsForDoctor = () => {
     patientdoctorvisitingformService
       .getByRole()
       .then((response) => {
+        var result = response.data;
+        for (let index = 0; index < result.length; index++) {
+          const element = result[index];
+          element.index = index + 1;
+        }
         setDoctorVisitingForms(response.data);
       })
       .catch((e) => {
@@ -197,9 +221,10 @@ const DoctorVisitingFormsForDoctor = () => {
       });
   };
 
-  useEffect(retrieveAll, []);
+  useEffect(retrieveAll, [!doctorVisitingForms]);
 
   const fields = [
+    { key: "index", label: "STT", _style: { width: "1%" } },
     { key: "code", label: "MÃ PHIẾU KHÁM", _style: { width: "8%" } },
     { key: "patientDetailedInformation", label: "TÊN BỆNH NHÂN" },
     { key: "description", label: "MÔ TẢ" },
@@ -227,8 +252,15 @@ const DoctorVisitingFormsForDoctor = () => {
       filter: false,
     },
     {
-      key: "delete",
+      key: "movetoend",
       label: "XẾP SAU",
+      _style: { width: "1%" },
+      sorter: false,
+      filter: false,
+    },
+    {
+      key: "movetobeginning",
+      label: "XẾP ĐẦU",
       _style: { width: "1%" },
       sorter: false,
       filter: false,
@@ -300,39 +332,40 @@ const DoctorVisitingFormsForDoctor = () => {
                       </td>
                     );
                   },
-                  delete: (row, index) => {
+                  movetoend: (row, index) => {
                     return (
                       <td className="py-2">
                         <ArrowDownwardIcon
                           fontSize="small"
                           style={cursorPointerStyle}
                           onClick={() => {
-                            toggleAddFirstElementToTheEndOfAQueue(row, index);
+                            toggleAddAnElementToTheEndOfAQueue(row, index);
                           }}
                         />
                       </td>
                     );
                   },
-                  details: (item, index) => {
+                  movetobeginning: (row, index) => {
                     return (
-                      <CCollapse show={details.includes(index)}>
-                        <CCardBody>
-                          <h4>{item.username}</h4>
-                          <p className="text-muted">
-                            User since: {item.registered}
-                          </p>
-                          <CButton size="sm" color="info">
-                            User Settings
-                          </CButton>
-                          <CButton size="sm" color="danger" className="ml-1">
-                            Delete
-                          </CButton>
-                        </CCardBody>
-                      </CCollapse>
+                      <td className="py-2">
+                        <ArrowUpwardIcon
+                          fontSize="small"
+                          style={cursorPointerStyle}
+                          onClick={() => {
+                            toggleAddAnElementToTheBeginningOfAQueue(
+                              row,
+                              index
+                            );
+                          }}
+                        />
+                      </td>
                     );
                   },
                 }}
               ></CDataTable>
+              <Typography component="h5" align="left">
+                Tổng số bệnh nhân đang chờ khám: {doctorVisitingForms.length}
+              </Typography>
             </CCardBody>
           </CCard>
         </CCol>

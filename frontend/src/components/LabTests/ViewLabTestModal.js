@@ -96,87 +96,87 @@ const EditLabTestModal = ({
     cursor: "pointer",
   };
 
-  const CreateButton = ({ display }) => {
-    if (display) {
-      return "";
-    } else {
-      return (
-        <Button
-          variant="contained"
-          color="primary"
-          shape="square"
-          sx={{ mt: 3, ml: 1 }}
-          onClick={() => {
-            editLabTestForm();
-          }}
-        >
-          Lưu
-        </Button>
-      );
-    }
-  };
+  // const CreateButton = ({ display }) => {
+  //   if (display) {
+  //     return "";
+  //   } else {
+  //     return (
+  //       <Button
+  //         variant="contained"
+  //         color="primary"
+  //         shape="square"
+  //         sx={{ mt: 3, ml: 1 }}
+  //         onClick={() => {
+  //           editLabTestForm();
+  //         }}
+  //       >
+  //         Lưu
+  //       </Button>
+  //     );
+  //   }
+  // };
 
   const closeModal = () => {
     setDescription("");
     onClose(false);
   };
 
-  const editLabTestForm = () => {
-    // console.log(medicationList);
-    labtestService.edit(labTest.id, result, labTestStatus, labTest.status).then(
-      (response) => {
-        var responseData = response.data.labTests;
-        var labTestsResult = [...responseData];
-        setLabTests(labTestsResult);
-        setDescription("");
-        setOpenSuccessModal(true);
-        if (responseData.isLabOrderFormDone) {
-          setNotificationMessage(
-            "Cập nhật phiếu xét nghiệm thành công, bệnh nhân đã hoàn thành toàn bộ xét nghiệm"
-          );
-        }
-        if (
-          responseData.isMovingFromWaitingForTestingStatusToWaitingForResultStatus
-        ) {
-          setNotificationMessage(
-            "Cập nhật phiếu xét nghiệm thành trạng thái đang chờ kết quả"
-          );
-        }
-        if (
-          responseData.IsMovingFromWaitingForTestingStatusToDoneStatus ||
-          responseData.isMovingFromWaitingForResultStatusToDoneStatus
-        ) {
-          setNotificationMessage(
-            "Cập nhật phiếu xét nghiệm thành trạng thái đã có kết quả"
-          );
-        } else {
-          setNotificationMessage("Cập nhật phiếu xét nghiệm thành công");
-        }
-        onClose(false);
-      },
-      (error) => {
-        console.log("=========");
-        console.log(error.response.data);
-        console.log("ahahah");
-        // if (error.response.data.errors !== undefined) {
-        //   var a = error.response.data.errors.DiagnosedDescription;
-        //   let arr = [];
-        //   if (a !== undefined) {
-        //     arr.push(a);
-        //   }
-        //   setMessages(arr);
-        // }
-        // if (typeof error.response.data === "string") {
-        //   let b = error.response.data;
-        //   let arr = [];
-        //   if (b !== undefined) {
-        //     arr.push(b);
-        //   }
-        //   setMessages(arr);
-        // }
-      }
-    );
-  };
+  // const editLabTestForm = () => {
+  //   // console.log(medicationList);
+  //   labtestService.edit(labTest.id, result, labTestStatus, labTest.status).then(
+  //     (response) => {
+  //       var responseData = response.data.labTests;
+  //       var labTestsResult = [...responseData];
+  //       setLabTests(labTestsResult);
+  //       setDescription("");
+  //       setOpenSuccessModal(true);
+  //       if (responseData.isLabOrderFormDone) {
+  //         setNotificationMessage(
+  //           "Cập nhật phiếu xét nghiệm thành công, bệnh nhân đã hoàn thành toàn bộ xét nghiệm"
+  //         );
+  //       }
+  //       if (
+  //         responseData.isMovingFromWaitingForTestingStatusToWaitingForResultStatus
+  //       ) {
+  //         setNotificationMessage(
+  //           "Cập nhật phiếu xét nghiệm thành trạng thái đang chờ kết quả"
+  //         );
+  //       }
+  //       if (
+  //         responseData.IsMovingFromWaitingForTestingStatusToDoneStatus ||
+  //         responseData.isMovingFromWaitingForResultStatusToDoneStatus
+  //       ) {
+  //         setNotificationMessage(
+  //           "Cập nhật phiếu xét nghiệm thành trạng thái đã có kết quả"
+  //         );
+  //       } else {
+  //         setNotificationMessage("Cập nhật phiếu xét nghiệm thành công");
+  //       }
+  //       onClose(false);
+  //     },
+  //     (error) => {
+  //       console.log("=========");
+  //       console.log(error.response.data);
+  //       console.log("ahahah");
+  //       // if (error.response.data.errors !== undefined) {
+  //       //   var a = error.response.data.errors.DiagnosedDescription;
+  //       //   let arr = [];
+  //       //   if (a !== undefined) {
+  //       //     arr.push(a);
+  //       //   }
+  //       //   setMessages(arr);
+  //       // }
+  //       // if (typeof error.response.data === "string") {
+  //       //   let b = error.response.data;
+  //       //   let arr = [];
+  //       //   if (b !== undefined) {
+  //       //     arr.push(b);
+  //       //   }
+  //       //   setMessages(arr);
+  //       // }
+  //     }
+  //   );
+  // };
 
   return (
     <CModal show={modal} onClose={closeModal} size="xl">
@@ -318,9 +318,9 @@ const EditLabTestModal = ({
                                   id="ioc66_d_reason"
                                   value={labTestStatus}
                                   label="Trạng thái"
-                                  onChange={(e) =>
-                                    setLabTestStatus(e.target.value)
-                                  }
+                                  // onChange={(e) =>
+                                  //   setLabTestStatus(e.target.value)
+                                  // }
                                 >
                                   <MenuItem value={1}>
                                     Đang chờ thực hiện xét nghiệm
@@ -359,7 +359,7 @@ const EditLabTestModal = ({
                                 class="suggestion-style ioc_textbox ioc66loidan ui-autocomplete-input"
                                 rows="4"
                                 value={result}
-                                onChange={(e) => setResult(e.target.value)}
+                                // onChange={(e) => setResult(e.target.value)}
                                 autocomplete="off"
                               ></textarea>
                             </div>
@@ -392,7 +392,7 @@ const EditLabTestModal = ({
                     setOpenSuccessModal={setOpenSuccessModal}
                     setOpenErrorModal={setOpenErrorModal}
                     setNotificationMessage={setNotificationMessage}
-                    isPrescriptionModal={false}
+                    isPrescriptionModal={true}
                   />
                 </CCol>
               </CRow>
@@ -401,7 +401,6 @@ const EditLabTestModal = ({
         </div>
       </CModalBody>
       <CModalFooter>
-        <CreateButton />
         <Button
           color="primary"
           variant="contained"
@@ -412,7 +411,7 @@ const EditLabTestModal = ({
             closeModal();
           }}
         >
-          Hủy
+          THOÁT
         </Button>
       </CModalFooter>
     </CModal>

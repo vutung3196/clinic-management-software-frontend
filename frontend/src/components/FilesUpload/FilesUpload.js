@@ -127,7 +127,7 @@ const FilesUpload = ({
                             )}
                           </div>
                           <t></t>
-                          <h class="file-jpg">{entry.name}</h>
+                          <h class="file-jpg"> {entry.name}</h>
                           <div class="n"></div>
                         </div>
                       </li>

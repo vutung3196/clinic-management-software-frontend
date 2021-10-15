@@ -12,6 +12,7 @@ import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { vi } from "date-fns/locale";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -19,7 +20,6 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Stack from "@mui/material/Stack";
 import PatientService from "../../services/patient/patient.service";
-import { vi } from "date-fns/locale";
 import PhoneInput from "react-phone-number-input";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
@@ -1289,7 +1289,7 @@ const PatientCreateOrEditModal = ({
             </Grid>
             <Grid item xs={12}>
               <LocalizationProvider locale={vi} dateAdapter={AdapterDateFns}>
-                <Stack spacing={1}>
+                <Stack spacing={1} sx={{ width: 250 }}>
                   <DesktopDatePicker
                     label="Ngày tháng năm sinh"
                     value={dateOfBirth}
@@ -1333,64 +1333,24 @@ const PatientCreateOrEditModal = ({
               <PhoneInput
                 defaultCountry="VN"
                 id="filled-full-width"
-                placeholder="Số điện thoại"
+                placeholder="Số điện thoại di động (ví dụ 912068946)"
                 value={phoneNumber}
                 onChange={setPhoneNumber}
               />
+              {/* <Typography component="h2" variant="h6" align="left">
+                Ví dụ: 912068946
+              </Typography> */}
             </Grid>
             <Grid item xs={12}>
               <TextField
                 id="filled-full-width"
-                label="Email"
+                label="Email (ví dụ: abcde@gmail.com)"
                 type="email"
                 fullWidth
                 margin="normal"
                 variant="standard"
                 value={emailAddress}
                 onChange={(e) => onChangeEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id="address2"
-                name="address2"
-                label="Số nhà, ngõ"
-                fullWidth
-                autoComplete="shipping address-line2"
-                variant="standard"
-                value={addressDetail}
-                onChange={(e) => setAddressDetail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id="city"
-                name="city"
-                label="Phố"
-                fullWidth
-                autoComplete="shipping address-level2"
-                variant="standard"
-                value={addressStreet}
-                onChange={(e) => setAddressStreet(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Autocomplete
-                options={provinces}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    label="Quận, huyện"
-                    margin="normal"
-                    fullWidth
-                  />
-                )}
-                value={addressDistrict}
-                onChange={(event, newValue) => {
-                  setAddressDistrict(newValue);
-                }}
-                getOptionLabel={(option) => option}
               />
             </Grid>
             <Grid item xs={12} sm={7}>
@@ -1426,6 +1386,53 @@ const PatientCreateOrEditModal = ({
                 }}
               />
             </Grid>
+            <Grid item xs={12} sm={7}>
+              <Autocomplete
+                options={provinces}
+                freeSolo
+                autoSelect
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Quận, huyện"
+                    margin="normal"
+                    fullWidth
+                  />
+                )}
+                value={addressDistrict}
+                onChange={(event, newValue) => {
+                  setAddressDistrict(newValue);
+                }}
+                getOptionLabel={(option) => option}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="city"
+                name="city"
+                label="Phố"
+                fullWidth
+                autoComplete="shipping address-level2"
+                variant="standard"
+                value={addressStreet}
+                onChange={(e) => setAddressStreet(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="address2"
+                name="address2"
+                label="Số nhà, ngõ"
+                fullWidth
+                autoComplete="shipping address-line2"
+                variant="standard"
+                value={addressDetail}
+                onChange={(e) => setAddressDetail(e.target.value)}
+              />
+            </Grid>
+
             <Grid item xs={12} sm={12}>
               <TextField
                 id="insurance-code"

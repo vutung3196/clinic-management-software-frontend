@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import patientdoctorvisitingformService from "src/services/patientdoctorvisitingform/patientdoctorvisitingform.service";
+import hospitalizedprofileService from "src/services/hospitalizedprofile/hospitalizedprofile.service";
+
 import {
   CCard,
   CCardBody,
@@ -10,33 +11,42 @@ import {
   CButton,
   CCollapse,
 } from "@coreui/react";
-
 import CIcon from "@coreui/icons-react";
+
 import * as Icon from "react-bootstrap-icons";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import EditDoctorVisitingFormModal from "./EditDoctorVisitingFormModal";
-import DoctorVisitingFormDeleteModal from "./DoctorVisitingFormDeleteModal";
+import ReadOnlyDetailedPatientHospitalizedProfileModal from "./ReadOnlyDetailedPatientHospitalizedProfileModal";
 import ArticleIcon from "@mui/icons-material/Article";
+import EditHospitalizedProfileModal from "./EditHospitalizedProfileModal";
+import PatientHospitalizedProfileDeleteModal from "./PatientHospitalizedProfileDeleteModal";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const DoctorVisitingFormsForReceptionist = () => {
-  const [doctorVisitingForms, setDoctorVisitingForms] = useState([]);
-  const [doctorVisitingForm, setDoctorVisitingForm] = useState("");
+const PatientHospitalizedProfiles = () => {
+  const [patientHospitalizedProfiles, setPatientHospitalizedProfiles] =
+    useState([]);
   const [details, setDetails] = useState([]);
   const [createModal, setCreateModal] = useState(false);
   const [id, setId] = useState("");
-  const [notificationMessage, setNotificationMessage] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
-
-  const [detailedModal, setDetailedModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [doctorVisitingFormModal, setDoctorVisitingFormModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [deleteModal, setDeleteModal] = React.useState(false);
+
+  const [patientProfileModal, setPatientProfileModal] = useState(false);
+  const [hospitalizedModal, setHospitalizedModal] = useState(false);
+
+  const [hospitalizedProfile, setHospitalizedProfile] = React.useState("");
+  const [patientHospitalizedProfileId, setPatientHospitalizedProfileId] =
+    React.useState("");
+  const [clinic, setClinic] = React.useState("");
+  const [
+    detailedPatientHospitalizedProfileModal,
+    setDetailedPatientHospitalizedProfileModal,
+  ] = React.useState(false);
 
   const handleCloseSuccessModal = (event, reason) => {
     if (reason === "clickaway") {
@@ -77,64 +87,60 @@ const DoctorVisitingFormsForReceptionist = () => {
   };
   const [patient, setPatient] = useState(constPatient);
 
-  const toggleEdit = (row) => {
-    setIsEditing(true);
-    setDoctorVisitingForm(row);
-    setDoctorVisitingFormModal(!doctorVisitingFormModal);
+  const toggleEditHospitalizedProfile = (row, index) => {
+    console.log("===============");
+    console.log(row);
+    setPatient(row.patientInformation);
+    setHospitalizedProfile(row);
+    setHospitalizedModal(!hospitalizedModal);
   };
 
-  const toggleView = (row) => {
-    setIsEditing(false);
-    setDoctorVisitingForm(row);
-    setDoctorVisitingFormModal(!doctorVisitingFormModal);
-  };
-
-  const handleCloseDoctorVisitingFormModal = () =>
-    setDoctorVisitingFormModal(false);
+  const handleCloseHospitalizedProfileModal = () => setHospitalizedModal(false);
 
   const retrieveAll = () => {
-    patientdoctorvisitingformService
-      .getByRole()
+    hospitalizedprofileService
+      .get()
       .then((response) => {
-        setDoctorVisitingForms(response.data);
+        var result = response.data;
+        for (let index = 0; index < result.length; index++) {
+          const element = result[index];
+          element.index = index + 1;
+        }
+        setPatientHospitalizedProfiles(response.data);
       })
       .catch((e) => {
-        setDoctorVisitingForms([]);
+        setPatientHospitalizedProfiles([]);
         console.log(e);
       });
   };
 
-  useEffect(retrieveAll, []);
+  useEffect(retrieveAll, [!patientHospitalizedProfiles]);
 
   const fields = [
-    {
-      key: "code",
-      label: "MÃ PHIẾU KHÁM",
-      _style: { width: "8%" },
-    },
+    { key: "code", label: "MÃ HỒ SƠ Y TẾ", _style: { width: "6%" } },
     { key: "patientDetailedInformation", label: "THÔNG TIN BỆNH NHÂN" },
-    { key: "doctorName", label: "Bác sĩ khám" },
+    { key: "diseaseName", label: "TÊN BỆNH" },
     { key: "description", label: "MÔ TẢ" },
-    { key: "visitingStatusDisplayed", label: "TRẠNG THÁI" },
-    { key: "updatedAt", label: "GIỜ CẬP NHẬT" },
+    { key: "createdAt", label: "NGÀY TẠO" },
+    { key: "revisitDateDisplayed", label: "NGÀY TÁI KHÁM" },
     {
-      key: "print1",
+      key: "view",
       label: "XEM",
-      _style: { width: "5%" },
-      sorter: false,
-      filter: false,
-    },
-    {
-      key: "print",
-      label: "IN",
-      _style: { width: "5%" },
+      _style: { width: "1%" },
       sorter: false,
       filter: false,
     },
     {
       key: "edit",
-      label: "SỬA",
-      _style: { width: "5%" },
+      label: "CẬP NHẬT",
+      _style: { width: "3%" },
+      sorter: false,
+      filter: false,
+    },
+    {
+      key: "delete",
+      label: "XÓA",
+      _style: { width: "1%" },
       sorter: false,
       filter: false,
     },
@@ -145,15 +151,31 @@ const DoctorVisitingFormsForReceptionist = () => {
     values: [5, 10, 20],
   };
 
+  const toggleDelete = (id) => {
+    setPatientHospitalizedProfileId(id);
+    setDeleteModal(!deleteModal);
+  };
+
+  const toggleOpenHospitalizedProfile = (row, index) => {
+    setDetailedPatientHospitalizedProfileModal(
+      !detailedPatientHospitalizedProfileModal
+    );
+    // setId(row.id);
+    setPatientHospitalizedProfileId(row.id);
+    setClinic(row.clinicInformation);
+    setPatientProfileModal(!patientProfileModal);
+    setPatient(row.patientInformation);
+  };
+
   return (
     <>
       <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>Danh sách cần khám</CCardHeader>
+            <CCardHeader>Danh sách hồ sơ y tế</CCardHeader>
             <CCardBody>
               <CDataTable
-                items={doctorVisitingForms}
+                items={patientHospitalizedProfiles}
                 fields={fields}
                 columnFilter
                 hover
@@ -165,41 +187,42 @@ const DoctorVisitingFormsForReceptionist = () => {
                 sorter
                 pagination
                 scopedSlots={{
-                  print1: (row) => {
+                  view: (row, index) => {
                     return (
                       <td className="py-2">
                         <ArticleIcon
-                          size="23"
                           style={cursorPointerStyle}
                           onClick={() => {
-                            toggleView(row);
-                          }}
-                          toggleView
-                        />
-                      </td>
-                    );
-                  },
-                  print: (row) => {
-                    return (
-                      <td className="py-2">
-                        <Icon.Printer
-                          size="23"
-                          style={cursorPointerStyle}
-                          onClick={() => {
-                            window.open("/doctorvisitingform/" + row.id);
+                            toggleOpenHospitalizedProfile(row, index);
                           }}
                         />
                       </td>
                     );
                   },
-                  edit: (row) => {
+                  edit: (row, index) => {
                     return (
                       <td className="py-2">
                         <Icon.PencilSquare
                           name="cilpencil"
                           size="22"
                           style={cursorPointerStyle}
-                          onClick={() => toggleEdit(row)}
+                          onClick={() =>
+                            toggleEditHospitalizedProfile(row, index)
+                          }
+                        />
+                      </td>
+                    );
+                  },
+                  delete: (row, index) => {
+                    return (
+                      <td className="py-2">
+                        <CIcon
+                          name="cilTrash"
+                          size="xl"
+                          style={cursorPointerStyle}
+                          onClick={() => {
+                            toggleDelete(row.id);
+                          }}
                         />
                       </td>
                     );
@@ -236,26 +259,35 @@ const DoctorVisitingFormsForReceptionist = () => {
           {notificationMessage}
         </Alert>
       </Snackbar>
-      <EditDoctorVisitingFormModal
-        open={doctorVisitingFormModal}
-        onClose={handleCloseDoctorVisitingFormModal}
+      <EditHospitalizedProfileModal
+        open={hospitalizedModal}
+        onClose={handleCloseHospitalizedProfileModal}
         patient={patient}
-        doctorVisitingForm={doctorVisitingForm}
-        doctorVisitingForms={doctorVisitingForms}
-        setDoctorVisitingForms={setDoctorVisitingForms}
+        patientHospitalizedProfile={hospitalizedProfile}
+        patientHospitalizedProfiles={patientHospitalizedProfiles}
+        setPatientHospitalizedProfiles={setPatientHospitalizedProfiles}
         setOpenSuccessModal={setOpenSuccessModal}
         setOpenErrorModal={setOpenErrorModal}
         setNotificationMessage={setNotificationMessage}
-        isEditing={isEditing}
       />
-      <DoctorVisitingFormDeleteModal
+      <ReadOnlyDetailedPatientHospitalizedProfileModal
+        modal={detailedPatientHospitalizedProfileModal}
+        onClose={setDetailedPatientHospitalizedProfileModal}
+        patient={patient}
+        clinic={clinic}
+        patientHospitalizedProfileId={patientHospitalizedProfileId}
+      />
+      <PatientHospitalizedProfileDeleteModal
         modal={deleteModal}
-        id={id}
+        id={patientHospitalizedProfileId}
         onClose={setDeleteModal}
-        doctorVisitingForms={doctorVisitingForms}
+        patientHospitalizedProfiles={patientHospitalizedProfiles}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
       />
     </>
   );
 };
 
-export default DoctorVisitingFormsForReceptionist;
+export default PatientHospitalizedProfiles;

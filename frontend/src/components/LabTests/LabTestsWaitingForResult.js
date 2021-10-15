@@ -15,6 +15,7 @@ import labtestService from "src/services/labtest/labtest.service";
 import EditLabTestModal from "./EditLabTestModal";
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
+import ViewLabTestModal from "./ViewLabTestModal";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -169,11 +170,11 @@ const LabTestsWaitingForResult = ({ status }) => {
           edit: (row) => {
             return (
               <td className="py-2">
-                <ArticleIcon
+                <Icon.PencilSquare
+                  name="cilpencil"
+                  size="22"
                   style={cursorPointerStyle}
-                  onClick={() => {
-                    toggleEdit(row);
-                  }}
+                  onClick={() => toggleEdit(row)}
                 />
               </td>
             );
@@ -185,7 +186,7 @@ const LabTestsWaitingForResult = ({ status }) => {
                   size="23"
                   style={cursorPointerStyle}
                   onClick={() => {
-                    window.open("/laborderform/" + row.id);
+                    window.open("/labtest/" + row.id);
                   }}
                 />
               </td>

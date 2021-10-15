@@ -25,7 +25,7 @@
   background: #fff;
   border: 1px solid #ddd;
   color: #333;
-  font-size: 13px;
+  font-size: 15px;
   margin: 1px;
   border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -240,7 +240,7 @@ ul {
 .ioc_textbox {
   // border: 1px solid #ddd;
   color: #333;
-  font-size: 13px;
+  font-size: 15px;
   margin: 1px;
   border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -1318,6 +1318,10 @@ tr {
   outline: none;
   border-color: transparent !important;
   background-color: transparent !important;
+}
+
+.image-element {
+  margin-right: 5px;
 }
 
 .ioc68_list td {

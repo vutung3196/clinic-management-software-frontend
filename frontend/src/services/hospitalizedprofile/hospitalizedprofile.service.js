@@ -16,6 +16,11 @@ const getById = async (id) => {
   return response.data;
 };
 
+const get = async () => {
+  const response = await axios.get(API_URL, config);
+  return response.data;
+};
+
 const getByPatient = async (patientId) => {
   const response = await axios.get(
     API_URL + "getbypatient?patientId=" + patientId,
@@ -42,33 +47,20 @@ const create = (patientId, diseaseName, description, revisitDate, code) => {
     });
 };
 
-const edit = (
-  id,
-  visitingFormCode,
-  description,
-  doctorId,
-  changeStatusFromWaitingForDoctorToVisitingDoctor
-) => {
+const edit = (id, diseaseName, description, revisitDate) => {
   return axios
     .put(
       API_URL + id,
       {
-        visitingFormCode,
-        description,
-        doctorId,
-        changeStatusFromWaitingForDoctorToVisitingDoctor,
+        diseaseName: diseaseName,
+        description: description,
+        revisitDate: revisitDate,
       },
       config
     )
     .then((response) => {
       return response.data;
     });
-};
-
-const movetoend = async () => {
-  return axios.put(MOVE_TO_END_QUEUE_API_URL, {}, config).then((response) => {
-    return response.data;
-  });
 };
 
 const deleteById = async (id) => {
@@ -79,8 +71,8 @@ const deleteById = async (id) => {
 export default {
   getById,
   create,
-  movetoend,
   deleteById,
   getByPatient,
   edit,
+  get,
 };

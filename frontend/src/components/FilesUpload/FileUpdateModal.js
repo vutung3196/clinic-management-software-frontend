@@ -56,7 +56,6 @@ const FileUpdateModal = ({ modal, onClose, file, files, setFiles }) => {
     );
   };
 
-  console.log("Here is the detailed modal");
   return (
     <CModal show={modal} onClose={onClose}>
       <CModalHeader closeButton>

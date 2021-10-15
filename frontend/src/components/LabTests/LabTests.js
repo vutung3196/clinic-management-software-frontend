@@ -35,24 +35,34 @@ const LabTests = () => {
         <CCard>
           <CCardBody>
             <CCardHeader>Danh sách xét nghiệm</CCardHeader>
-            <Box sx={{ marginLeft: 3, maxWidth: 300, maxHeight: 5 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Trạng thái
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={status}
-                  label="Trạng thái"
-                  onChange={handleChangeStatus}
-                >
-                  <MenuItem value={1}>Đang chờ thực hiện xét nghiệm</MenuItem>
-                  <MenuItem value={2}>Đang chờ kết quả xét nghiệm</MenuItem>
-                  <MenuItem value={3}>Đã có kết quả xét nghiệm</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+            <div>
+              <Box
+                sx={{
+                  marginLeft: 3,
+                  maxWidth: 300,
+                  maxHeight: 5,
+                  marginTop: 5,
+                  marginBottom: 5,
+                }}
+              >
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Trạng thái
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={status}
+                    label="Trạng thái"
+                    onChange={handleChangeStatus}
+                  >
+                    <MenuItem value={1}>Đang chờ thực hiện xét nghiệm</MenuItem>
+                    <MenuItem value={2}>Đang chờ kết quả xét nghiệm</MenuItem>
+                    <MenuItem value={3}>Đã có kết quả xét nghiệm</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </div>
 
             <CustomLabTests status={status} />
           </CCardBody>

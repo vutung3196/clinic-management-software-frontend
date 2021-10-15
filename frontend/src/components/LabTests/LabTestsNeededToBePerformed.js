@@ -10,6 +10,8 @@ import {
 } from "@coreui/react";
 
 import * as Icon from "react-bootstrap-icons";
+import Typography from "@mui/material/Typography";
+
 import ArticleIcon from "@mui/icons-material/Article";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -122,7 +124,7 @@ const LabTestsNeededToBePerformed = ({ status }) => {
       });
   };
 
-  useEffect(retrieveAll, []);
+  useEffect(retrieveAll, [!labTests]);
 
   const fields = [
     {
@@ -145,13 +147,13 @@ const LabTestsNeededToBePerformed = ({ status }) => {
       sorter: false,
       filter: false,
     },
-    {
-      key: "print",
-      label: "IN",
-      _style: { width: "3%" },
-      sorter: false,
-      filter: false,
-    },
+    // {
+    //   key: "print",
+    //   label: "IN",
+    //   _style: { width: "3%" },
+    //   sorter: false,
+    //   filter: false,
+    // },
     {
       key: "movetoend",
       label: "XẾP SAU",
@@ -192,7 +194,7 @@ const LabTestsNeededToBePerformed = ({ status }) => {
     }
     setPatient(row.patientInformation);
     setId(row.id);
-    setLabTests(row.labTests);
+    // setLabTests(row.labTests);
     setLabTest(row);
     setLabTestModal(!labTestModal);
   };
@@ -219,28 +221,28 @@ const LabTestsNeededToBePerformed = ({ status }) => {
           edit: (row, index) => {
             return (
               <td className="py-2">
-                <ArticleIcon
+                <Icon.PencilSquare
+                  name="cilpencil"
+                  size="22"
                   style={cursorPointerStyle}
-                  onClick={() => {
-                    toggleEdit(row, index);
-                  }}
+                  onClick={() => toggleEdit(row, index)}
                 />
               </td>
             );
           },
-          print: (row) => {
-            return (
-              <td className="py-2">
-                <Icon.Printer
-                  size="23"
-                  style={cursorPointerStyle}
-                  onClick={() => {
-                    window.open("/laborderform/" + row.id);
-                  }}
-                />
-              </td>
-            );
-          },
+          // print: (row) => {
+          //   return (
+          //     <td className="py-2">
+          //       <Icon.Printer
+          //         size="23"
+          //         style={cursorPointerStyle}
+          //         onClick={() => {
+          //           window.open("/laborderform/" + row.id);
+          //         }}
+          //       />
+          //     </td>
+          //   );
+          // },
           movetoend: (row, index) => {
             return (
               <td className="py-2">
@@ -256,6 +258,9 @@ const LabTestsNeededToBePerformed = ({ status }) => {
           },
         }}
       ></CDataTable>
+      <Typography component="h5" align="left">
+        Tổng số xét nghiệm cần thực hiện: {labTests.length}
+      </Typography>
       <Snackbar
         open={openSuccessModal}
         autoHideDuration={3000}

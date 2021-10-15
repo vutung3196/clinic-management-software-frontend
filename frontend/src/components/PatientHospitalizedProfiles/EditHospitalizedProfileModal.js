@@ -12,21 +12,22 @@ import hospitalizedprofileService from "src/services/hospitalizedprofile/hospita
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { vi } from "date-fns/locale";
+import Stack from "@mui/material/Stack";
 
-const CreateOrEditHospitalizedProfileModal = ({
+const EditHospitalizedProfileModal = ({
   open,
   patient,
   onClose,
+  patientHospitalizedProfile,
+  patientHospitalizedProfiles,
+  setPatientHospitalizedProfiles,
   setOpenSuccessModal,
   setOpenErrorModal,
   setNotificationMessage,
-  hospitalizedProfile,
-  hospitalizedProfiles,
-  setHospitalizedProfiles,
-  isEditing,
-  detailedPatientHospitalizedProfileModal,
-  setDetailedPatientHospitalizedProfileModal,
-  setHospitalizedProfileId,
 }) => {
   console.log("====");
   const { register, handleSubmit, errors, formState } = useForm({
@@ -35,64 +36,72 @@ const CreateOrEditHospitalizedProfileModal = ({
 
   const [description, setDescription] = React.useState("");
   const [diseaseName, setDiseaseName] = React.useState("");
-  const [code, setCode] = React.useState("");
+  const [revisitDate, handleRevisitDateChange] = React.useState(new Date());
 
-  const [patientHospitalizedProfileId, setPatientHospitalizedProfileId] =
-    React.useState(0);
   const handleCreateOrEdit = () => {
-    if (isEditing === false) {
-      hospitalizedprofileService
-        .create(patient.id, diseaseName, description, null, code)
-        .then(
-          (response) => {
-            console.log(response.data.id);
-            setPatientHospitalizedProfileId(response.data.id);
-            setHospitalizedProfileId(response.data.id);
-            setDetailedPatientHospitalizedProfileModal(
-              !detailedPatientHospitalizedProfileModal
-            );
-            setOpenSuccessModal(true);
-            setNotificationMessage("Tạo mới hồ sơ y tế thành công");
-            setCode("");
-            setDiseaseName("");
-            setDescription("");
-            onClose(false);
-          },
-          (error) => {
-            console.log(error);
-            //
+    hospitalizedprofileService
+      .edit(
+        patientHospitalizedProfile.id,
+        diseaseName,
+        description,
+        revisitDate
+      )
+      .then(
+        (response) => {
+          let updatedHospitalizedProfile = patientHospitalizedProfile;
+          updatedHospitalizedProfile.description = description;
+          updatedHospitalizedProfile.diseaseName = diseaseName;
+          updatedHospitalizedProfile.revisitDate = revisitDate;
 
-            if (error.response.data.errors !== undefined) {
-              console.log(error.response.data.errors);
-              let arr = [];
-              var descriptionError = error.response.data.errors.Description;
-              if (descriptionError !== undefined) {
-                arr.push(descriptionError);
-              }
-              var doctorError = error.response.data.errors.doctorId;
-              if (doctorError !== undefined) {
-                arr.push(doctorError);
-              }
+          updatedHospitalizedProfile.revisitDateDisplayed =
+            revisitDate.toLocaleDateString("en-US");
+          console.log(updatedHospitalizedProfile);
+          var updateIndex = patientHospitalizedProfiles
+            .map((item) => item.id)
+            .indexOf(patientHospitalizedProfile.id);
+          patientHospitalizedProfiles[updateIndex] = updatedHospitalizedProfile;
+          setPatientHospitalizedProfiles(patientHospitalizedProfiles);
+          setOpenSuccessModal(true);
+          setNotificationMessage("Chỉnh sửa hồ sơ y tế thành công");
+          setDiseaseName("");
+          setDescription("");
+          onClose(false);
+        },
+        (error) => {
+          console.log(error);
+          //
 
-              var errorMessage = "";
-              for (let index = 0; index < arr.length; index++) {
-                errorMessage += arr[index];
-                if (index !== arr.length - 1) {
-                  errorMessage += " và ";
-                }
-              }
-              setOpenErrorModal(true);
-              setNotificationMessage(errorMessage);
+          if (error.response.data.errors !== undefined) {
+            console.log(error.response.data.errors);
+            let arr = [];
+            var descriptionError = error.response.data.errors.Description;
+            if (descriptionError !== undefined) {
+              arr.push(descriptionError);
             }
+            var doctorError = error.response.data.errors.doctorId;
+            if (doctorError !== undefined) {
+              arr.push(doctorError);
+            }
+
+            var errorMessage = "";
+            for (let index = 0; index < arr.length; index++) {
+              errorMessage += arr[index];
+              if (index !== arr.length - 1) {
+                errorMessage += " và ";
+              }
+            }
+            setOpenErrorModal(true);
+            setNotificationMessage(errorMessage);
           }
-        );
-    }
+        }
+      );
   };
 
   React.useEffect(() => {
-    var currentMillis = new Date().getUTCMilliseconds();
-    if (patient !== null) {
-      setCode("YT" + patient.id.toString() + currentMillis.toString());
+    if (patientHospitalizedProfile !== null) {
+      setDiseaseName(patientHospitalizedProfile.diseaseName);
+      setDescription(patientHospitalizedProfile.description);
+      handleRevisitDateChange(patientHospitalizedProfile.revisitDate);
     }
   }, [open]);
 
@@ -113,7 +122,6 @@ const CreateOrEditHospitalizedProfileModal = ({
   };
 
   const handleClose = () => {
-    setCode("");
     setDiseaseName("");
     setDescription("");
     onClose();
@@ -122,13 +130,7 @@ const CreateOrEditHospitalizedProfileModal = ({
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
         <ThemeProvider theme={theme}>
-          {/* <CssBaseline /> */}
-          {/* <AppBar position="absolute" color="default" elevation={0}></AppBar> */}
           <Container component="main" maxWidth="s" sx={{ mb: 4 }}>
-            {/* <Paper
-              variant="outlined"
-              sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-            > */}
             <React.Fragment>
               <React.Fragment sx={style}>
                 <form
@@ -140,7 +142,10 @@ const CreateOrEditHospitalizedProfileModal = ({
                     Hồ sơ y tế
                   </Typography>
                   <Typography component="h6" align="center">
-                    Mã hồ sơ: {code}
+                    Mã hồ sơ:{" "}
+                    {patientHospitalizedProfile !== undefined
+                      ? patientHospitalizedProfile.code
+                      : ""}
                   </Typography>
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
@@ -268,6 +273,25 @@ const CreateOrEditHospitalizedProfileModal = ({
                         onChange={(e) => setDescription(e.target.value)}
                       />
                     </Grid>
+                    <Grid item xs={12}>
+                      <LocalizationProvider
+                        locale={vi}
+                        dateAdapter={AdapterDateFns}
+                      >
+                        <Stack spacing={1} sx={{ width: 250 }}>
+                          <DesktopDatePicker
+                            label="Ngày tái khám"
+                            value={revisitDate}
+                            minDate={new Date("1900-01-01")}
+                            onChange={(newValue) => {
+                              handleRevisitDateChange(newValue);
+                            }}
+                            variant="standard"
+                            renderInput={(params) => <TextField {...params} />}
+                          />
+                        </Stack>
+                      </LocalizationProvider>
+                    </Grid>
                   </Grid>
                   <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                     <Button
@@ -289,19 +313,11 @@ const CreateOrEditHospitalizedProfileModal = ({
                 </form>
               </React.Fragment>
             </React.Fragment>
-            {/* </Paper> */}
           </Container>
         </ThemeProvider>
-        {/* <DetailedPatientHospitalizedProfileModal
-          modal={detailedPatientHospitalizedProfileModal}
-          onClose={setDetailedPatientHospitalizedProfileModal}
-          patient={patient}
-          // clinic={clinic}
-          // patientHospitalizedProfileId={patientHospitalizedProfileId}
-        /> */}
       </Box>
     </Modal>
   );
 };
 
-export default CreateOrEditHospitalizedProfileModal;
+export default EditHospitalizedProfileModal;

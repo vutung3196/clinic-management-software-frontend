@@ -10,7 +10,7 @@ import VisitingDoctorFirstStep from "../Patients//VisitingDoctorFirstStep";
 import Modal from "@mui/material/Modal";
 import { useForm } from "react-hook-form";
 import patientdoctorvisitingformService from "src/services/patientdoctorvisitingform/patientdoctorvisitingform.service";
-import { convertGridRowsPropToState } from "@mui/x-data-grid";
+import VisitingDoctorReadOnlyStep from "../Patients/VisitingDoctorReadOnlyStep";
 
 const EditDoctorVisitingFormModal = ({
   open,
@@ -94,12 +94,20 @@ const EditDoctorVisitingFormModal = ({
     }
   };
 
+  const handleClose = () => {
+    setDescription("");
+    setVisitingFormCode("");
+    setDoctorId("");
+    setDoctorName("");
+    onClose(false);
+  };
+
   React.useEffect(() => {
     setDescription(doctorVisitingForm.description);
     setVisitingFormCode(doctorVisitingForm.code);
     setDoctorId(doctorVisitingForm.doctorId);
     setDoctorName(doctorVisitingForm.doctorName);
-  }, [doctorVisitingForm]);
+  }, [open]);
 
   const theme = createTheme();
 
@@ -134,7 +142,7 @@ const EditDoctorVisitingFormModal = ({
                   onSubmit={handleSubmit(handleEdit)}
                   novalidate
                 >
-                  {
+                  {isEditing === true ? (
                     <VisitingDoctorFirstStep
                       patient={patient}
                       description={description}
@@ -144,20 +152,32 @@ const EditDoctorVisitingFormModal = ({
                       setDoctorName={setDoctorName}
                       setDoctorId={setDoctorId}
                       visitingFormCode={visitingFormCode}
+                      isEditing={isEditing}
                     />
-                  }
+                  ) : (
+                    <VisitingDoctorReadOnlyStep
+                      patient={patient}
+                      description={description}
+                      doctorName={doctorName}
+                      visitingFormCode={visitingFormCode}
+                    />
+                  )}
                   <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    {isEditing === true ? (
+                      <Button
+                        variant="contained"
+                        // type="submit"
+                        onClick={handleEdit}
+                        sx={{ mt: 3, ml: 1 }}
+                      >
+                        LƯU
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                     <Button
                       variant="contained"
-                      // type="submit"
-                      onClick={handleEdit}
-                      sx={{ mt: 3, ml: 1 }}
-                    >
-                      LƯU
-                    </Button>
-                    <Button
-                      variant="contained"
-                      onClick={onClose}
+                      onClick={() => handleClose()}
                       sx={{ mt: 3, ml: 1 }}
                     >
                       HỦY

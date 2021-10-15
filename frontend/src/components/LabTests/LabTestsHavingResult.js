@@ -10,13 +10,10 @@ import {
 } from "@coreui/react";
 import * as Icon from "react-bootstrap-icons";
 import ArticleIcon from "@mui/icons-material/Article";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import labtestService from "src/services/labtest/labtest.service";
 import EditLabTestModal from "./EditLabTestModal";
+import ViewLabTestModal from "./ViewLabTestModal";
+
 const LabTestsHavingResult = ({ status }) => {
   const [labTests, setLabTests] = useState([]);
   const [labOrderForm, setLabOrderForm] = useState([]);
@@ -78,32 +75,8 @@ const LabTestsHavingResult = ({ status }) => {
   };
 
   const toggleEdit = (row, index) => {
-    if (index > 0) {
-      labtestService.movetobeginning(row.id).then(
-        (response) => {
-          var arr = [...labTests];
-          var removeIndex = index;
-          ~removeIndex && arr.splice(removeIndex, 1);
-          const newArray = [row].concat(arr); // [ 4, 3, 2, 1 ]
-          for (var i = 0; i < arr.length; i++) {
-            newArray[i].index = i + 1;
-          }
-          setLabTests(newArray);
-          setOpenSuccessModal(true);
-          setNotificationMessage("Xếp phiếu xét nghiệm lên đầu thành công");
-        },
-        (error) => {
-          console.log(error);
-          setOpenErrorModal(true);
-          setNotificationMessage(
-            "Xếp sau phiếu xét nghiệm lên đầu không thành công"
-          );
-        }
-      );
-    }
     setPatient(row.patientInformation);
     setId(row.id);
-    setLabTests(row.labTests);
     setLabTest(row);
     setLabTestModal(!labTestModal);
   };
@@ -162,7 +135,7 @@ const LabTestsHavingResult = ({ status }) => {
     { key: "createdAt", label: "GIỜ CẬP NHẬT" },
     {
       key: "view",
-      label: "CẬP NHẬT",
+      label: "XEM",
       _style: { width: "2%" },
       sorter: false,
       filter: false,
@@ -231,16 +204,13 @@ const LabTestsHavingResult = ({ status }) => {
           },
         }}
       ></CDataTable>
-      <EditLabTestModal
+      <ViewLabTestModal
         patient={patient}
         modal={labTestModal}
         onClose={setLabTestModal}
         labTest={labTest}
         labTests={labTests}
         setLabTests={setLabTests}
-        setOpenSuccessModal={setOpenSuccessModal}
-        setOpenErrorModal={setOpenErrorModal}
-        setNotificationMessage={setNotificationMessage}
       />
     </>
   );

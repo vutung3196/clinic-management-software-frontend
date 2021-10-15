@@ -2,30 +2,13 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
-import DoctorAvailabilityModal from "./DoctorAvailabilityModal";
 
-const VisitingDoctorFirstStep = ({
+const VisitingDoctorReadOnlyStep = ({
   patient,
   description,
-  setDescription,
-  doctorId,
-  setDoctorId,
   doctorName,
-  setDoctorName,
   visitingFormCode,
 }) => {
-  const [doctorVisitingFormModal, setDoctorVisitingFormModal] =
-    React.useState(false);
-
-  const handleOpenDoctorVisitingFormModal = () => {
-    setDoctorVisitingFormModal(true);
-    console.log("================");
-  };
-
-  const handleCloseDoctorVisitingFormModal = () =>
-    setDoctorVisitingFormModal(false);
-
   return (
     <React.Fragment>
       <Typography component="h1" variant="h4" align="center">
@@ -146,7 +129,7 @@ const VisitingDoctorFirstStep = ({
             label="Lý do khám"
             value={description}
             placeholder="Lý do khám"
-            onChange={(e) => setDescription(e.target.value)}
+            // onChange={(e) => setDescription(e.target.value)}
           />
         </Grid>
         <Grid item xs={12}>
@@ -158,18 +141,12 @@ const VisitingDoctorFirstStep = ({
             fullWidth
             variant="standard"
             value={doctorName}
-            onClick={() => handleOpenDoctorVisitingFormModal()}
+            // onClick={() => handleOpenDoctorVisitingFormModal()}
           />
         </Grid>
       </Grid>
-      <DoctorAvailabilityModal
-        open={doctorVisitingFormModal}
-        onClose={handleCloseDoctorVisitingFormModal}
-        setDoctorName={setDoctorName}
-        setDoctorId={setDoctorId}
-      />
     </React.Fragment>
   );
 };
 
-export default VisitingDoctorFirstStep;
+export default VisitingDoctorReadOnlyStep;

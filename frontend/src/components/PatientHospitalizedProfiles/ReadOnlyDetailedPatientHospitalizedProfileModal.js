@@ -23,16 +23,12 @@ import hospitalizedprofileService from "src/services/hospitalizedprofile/hospita
 import LabOrderFormModal from "../LabOrderForm";
 import Button from "@mui/material/Button";
 
-const DetailedPatientHospitalizedProfileModal = ({
+const ReadOnlyDetailedPatientHospitalizedProfileModal = ({
   modal,
   onClose,
   patient,
   clinic,
   patientHospitalizedProfileId,
-  patientDoctorVisitingFormId,
-  setOpenSuccessModal,
-  setOpenErrorModal,
-  setNotificationMessage,
 }) => {
   console.log("damn");
   console.log("damn");
@@ -377,24 +373,6 @@ const DetailedPatientHospitalizedProfileModal = ({
             </div>
           </div>
         </div>
-
-        <LabOrderFormModal
-          modal={labOrderFormModal}
-          onClose={setLabOrderFormModal}
-          patient={patient}
-          patientHospitalizedProfileId={patientHospitalizedProfileId}
-          patientDoctorVisitingFormId={patientDoctorVisitingFormId}
-        />
-        <CreatePrescriptionModal
-          modal={prescriptionModal}
-          onClose={setPrescriptionModal}
-          patient={patient}
-          patientHospitalizedProfileId={patientHospitalizedProfileId}
-          patientDoctorVisitingFormId={patientDoctorVisitingFormId}
-          setOpenSuccessModal={setOpenSuccessModal}
-          setOpenErrorModal={setOpenErrorModal}
-          setNotificationMessage={setNotificationMessage}
-        />
         <ViewImageModal
           modal={viewImageModal}
           onClose={setViewImageModal}
@@ -402,26 +380,6 @@ const DetailedPatientHospitalizedProfileModal = ({
         />
       </CModalBody>
       <CModalFooter>
-        <Button
-          color="primary"
-          variant="contained"
-          shape="square"
-          size="sm"
-          sx={{ mt: 3, ml: 1 }}
-          onClick={() => setPrescriptionModal(!prescriptionModal)}
-        >
-          Kê đơn
-        </Button>
-        <Button
-          color="primary"
-          variant="contained"
-          shape="square"
-          size="sm"
-          sx={{ mt: 3, ml: 1 }}
-          onClick={() => setLabOrderFormModal(!labOrderFormModal)}
-        >
-          Tạo phiếu chỉ định
-        </Button>
         <Button
           color="primary"
           variant="contained"
@@ -437,4 +395,4 @@ const DetailedPatientHospitalizedProfileModal = ({
   );
 };
 
-export default DetailedPatientHospitalizedProfileModal;
+export default ReadOnlyDetailedPatientHospitalizedProfileModal;
