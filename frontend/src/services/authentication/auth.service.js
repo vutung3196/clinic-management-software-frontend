@@ -76,6 +76,17 @@ const isDoctor = () => {
   return false;
 };
 
+const isTestSpecialist = () => {
+  var currentUser = getCurrentUser();
+  if (!currentUser) {
+    return false;
+  }
+  if (currentUser.role === "TestSpecialist") {
+    return true;
+  }
+  return false;
+};
+
 const isMasterAdmin = () => {
   var currentUser = getCurrentUser();
   console.log(currentUser);
@@ -98,5 +109,6 @@ export default {
   isAdmin,
   isMasterAdmin,
   isReceptionist,
+  isTestSpecialist,
   isDoctor,
 };

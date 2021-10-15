@@ -18,6 +18,10 @@ import PatientDeleteModal from "./PatientDeleteModal";
 import CreateVisitingDoctorFormAndPaymentModal from "./CreateVisitingDoctorFormAndPaymentModal";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+// import { CSmartTable } from "@coreui/react";
+import SearchBar from "material-ui-search-bar";
+
+import TextField from "@mui/material/TextField";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -36,7 +40,7 @@ const Patients = () => {
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -82,11 +86,6 @@ const Patients = () => {
     setCreateModal(!createModal);
   };
 
-  const toggleDoctorVisitingForm = (patient) => {
-    setPatient(patient);
-    setDoctorVisitingFormModal(!doctorVisitingFormModal);
-  };
-
   const toggleDelete = (patientId) => {
     setDeleteModal(!deleteModal);
     setId(patientId);
@@ -121,13 +120,12 @@ const Patients = () => {
   const handleOpenDoctorVisitingFormModal = (patient) => {
     setPatient(patient);
     setDoctorVisitingFormModal(true);
-    console.log("================");
   };
   const handleCloseDoctorVisitingFormModal = () =>
     setDoctorVisitingFormModal(false);
 
-  const retrievePatients = () => {
-    PatientService.getPatients()
+  const retrievePatients = (searchName) => {
+    PatientService.getPatients(searchName)
       .then((response) => {
         setPatients(response.data);
       })
@@ -137,7 +135,18 @@ const Patients = () => {
       });
   };
 
-  useEffect(retrievePatients, []);
+  const retrieveAllPatients = () => {
+    PatientService.getPatients("")
+      .then((response) => {
+        setPatients(response.data);
+      })
+      .catch((e) => {
+        setPatients([]);
+        console.log(e);
+      });
+  };
+
+  useEffect(retrieveAllPatients, [!patients]);
 
   const fields = [
     { key: "id", label: "MÃ BỆNH NHÂN", _style: { width: "8%" } },
@@ -170,6 +179,11 @@ const Patients = () => {
     },
   ];
 
+  const rowsPerPageOption = {
+    label: "Số bản ghi trên trang",
+    values: [5, 10, 20],
+  };
+
   return (
     <>
       <CRow>
@@ -185,16 +199,28 @@ const Patients = () => {
                 Thêm mới
               </CButton>
             </div>
+            <div col="2" class="mb-3 mb-xl-0 col-sm-4 col-md-2 ">
+              <CCardHeader>Tìm kiếm bệnh nhân theo tên</CCardHeader>
+              <SearchBar
+                onChange={(e) => setSearchTerm(e)}
+                value={searchTerm}
+                onRequestSearch={() => retrievePatients(searchTerm)}
+                style={{
+                  margin: "0 auto",
+                  maxWidth: 800,
+                }}
+              />
+            </div>
             <CCardBody>
               <CDataTable
                 items={patients}
                 fields={fields}
-                columnFilter
+                // columnFilter
                 hover
                 striped
                 bordered
                 size="sm"
-                itemsPerPageSelect
+                itemsPerPageSelect={rowsPerPageOption}
                 itemsPerPage={10}
                 sorter
                 pagination
@@ -268,6 +294,9 @@ const Patients = () => {
         id={id}
         onClose={setDeleteModal}
         patients={patients}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
       />
       <PatientCreateOrEditModal
         modal={createModal}

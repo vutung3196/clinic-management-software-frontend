@@ -1,11 +1,11 @@
 import prescriptionService from "../../../services/prescription/prescription.service";
 import patientService from "../../../services/patient/patient.service";
 import { useState, useEffect } from "react";
-import jsPDF from "jspdf";
 import * as Icon from "react-bootstrap-icons";
 import { CTooltip } from "@coreui/react";
 import clinicService from "src/services/clinicservice/clinic.service";
 import authService from "src/services/authentication/auth.service";
+import { Helmet } from "react-helmet";
 
 const style1 = {
   display: "none",
@@ -70,22 +70,57 @@ const style14 = {
 };
 
 const SinglePrescriptionPage = (props) => {
-  const retrieveClinicInformation = () => {
-    var currentUser = authService.getCurrentUser();
-    console.log("=====");
-    console.log(currentUser);
-    clinicService
-      .getClinicInformation(currentUser.clinicId)
-      .then((response) => {
-        var clinic = response.data;
-        setClinicName(clinic.name);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const prescriptionConst = {
+    id: 5,
+    doctorVisitingFormCode: null,
+    doctorVisitingFormId: 0,
+    visitReason: null,
+    code: "",
+    diagnosedDescription: "Bệnh Rubella",
+    revisitDate: "10/14/2021",
+    doctorSuggestion: "Ngày ngủ đủ 8 tiếng nhé",
+    patientPrescriptionCode: null,
+    createdAt: "10/14/2021",
+    doctorName: null,
+    doctorId: 6,
+    medicationInformation: [
+      {
+        id: 0,
+        name: "Thuốc 1",
+        quantity: 1,
+        usage: "ngày 3 viên sau ăn",
+      },
+    ],
+    patientInformation: {
+      id: 7,
+      clinicId: 1,
+      fullName: "Vũ Tùng",
+      emailAddress: "tungvu3196@gmail.com",
+      phoneNumber: "+84912068946",
+      gender: "Nam",
+      createdAt: "10/04/2021",
+      updatedAt: "10/04/2021",
+      addressDetail: "399",
+      addressCity: "Thành phố Hà Nội",
+      addressStreet: "Hoang Mai",
+      addressDistrict: "Hoang Mai ",
+      dateOfBirth: "2021-10-08T13:38:13",
+      dateOfBirthDetail: "10/08/2021",
+      age: 0,
+      medicalInsuranceCode: "3132393913",
+    },
+    clinicInformation: {
+      id: 0,
+      name: "Ha pham",
+      emailAddress: null,
+      phoneNumber: "+84912068946",
+      address: "Hà Nội",
+      description: null,
+    },
   };
+
   const a = { day: 1, month: 1, year: 1 };
-  const [prescription, setPrescription] = useState("");
+  const [prescription, setPrescription] = useState(prescriptionConst);
   const [patient, setPatient] = useState("");
   const [date, setDate] = useState("");
   const [clinicName, setClinicName] = useState("");
@@ -100,6 +135,7 @@ const SinglePrescriptionPage = (props) => {
           year: arr[2],
         };
         setDate(date);
+        console.log(response.data);
         setPrescription(response.data);
       },
       (error) => {
@@ -107,7 +143,6 @@ const SinglePrescriptionPage = (props) => {
       }
     );
 
-    retrieveClinicInformation();
     patientService.getPatient(props.match.params.patientId).then(
       (response) => {
         if (response.data.gender === "Male") {
@@ -127,16 +162,6 @@ const SinglePrescriptionPage = (props) => {
 
   const style30 = {
     "padding-bottom": "5px",
-  };
-
-  const testPrint = () => {
-    var pdf = new jsPDF("p", "pt", "letter");
-    var source = window.document.getElementsByTagName("body")[0];
-    pdf.html(source, function () {
-      pdf.save("Test.pdf");
-    });
-    console.log(121323);
-    pdf.save("Test.pdf");
   };
 
   const style31 = {
@@ -187,62 +212,255 @@ const SinglePrescriptionPage = (props) => {
   };
 
   return (
-    <html>
-      <head></head>
-      <body data-new-gr-c-s-check-loaded="14.1019.0" data-gr-ext-installed="">
-        <div id="StayFocusd-infobar" style={style1}>
+    <html lang="vi" class="js-focus-visible" data-js-focus-visible="">
+      <Helmet>
+        <title>Đơn thuốc</title>
+      </Helmet>
+      <body data-new-gr-c-s-check-loaded="14.1022.0" data-gr-ext-installed="">
+        <div
+          id="StayFocusd-infobar"
+          style={{
+            display: "none",
+            top: "0px",
+          }}
+        >
           <span id="StayFocusd-infobar-msg"></span>
-          <span id="StayFocusd-infobar-links"></span>
+          <span id="StayFocusd-infobar-links">
+            <a id="StayFocusd-infobar-never-show">hide forever</a>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a id="StayFocusd-infobar-hide">hide once</a>
+          </span>
         </div>
-        <div class="view-c0-single">
-          <div class="view-c1-single">
+        <div
+          class="view-c0"
+          style={{
+            "text-rendering": "auto",
+            "-webkit-font-smoothing": "antialiased",
+            "font-family": "-apple-system,BlinkMacSystemFont",
+            "text-align": "left",
+            color: "#000",
+            "line-height": 2,
+            "font-size": "13px",
+            width: "800px",
+            margin: "0 auto",
+          }}
+        >
+          <div
+            class="view-c1"
+            style={{
+              "text-rendering": "auto",
+              "-webkit-font-smoothing": "antialiased",
+              "font-family": "Segoe UI",
+              "text-align": "left",
+              color: "#000",
+              "line-height": "2",
+              "font-size": "13px",
+              "box-sizing": "border-box",
+              background: "#fff",
+              padding: "20px",
+              "margin-bottom": "20px",
+              "box-shadow": "2px 3px 3px #888",
+              border: "1px solid #ddd",
+              // "border-left": "1px solid #ddd",
+            }}
+          >
             <div class="dochead2">
-              <div style={style10}>
-                <p>Địa chỉ: 123 Đường số 5, Q6, Tp. HCM</p>
-                <p>Điện thoại: 1900 11111</p>
+              <div style={{ "line-height": "0.3" }}>
+                <p>
+                  Tên đơn vị: Phòng khám {prescription.clinicInformation.name}
+                </p>
+                <p>Địa chỉ: {prescription.clinicInformation.address}</p>
+                <p>Điện thoại: {prescription.clinicInformation.phoneNumber}</p>
               </div>
             </div>
-            <div>
+            <div style={{ "text-align": "center" }}>
               <div
-                class="prescription-style"
-                onClick={() => {
-                  testPrint();
+                style={{
+                  "font-size": "20px",
+                  "font-weight": "bold",
+                  color: "#3E7770",
+                  "text-transform": "uppercase",
                 }}
               >
                 Đơn thuốc
               </div>
-              <div style={style2}>
-                Mã số: {prescription.patientPrescriptionCode}
-              </div>
+              <div>Mã đơn thuốc: {prescription.code} </div>
             </div>
-            <div style={style3}>
-              <table class="tab_table" style={style4}>
+            <div style={{ padding: "15px 0 5px", overflow: "auto" }}>
+              <div style={{ "font-weight": "bold" }}>Thông tin bệnh nhân</div>
+              <table class="tab_table" style={{ width: "100%", padding: 0 }}>
                 <tbody>
                   <tr>
-                    <td style={style5}>Họ tên</td>
-                    <td class="s">:</td>
-                    <td>
-                      <strong>{patient.fullName}</strong>
+                    <td
+                      style={{
+                        width: "80px",
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Họ tên
                     </td>
-                    <td style={style5}>Năm sinh</td>
-                    <td class="s">:</td>
-                    <td>{patient.yearOfBirth}</td>
-                  </tr>
-                  <tr>
-                    <td>Điện thoại</td>
-                    <td class="s">:</td>
-                    <td>{patient.phoneNumber}</td>
-                    <td>Giới tính</td>
-                    <td class="s">:</td>
-                    <td>{patient.gender}</td>
-                  </tr>
-                  <tr>
-                    <td valign="top">Lý do khám</td>
-                    <td class="s" valign="top">
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
                       :
                     </td>
-                    <td colspan="4" valign="top">
-                      {prescription.visitReason}
+                    <td>
+                      <strong>
+                        {prescription.patientInformation.fullName}
+                      </strong>
+                    </td>
+                    <td
+                      style={{
+                        width: "80px",
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Tuổi
+                    </td>
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      style={{
+                        width: "80px",
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {prescription.patientInformation.age}
+                    </td>
+                  </tr>
+                  <tr>
+                    {/* <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Điện thoại
+                    </td>
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {prescription.patientInformation.phoneNumber}
+                    </td> */}
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Địa chỉ
+                    </td>
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {prescription.patientInformation.addressCity}
+                    </td>
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Giới tính
+                    </td>
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {prescription.patientInformation.gender}
+                    </td>
+                  </tr>
+                  <tr></tr>
+                  <tr>
+                    <td
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Mã số thẻ BHYT (nếu có)
+                    </td>
+                    <td
+                      class="s"
+                      valign="top"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      colspan="4"
+                      valign="top"
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      {prescription.patientInformation.medicalInsuranceCode}
                     </td>
                   </tr>
                   <tr>
@@ -253,6 +471,9 @@ const SinglePrescriptionPage = (props) => {
                     <td colspan="4" valign="top">
                       {prescription.diagnosedDescription}
                     </td>
+                  </tr>
+                  <tr>
+                    <td valign="top">Thuốc điều trị:</td>
                   </tr>
                 </tbody>
               </table>
@@ -277,7 +498,7 @@ const SinglePrescriptionPage = (props) => {
                             <div>{entry.usage}</div>
                           </div>
                           <div style={style11}>
-                            Số lượng: <strong>{entry.number}</strong> viên
+                            Số lượng: <strong>{entry.quantity}</strong> viên
                           </div>
                           <div class="clear"></div>
                         </td>
@@ -302,7 +523,7 @@ const SinglePrescriptionPage = (props) => {
                 </div>
                 <div class="p">Bác sĩ</div>
                 <div class="b" style={style12}>
-                  Hà Phạm Clinic
+                  {prescription.doctorName}
                 </div>
               </div>
               <div class="clear"></div>
@@ -312,7 +533,7 @@ const SinglePrescriptionPage = (props) => {
               <div style={style9}>
                 Theo dõi tác dụng thuốc/ hẹn tái khám.
                 <br />
-                Gọi BÁC SĨ 1900 11111
+                Gọi BÁC SĨ {prescription.clinicInformation.phoneNumber}
               </div>
             </div>
           </div>

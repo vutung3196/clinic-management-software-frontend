@@ -13,8 +13,14 @@ import UserManagementPage from "./containers/pages/UserManagement";
 import InformationManagementPage from "./containers/pages/InformationManagement";
 import PatientsPage from "./containers/pages/Patients";
 import SingleReceiptPage from "./containers/pages/SingleReceipt";
+import SinglePrescriptionPage from "./containers/pages/SinglePrescription";
 import SingleDoctorVisitingFormPage from "./containers/pages/SingleDoctorVisitingForm";
 import DoctorVisitingFormsPage from "./containers/pages/DoctorVisitingForms";
+import SingleLabOrderFormPage from "./containers/pages/SingleLabOrderForm";
+import LabOrderFormsPage from "./containers/pages/LabOrderForms";
+import LabTestsPage from "./containers/pages/LabTests";
+import SingleLabTestPage from "./containers/pages/SingleLabTest";
+import PatientHospitalizedProfilesPage from "./containers/pages/PatientHospitalizedProfiles";
 
 import authService from "./services/authentication/auth.service";
 
@@ -23,6 +29,7 @@ import AdminRoute from "./utils/adminRoute";
 import MasterAdminRoute from "./utils/masterAdminRoute";
 import ReceptionistRoute from "./utils/receptionistRoute";
 import DoctorRoute from "./utils/doctorRoute";
+import TestSpecialistRoute from "./utils/testSpecialistRoute";
 import DoctorAndReceptionistRoute from "./utils/doctorAndReceptionistRoute/doctorAndReceptionistRoute";
 
 const loading = (
@@ -81,13 +88,41 @@ const App = () => {
             props
             component={DoctorVisitingFormsPage}
           ></DoctorAndReceptionistRoute>
+          <DoctorAndReceptionistRoute
+            exact
+            path="/patienthospitalizedprofiles"
+            props
+            component={PatientHospitalizedProfilesPage}
+          ></DoctorAndReceptionistRoute>
+          <TestSpecialistRoute
+            exact
+            path="/labtests"
+            props
+            component={LabTestsPage}
+          ></TestSpecialistRoute>
           <PrivateRoute
             path="/receipt/:id"
             component={SingleReceiptPage}
           ></PrivateRoute>
           <PrivateRoute
+            path="/laborderform/:id"
+            component={SingleLabOrderFormPage}
+          ></PrivateRoute>
+          <PrivateRoute
+            path="/laborderforms"
+            component={LabOrderFormsPage}
+          ></PrivateRoute>
+          <PrivateRoute
             path="/doctorvisitingform/:id"
             component={SingleDoctorVisitingFormPage}
+          ></PrivateRoute>
+          <PrivateRoute
+            path="/labtest/:id"
+            component={SingleLabTestPage}
+          ></PrivateRoute>
+          <PrivateRoute
+            path="/prescription/:id"
+            component={SinglePrescriptionPage}
           ></PrivateRoute>
           <PrivateRoute path="/" component={Main}></PrivateRoute>
         </Switch>

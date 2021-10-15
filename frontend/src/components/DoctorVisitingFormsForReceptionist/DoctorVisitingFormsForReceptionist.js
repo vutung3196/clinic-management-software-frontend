@@ -17,6 +17,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import EditDoctorVisitingFormModal from "./EditDoctorVisitingFormModal";
 import DoctorVisitingFormDeleteModal from "./DoctorVisitingFormDeleteModal";
+import ArticleIcon from "@mui/icons-material/Article";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -77,13 +78,15 @@ const DoctorVisitingFormsForReceptionist = () => {
   const [patient, setPatient] = useState(constPatient);
 
   const toggleEdit = (row) => {
+    setIsEditing(true);
     setDoctorVisitingForm(row);
     setDoctorVisitingFormModal(!doctorVisitingFormModal);
   };
 
-  const toggleDelete = (row) => {
-    setDeleteModal(!deleteModal);
-    setId(row.id);
+  const toggleView = (row) => {
+    setIsEditing(false);
+    setDoctorVisitingForm(row);
+    setDoctorVisitingFormModal(!doctorVisitingFormModal);
   };
 
   const handleCloseDoctorVisitingFormModal = () =>
@@ -104,33 +107,43 @@ const DoctorVisitingFormsForReceptionist = () => {
   useEffect(retrieveAll, []);
 
   const fields = [
-    { key: "code", label: "MÃ PHIẾU KHÁM", _style: { width: "8%" } },
-    { key: "patientDetailedInformation", label: "TÊN BỆNH NHÂN" },
+    {
+      key: "code",
+      label: "MÃ PHIẾU KHÁM",
+      _style: { width: "8%" },
+    },
+    { key: "patientDetailedInformation", label: "THÔNG TIN BỆNH NHÂN" },
+    { key: "doctorName", label: "Bác sĩ khám" },
     { key: "description", label: "MÔ TẢ" },
     { key: "visitingStatusDisplayed", label: "TRẠNG THÁI" },
     { key: "updatedAt", label: "GIỜ CẬP NHẬT" },
     {
-      key: "view",
+      key: "print1",
       label: "XEM",
       _style: { width: "5%" },
       sorter: false,
       filter: false,
     },
     {
-      key: "edit",
-      label: "CHỈNH SỬA",
+      key: "print",
+      label: "IN",
       _style: { width: "5%" },
       sorter: false,
       filter: false,
     },
     {
-      key: "delete",
-      label: "XÓA",
-      _style: { width: "1%" },
+      key: "edit",
+      label: "SỬA",
+      _style: { width: "5%" },
       sorter: false,
       filter: false,
     },
   ];
+
+  const rowsPerPageOption = {
+    label: "Số bản ghi trên trang",
+    values: [5, 10, 20],
+  };
 
   return (
     <>
@@ -147,17 +160,30 @@ const DoctorVisitingFormsForReceptionist = () => {
                 striped
                 bordered
                 size="sm"
-                itemsPerPageSelect
+                itemsPerPageSelect={rowsPerPageOption}
                 itemsPerPage={10}
                 sorter
                 pagination
                 scopedSlots={{
-                  view: (row) => {
+                  print1: (row) => {
                     return (
                       <td className="py-2">
-                        <Icon.PersonBadge
-                          name="cilpencil"
-                          size="22"
+                        <ArticleIcon
+                          size="23"
+                          style={cursorPointerStyle}
+                          onClick={() => {
+                            toggleView(row);
+                          }}
+                          toggleView
+                        />
+                      </td>
+                    );
+                  },
+                  print: (row) => {
+                    return (
+                      <td className="py-2">
+                        <Icon.Printer
+                          size="23"
                           style={cursorPointerStyle}
                           onClick={() => {
                             window.open("/doctorvisitingform/" + row.id);
@@ -174,20 +200,6 @@ const DoctorVisitingFormsForReceptionist = () => {
                           size="22"
                           style={cursorPointerStyle}
                           onClick={() => toggleEdit(row)}
-                        />
-                      </td>
-                    );
-                  },
-                  delete: (row) => {
-                    return (
-                      <td className="py-2">
-                        <CIcon
-                          name="cilTrash"
-                          size="xl"
-                          style={cursorPointerStyle}
-                          onClick={() => {
-                            toggleDelete(row);
-                          }}
                         />
                       </td>
                     );
@@ -234,7 +246,7 @@ const DoctorVisitingFormsForReceptionist = () => {
         setOpenSuccessModal={setOpenSuccessModal}
         setOpenErrorModal={setOpenErrorModal}
         setNotificationMessage={setNotificationMessage}
-        isEditing={true}
+        isEditing={isEditing}
       />
       <DoctorVisitingFormDeleteModal
         modal={deleteModal}

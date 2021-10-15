@@ -10,7 +10,15 @@ import {
 import PatientService from "../../services/patient/patient.service";
 import Button from "@mui/material/Button";
 
-const PatientDeleteModal = ({ modal, id, onClose, patients }) => {
+const PatientDeleteModal = ({
+  modal,
+  id,
+  onClose,
+  patients,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
+}) => {
   const handleDelete = (patientId) => {
     console.log("let's delete");
     console.log(patientId);
@@ -18,11 +26,14 @@ const PatientDeleteModal = ({ modal, id, onClose, patients }) => {
       () => {
         var removeIndex = patients.map((item) => item.id).indexOf(patientId);
         ~removeIndex && patients.splice(removeIndex, 1);
+        setOpenSuccessModal(true);
+        setNotificationMessage("Xóa bệnh nhân thành công");
         onClose(false);
       },
       (error) => {
-        const resMessage = error.response.data;
-        console.log(resMessage);
+        setOpenErrorModal(true);
+        setNotificationMessage("Xóa bệnh nhân không thành công");
+        console.log(error);
       }
     );
   };

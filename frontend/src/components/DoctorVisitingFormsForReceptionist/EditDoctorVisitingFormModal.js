@@ -10,7 +10,7 @@ import VisitingDoctorFirstStep from "../Patients//VisitingDoctorFirstStep";
 import Modal from "@mui/material/Modal";
 import { useForm } from "react-hook-form";
 import patientdoctorvisitingformService from "src/services/patientdoctorvisitingform/patientdoctorvisitingform.service";
-import { convertGridRowsPropToState } from "@mui/x-data-grid";
+import VisitingDoctorReadOnlyStep from "../Patients/VisitingDoctorReadOnlyStep";
 
 const EditDoctorVisitingFormModal = ({
   open,
@@ -51,6 +51,8 @@ const EditDoctorVisitingFormModal = ({
         .then(
           (response) => {
             let updatedForm = response.data;
+            updatedForm.doctorName = doctorName;
+            console.log(updatedForm);
             var updateIndex = doctorVisitingForms
               .map((item) => item.id)
               .indexOf(doctorVisitingForm.id);
@@ -92,12 +94,20 @@ const EditDoctorVisitingFormModal = ({
     }
   };
 
+  const handleClose = () => {
+    setDescription("");
+    setVisitingFormCode("");
+    setDoctorId("");
+    setDoctorName("");
+    onClose(false);
+  };
+
   React.useEffect(() => {
     setDescription(doctorVisitingForm.description);
     setVisitingFormCode(doctorVisitingForm.code);
     setDoctorId(doctorVisitingForm.doctorId);
     setDoctorName(doctorVisitingForm.doctorName);
-  }, [doctorVisitingForm]);
+  }, [open]);
 
   const theme = createTheme();
 
@@ -108,8 +118,8 @@ const EditDoctorVisitingFormModal = ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "80%",
-    height: "90%",
+    width: "60%",
+    // height: "90%",
     overflowX: "auto",
     bgcolor: "background.paper",
     p: 4,
@@ -121,30 +131,39 @@ const EditDoctorVisitingFormModal = ({
           <CssBaseline />
           <AppBar position="absolute" color="default" elevation={0}></AppBar>
           <Container component="main" maxWidth="s" sx={{ mb: 4 }}>
-            <Paper
+            {/* <Paper
               variant="outlined"
               sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-            >
+            > */}
+            <React.Fragment>
               <React.Fragment>
-                <React.Fragment>
-                  <form
-                    ref={myForm}
-                    onSubmit={handleSubmit(handleEdit)}
-                    novalidate
-                  >
-                    {
-                      <VisitingDoctorFirstStep
-                        patient={patient}
-                        description={description}
-                        setDescription={setDescription}
-                        doctorId={doctorId}
-                        doctorName={doctorName}
-                        setDoctorName={setDoctorName}
-                        setDoctorId={setDoctorId}
-                        visitingFormCode={visitingFormCode}
-                      />
-                    }
-                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <form
+                  ref={myForm}
+                  onSubmit={handleSubmit(handleEdit)}
+                  novalidate
+                >
+                  {isEditing === true ? (
+                    <VisitingDoctorFirstStep
+                      patient={patient}
+                      description={description}
+                      setDescription={setDescription}
+                      doctorId={doctorId}
+                      doctorName={doctorName}
+                      setDoctorName={setDoctorName}
+                      setDoctorId={setDoctorId}
+                      visitingFormCode={visitingFormCode}
+                      isEditing={isEditing}
+                    />
+                  ) : (
+                    <VisitingDoctorReadOnlyStep
+                      patient={patient}
+                      description={description}
+                      doctorName={doctorName}
+                      visitingFormCode={visitingFormCode}
+                    />
+                  )}
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    {isEditing === true ? (
                       <Button
                         variant="contained"
                         // type="submit"
@@ -153,18 +172,21 @@ const EditDoctorVisitingFormModal = ({
                       >
                         LƯU
                       </Button>
-                      <Button
-                        variant="contained"
-                        onClick={onClose}
-                        sx={{ mt: 3, ml: 1 }}
-                      >
-                        HỦY
-                      </Button>
-                    </Box>
-                  </form>
-                </React.Fragment>
+                    ) : (
+                      ""
+                    )}
+                    <Button
+                      variant="contained"
+                      onClick={() => handleClose()}
+                      sx={{ mt: 3, ml: 1 }}
+                    >
+                      HỦY
+                    </Button>
+                  </Box>
+                </form>
               </React.Fragment>
-            </Paper>
+            </React.Fragment>
+            {/* </Paper> */}
           </Container>
         </ThemeProvider>
       </Box>

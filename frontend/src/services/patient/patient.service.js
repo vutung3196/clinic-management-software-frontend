@@ -1,15 +1,18 @@
 import axios from "axios";
 import authHeader from "../authentication/auth.header";
 
-const API_URL = "http://localhost:57679/api/patient/";
+const API_URL = "http://localhost:57679/api/patient";
 
 const config = {
   headers: { Authorization: `Bearer ${authHeader()}` },
 };
 
-const getPatients = async () => {
+const getPatients = async (searchName) => {
   console.log(config);
-  const response = await axios.get(API_URL, config);
+  const response = await axios.get(
+    API_URL + "?searchName=" + searchName,
+    config
+  );
   return response.data;
 };
 

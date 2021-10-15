@@ -10,21 +10,23 @@ import {
 import { Alert } from "reactstrap";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { vi } from "date-fns/locale";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import Stack from "@mui/material/Stack";
 import PatientService from "../../services/patient/patient.service";
-import Grid from "@mui/material/Grid";
-import { vi } from "date-fns/locale";
 import PhoneInput from "react-phone-number-input";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import Autocomplete from "@mui/material/Autocomplete";
+import Grid from "@mui/material/Grid";
+import Input from "@material-ui/core/Input";
+import Typography from "@mui/material/Typography";
 
 const PatientCreateOrEditModal = ({
   modal,
@@ -1059,8 +1061,8 @@ const PatientCreateOrEditModal = ({
   const [phoneNumber, setPhoneNumber] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   const [addressCity, setAddressCity] = useState("");
-  const [addressStreet, setAddressStreet] = useState("");
   const [addressDistrict, setAddressDistrict] = useState("");
+  const [addressStreet, setAddressStreet] = useState("");
   const [medicalInsuranceCode, setMedicalInsuranceCode] = useState("");
   const [provinces, setProvinces] = useState([]);
   const [dateOfBirth, handleDateOfBirthChange] = useState(new Date());
@@ -1154,31 +1156,41 @@ const PatientCreateOrEditModal = ({
           onClose(false);
         },
         (error) => {
-          console.log(error.response.data.errors);
-          let arr = [];
-          var error1 = error.response.data.errors.AddressStreet;
-          if (error1 !== undefined) {
-            arr.push(error1);
-          }
-          var error2 = error.response.data.errors.MedicalInsuranceCode;
-          if (error2 !== undefined) {
-            arr.push(error2);
-          }
-
-          var error3 = error.response.data.errors.AddressDetail;
-          if (error3 !== undefined) {
-            arr.push(error3);
-          }
-
-          var errorMessage = "";
-          for (let index = 0; index < arr.length; index++) {
-            errorMessage += arr[index];
-            if (index !== arr.length - 1) {
-              errorMessage += " và ";
+          if (error.response.data.errors !== undefined) {
+            let arr = [];
+            var error1 = error.response.data.errors.AddressStreet;
+            if (error1 !== undefined) {
+              arr.push(error1);
             }
+            var error2 = error.response.data.errors.MedicalInsuranceCode;
+            if (error2 !== undefined) {
+              arr.push(error2);
+            }
+
+            var error3 = error.response.data.errors.AddressDetail;
+            if (error3 !== undefined) {
+              arr.push(error3);
+            }
+
+            var error4 = error.response.data.errors.EmailAddress;
+            var error5 = error.response.data.errors.FullName;
+            if (error4 !== undefined) {
+              arr.push(error4);
+            }
+            if (error5 !== undefined) {
+              arr.push(error5);
+            }
+
+            var errorMessage = "";
+            for (let index = 0; index < arr.length; index++) {
+              errorMessage += arr[index];
+              if (index !== arr.length - 1) {
+                errorMessage += " và ";
+              }
+            }
+            setOpenErrorModal(true);
+            setNotificationMessage(errorMessage);
           }
-          setOpenErrorModal(true);
-          setNotificationMessage(errorMessage);
         }
       );
     } else {
@@ -1201,20 +1213,45 @@ const PatientCreateOrEditModal = ({
           patients[updateIndex] = updatedPatient;
           setPatients(patients);
           setMessages([]);
+          setOpenSuccessModal(true);
+          setNotificationMessage("Cập nhật bệnh nhân thành công");
           onClose(false);
         },
         (error) => {
           if (error.response.data.errors !== undefined) {
-            var a = error.response.data.errors.EmailAddress;
-            var b = error.response.data.errors.FullName;
             let arr = [];
-            if (a !== undefined) {
-              arr.push(a);
+            var error1 = error.response.data.errors.AddressStreet;
+            if (error1 !== undefined) {
+              arr.push(error1);
             }
-            if (b !== undefined) {
-              arr.push(b);
+            var error2 = error.response.data.errors.MedicalInsuranceCode;
+            if (error2 !== undefined) {
+              arr.push(error2);
             }
-            setMessages(arr);
+
+            var error3 = error.response.data.errors.AddressDetail;
+            if (error3 !== undefined) {
+              arr.push(error3);
+            }
+
+            var error4 = error.response.data.errors.EmailAddress;
+            var error5 = error.response.data.errors.FullName;
+            if (error4 !== undefined) {
+              arr.push(error4);
+            }
+            if (error5 !== undefined) {
+              arr.push(error5);
+            }
+
+            var errorMessage = "";
+            for (let index = 0; index < arr.length; index++) {
+              errorMessage += arr[index];
+              if (index !== arr.length - 1) {
+                errorMessage += " và ";
+              }
+            }
+            setOpenErrorModal(true);
+            setNotificationMessage(errorMessage);
           }
         }
       );
@@ -1252,7 +1289,7 @@ const PatientCreateOrEditModal = ({
             </Grid>
             <Grid item xs={12}>
               <LocalizationProvider locale={vi} dateAdapter={AdapterDateFns}>
-                <Stack spacing={1}>
+                <Stack spacing={1} sx={{ width: 250 }}>
                   <DesktopDatePicker
                     label="Ngày tháng năm sinh"
                     value={dateOfBirth}
@@ -1296,64 +1333,24 @@ const PatientCreateOrEditModal = ({
               <PhoneInput
                 defaultCountry="VN"
                 id="filled-full-width"
-                placeholder="Số điện thoại"
+                placeholder="Số điện thoại di động (ví dụ 912068946)"
                 value={phoneNumber}
                 onChange={setPhoneNumber}
               />
+              {/* <Typography component="h2" variant="h6" align="left">
+                Ví dụ: 912068946
+              </Typography> */}
             </Grid>
             <Grid item xs={12}>
               <TextField
                 id="filled-full-width"
-                label="Email"
+                label="Email (ví dụ: abcde@gmail.com)"
                 type="email"
                 fullWidth
                 margin="normal"
                 variant="standard"
                 value={emailAddress}
                 onChange={(e) => onChangeEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id="address2"
-                name="address2"
-                label="Số nhà"
-                fullWidth
-                autoComplete="shipping address-line2"
-                variant="standard"
-                value={addressDetail}
-                onChange={(e) => setAddressDetail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id="city"
-                name="city"
-                label="Phố"
-                fullWidth
-                autoComplete="shipping address-level2"
-                variant="standard"
-                value={addressStreet}
-                onChange={(e) => setAddressStreet(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Autocomplete
-                options={provinces}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    label="Quận, huyện"
-                    margin="normal"
-                    fullWidth
-                  />
-                )}
-                value={addressDistrict}
-                onChange={(event, newValue) => {
-                  setAddressDistrict(newValue);
-                }}
-                getOptionLabel={(option) => option}
               />
             </Grid>
             <Grid item xs={12} sm={7}>
@@ -1370,9 +1367,13 @@ const PatientCreateOrEditModal = ({
                 )}
                 value={addressCity}
                 onChange={(event, newValue) => {
-                  setAddressCity(newValue.name);
-                  setProvinces(newValue.districts);
-                  setAddressDistrict(newValue.districts[0]);
+                  if (newValue != null) {
+                    setAddressCity(newValue.name);
+                    if (newValue.districts !== null) {
+                      setProvinces(newValue.districts);
+                      setAddressDistrict(newValue.districts[0]);
+                    }
+                  }
                 }}
                 getOptionLabel={(option) => {
                   if (typeof option === "string") {
@@ -1385,9 +1386,57 @@ const PatientCreateOrEditModal = ({
                 }}
               />
             </Grid>
+            <Grid item xs={12} sm={7}>
+              <Autocomplete
+                options={provinces}
+                freeSolo
+                autoSelect
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Quận, huyện"
+                    margin="normal"
+                    fullWidth
+                  />
+                )}
+                value={addressDistrict}
+                onChange={(event, newValue) => {
+                  setAddressDistrict(newValue);
+                }}
+                getOptionLabel={(option) => option}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="city"
+                name="city"
+                label="Phố"
+                fullWidth
+                autoComplete="shipping address-level2"
+                variant="standard"
+                value={addressStreet}
+                onChange={(e) => setAddressStreet(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="address2"
+                name="address2"
+                label="Số nhà, ngõ"
+                fullWidth
+                autoComplete="shipping address-line2"
+                variant="standard"
+                value={addressDetail}
+                onChange={(e) => setAddressDetail(e.target.value)}
+              />
+            </Grid>
+
             <Grid item xs={12} sm={12}>
               <TextField
                 id="insurance-code"
+                type="number"
                 name="insurance-code"
                 label="Mã số thẻ BHYT (nếu có)"
                 fullWidth

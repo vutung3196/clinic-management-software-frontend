@@ -130,6 +130,15 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
     onClose(!open);
   };
 
+  const handleClose = () => {
+    setVisitingFormCode("");
+    setPaymentCode("");
+    setDescription("");
+    setPaymentDescription("");
+    setStep(0);
+    onClose();
+  };
+
   React.useEffect(() => {
     var currentMillis = new Date().getUTCMilliseconds();
     setVisitingFormCode(
@@ -137,7 +146,7 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
     );
     setPaymentCode("PT" + patient.id.toString() + currentMillis.toString());
     retrieveMedicalServices();
-  }, [patient.id]);
+  }, [patient.id, open]);
 
   const theme = createTheme();
 
@@ -196,7 +205,7 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
     p: 4,
   };
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -250,7 +259,7 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
                       )}
                       <Button
                         variant="contained"
-                        onClick={onClose}
+                        onClick={handleClose}
                         sx={{ mt: 3, ml: 1 }}
                       >
                         HỦY

@@ -172,15 +172,6 @@ const VisitingDoctorSecondStep = ({
               Ngày thu tiền: {new Date().toLocaleDateString("vn-VI")}
             </Typography>
           </Grid>
-          {/* <Grid item container direction="column" xs={12} sm={6}>
-          <Grid container>
-            <React.Fragment>
-              <Grid item xs={12}>
-                <Typography gutterBottom>Ngày thu tiền: 03/03/1999</Typography>
-              </Grid>
-            </React.Fragment>
-          </Grid>
-        </Grid> */}
         </Grid>
         {/* </Box> */}
       </Box>

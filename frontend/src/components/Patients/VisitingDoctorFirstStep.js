@@ -148,19 +148,6 @@ const VisitingDoctorFirstStep = ({
             placeholder="Lý do khám"
             onChange={(e) => setDescription(e.target.value)}
           />
-          {/* <Typography component="h6" align="left">
-            Lý do khám
-          </Typography>
-          <TextareaAutosize
-            aria-label="empty textarea"
-            minRows={3}
-            required
-            label="Lý do khám (bắt buộc)"
-            value={description}
-            placeholder="Lý do khám"
-            onChange={(e) => setDescription(e.target.value)}
-            style={{ width: 300 }}
-          /> */}
         </Grid>
         <Grid item xs={12}>
           <TextField
@@ -171,7 +158,6 @@ const VisitingDoctorFirstStep = ({
             fullWidth
             variant="standard"
             value={doctorName}
-            placeholder="Lý do khám"
             onClick={() => handleOpenDoctorVisitingFormModal()}
           />
         </Grid>
