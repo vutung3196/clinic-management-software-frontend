@@ -234,7 +234,7 @@ const EditUserModal = ({
                 }}
               />
             </div>
-            <div>
+            {/* <div>
               <PhoneInput
                 defaultCountry="VN"
                 id="filled-full-width"
@@ -242,7 +242,7 @@ const EditUserModal = ({
                 value={phoneNumber}
                 onChange={setPhoneNumber}
               />
-            </div>
+            </div> */}
             <div style={{ "padding-left": "10px" }}>
               <FormControl>
                 <InputLabel id="demo-simple-select-label">Vai trò</InputLabel>
@@ -251,9 +251,10 @@ const EditUserModal = ({
                   id="demo-simple-select"
                   value={role}
                   onChange={onChangeRole}
+                  style={{ paddingTop: 10, width: 300 }}
                 >
                   <MenuItem value={"Admin"}>Admin phòng khám</MenuItem>
-                  <MenuItem value={"Accountant"}>Kế toán</MenuItem>
+                  <MenuItem value={"Receptionist"}>Lễ tân</MenuItem>
                   <MenuItem value={"Doctor"}>Bác sĩ</MenuItem>
                   <MenuItem value={"TestSpecialist"}>
                     Nhân viên xét nghiệm

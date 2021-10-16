@@ -11,6 +11,7 @@ import {
 
 import * as Icon from "react-bootstrap-icons";
 import Typography from "@mui/material/Typography";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 import ArticleIcon from "@mui/icons-material/Article";
 import Box from "@mui/material/Box";
@@ -124,6 +125,28 @@ const LabTestsNeededToBePerformed = ({ status }) => {
       });
   };
 
+  const toggleAddAnElementToTheBeginningOfAQueue = (row, index) => {
+    labtestService.movetobeginning(row.id).then(
+      (response) => {
+        var arr = [...labTests];
+        var removeIndex = index;
+        ~removeIndex && arr.splice(removeIndex, 1);
+        arr = [row].concat(arr);
+        for (var i = 0; i < arr.length; i++) {
+          arr[i].index = i + 1;
+        }
+        setLabTests(arr);
+        setOpenSuccessModal(true);
+        setNotificationMessage("Xếp phiếu xét nghiệm lên đầu thành công");
+      },
+      (error) => {
+        console.log(error);
+        setOpenErrorModal(true);
+        setNotificationMessage("Xếp phiếu xét nghiệm lên đầu không thành công");
+      }
+    );
+  };
+
   useEffect(retrieveAll, [!labTests]);
 
   const fields = [
@@ -157,6 +180,13 @@ const LabTestsNeededToBePerformed = ({ status }) => {
     {
       key: "movetoend",
       label: "XẾP SAU",
+      _style: { width: "3%" },
+      sorter: false,
+      filter: false,
+    },
+    {
+      key: "movetobeginning",
+      label: "XẾP TRƯỚC",
       _style: { width: "3%" },
       sorter: false,
       filter: false,
@@ -230,19 +260,6 @@ const LabTestsNeededToBePerformed = ({ status }) => {
               </td>
             );
           },
-          // print: (row) => {
-          //   return (
-          //     <td className="py-2">
-          //       <Icon.Printer
-          //         size="23"
-          //         style={cursorPointerStyle}
-          //         onClick={() => {
-          //           window.open("/laborderform/" + row.id);
-          //         }}
-          //       />
-          //     </td>
-          //   );
-          // },
           movetoend: (row, index) => {
             return (
               <td className="py-2">
@@ -251,6 +268,19 @@ const LabTestsNeededToBePerformed = ({ status }) => {
                   style={cursorPointerStyle}
                   onClick={() => {
                     toggleAddElementToTheEndOfAQueue(row, index);
+                  }}
+                />
+              </td>
+            );
+          },
+          movetobeginning: (row, index) => {
+            return (
+              <td className="py-2">
+                <ArrowUpwardIcon
+                  fontSize="small"
+                  style={cursorPointerStyle}
+                  onClick={() => {
+                    toggleAddAnElementToTheBeginningOfAQueue(row, index);
                   }}
                 />
               </td>

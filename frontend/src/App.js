@@ -21,7 +21,8 @@ import LabOrderFormsPage from "./containers/pages/LabOrderForms";
 import LabTestsPage from "./containers/pages/LabTests";
 import SingleLabTestPage from "./containers/pages/SingleLabTest";
 import PatientHospitalizedProfilesPage from "./containers/pages/PatientHospitalizedProfiles";
-
+import RegisterPage from "./containers/pages/Register";
+import SingleReceiptReportPage from "./containers/pages/SingleReceiptReport";
 import authService from "./services/authentication/auth.service";
 
 import PrivateRoute from "./utils/privateRoute";
@@ -31,6 +32,7 @@ import ReceptionistRoute from "./utils/receptionistRoute";
 import DoctorRoute from "./utils/doctorRoute";
 import TestSpecialistRoute from "./utils/testSpecialistRoute";
 import DoctorAndReceptionistRoute from "./utils/doctorAndReceptionistRoute/doctorAndReceptionistRoute";
+import ReceiptsPage from "./containers/pages/Receipts";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -58,6 +60,21 @@ const App = () => {
               )
             }
           />
+          <Route
+            exact
+            path="/register"
+            name="Login Page"
+            exact
+            render={(props) =>
+              isAuthenticated ? (
+                (alert("You can't register if you are logged in!"),
+                (<Redirect to="/" />))
+              ) : (
+                <RegisterPage {...props} />
+              )
+            }
+          />
+
           <AdminRoute
             exact
             path="/usermanagement"
@@ -81,6 +98,12 @@ const App = () => {
             path="/patients"
             props
             component={PatientsPage}
+          ></ReceptionistRoute>
+          <ReceptionistRoute
+            exact
+            path="/receipts"
+            props
+            component={ReceiptsPage}
           ></ReceptionistRoute>
           <DoctorAndReceptionistRoute
             exact
@@ -116,6 +139,11 @@ const App = () => {
             path="/doctorvisitingform/:id"
             component={SingleDoctorVisitingFormPage}
           ></PrivateRoute>
+          <PrivateRoute
+            path="/receiptreport"
+            component={SingleReceiptReportPage}
+          ></PrivateRoute>
+
           <PrivateRoute
             path="/labtest/:id"
             component={SingleLabTestPage}

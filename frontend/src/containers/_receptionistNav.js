@@ -35,6 +35,7 @@ const _receptionistNav = [
     _tag: "CSidebarNavItem",
     name: "Phiếu thu",
     route: "/receipts",
+    to: "/receipts",
     icon: "cil-bell",
   },
   {
@@ -42,12 +43,6 @@ const _receptionistNav = [
     name: "Dịch vụ",
     route: "/notifications",
     icon: "cil-bell",
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Báo cáo",
-    to: "/report",
-    icon: "cil-calculator",
   },
 ];
 

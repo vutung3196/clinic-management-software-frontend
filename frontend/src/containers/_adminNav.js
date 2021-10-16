@@ -8,18 +8,18 @@ const _adminNav = [
     _tag: "CSidebarNavTitle",
     _children: ["Menu"],
   },
-  {
-    _tag: "CSidebarNavDropdown",
-    name: "Dịch vụ",
-    route: "/notifications",
-    icon: "cil-bell",
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Báo cáo",
-    to: "/report",
-    icon: "cil-calculator",
-  },
+  // {
+  //   _tag: "CSidebarNavDropdown",
+  //   name: "Dịch vụ",
+  //   route: "/notifications",
+  //   icon: "cil-bell",
+  // },
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Báo cáo",
+  //   to: "/report",
+  //   icon: "cil-calculator",
+  // },
   {
     _tag: "CSidebarNavDropdown",
     name: "Quản lý",
