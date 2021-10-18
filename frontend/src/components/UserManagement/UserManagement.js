@@ -13,7 +13,12 @@ import {
 import userService from "src/services/user/user.service";
 import DeactivateUserModal from "./DeactivateUserModal";
 import EditUserModal from "./EditUserModal";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 const UserManagement = () => {
   const constUser = {
     phoneNumber: null,
@@ -33,6 +38,24 @@ const UserManagement = () => {
   const [user, setUser] = useState(constUser);
   const [userId, setUserId] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [openErrorModal, setOpenErrorModal] = React.useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSuccessModal(false);
+  };
+
+  const handleCloseErrorModal = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenErrorModal(false);
+  };
 
   // modal
   const [deactivateModal, setDeactivateModal] = useState(false);
@@ -59,7 +82,7 @@ const UserManagement = () => {
       _style: { width: "8%" },
     },
     { key: "fullName", label: "Họ tên" },
-    { key: "roleDescription", label: "NHÓM NGƯỜI DÙNG" },
+    { key: "roleDescription", label: "VAI TRÒ" },
     { key: "status", label: "Trạng thái" },
     { key: "createdAt", label: "NGÀY TẠO" },
     {
@@ -170,6 +193,9 @@ const UserManagement = () => {
         users={users}
         setUsers={setUsers}
         user={user}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
       />
       <EditUserModal
         modal={editModal}
@@ -178,7 +204,32 @@ const UserManagement = () => {
         setUsers={setUsers}
         user={user}
         isEditing={isEditing}
-      />{" "}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
+      />
+      <Snackbar
+        open={openSuccessModal}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          {notificationMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openErrorModal}
+        autoHideDuration={3000}
+        onClose={handleCloseErrorModal}
+      >
+        <Alert
+          onClose={handleCloseErrorModal}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {notificationMessage}
+        </Alert>
+      </Snackbar>
     </CRow>
   );
 };

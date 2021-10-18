@@ -19,6 +19,8 @@ import Select from "@mui/material/Select";
 import PhoneInput from "react-phone-number-input";
 import { useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import medicalService from "src/services/medicalservice/medical.service";
 
 const EditUserModal = ({
   modal,
@@ -27,26 +29,46 @@ const EditUserModal = ({
   setUsers,
   user,
   isEditing,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
 }) => {
   const [role, setRole] = useState("");
+  const [isTestSpecialist, setIsTestSpecialist] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [enabled, setEnabled] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [medicalServiceGroupId, setMedicalServiceGroupId] = useState("");
+  const [medicalServiceGroups, setMedicalServiceGroups] = useState([]);
+
+  const retrieveGroups = () => {
+    medicalService
+      .getAllMedicalServiceGroups()
+      .then((response) => {
+        console.log(response.data);
+        setMedicalServiceGroups(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const { register, handleSubmit, errors, formState } = useForm({
     mode: "all",
   });
 
   useEffect(() => {
+    retrieveGroups();
     if (isEditing) {
       setRole(user.role);
       setFullName(user.fullName);
       setUserName(user.userName);
       setPhoneNumber(user.phoneNumber);
       setEnabled(user.enabled);
+      setMedicalServiceGroupId(user.medicalServiceGroupForTestSpecialistId);
     } else {
       setRole("Admin");
       setFullName("");
@@ -85,16 +107,16 @@ const EditUserModal = ({
   const handleEdit = () => {
     console.log(user.id);
     console.log(userName);
-    if (isEditing) {
+    if (isEditing === true) {
       userService
         .editUser(
           user.id,
           userName,
           password,
           fullName,
-          phoneNumber,
           enabled,
-          role
+          role,
+          medicalServiceGroupId
         )
         .then(
           (response) => {
@@ -102,10 +124,17 @@ const EditUserModal = ({
             var updateIndex = users.map((item) => item.id).indexOf(user.id);
             users[updateIndex] = updatedUser;
             setUsers(users);
-            setMessages([]);
+            setOpenSuccessModal(true);
+            setNotificationMessage(
+              "Cập nhật thông tin tài khoản người dùng thành công"
+            );
             onClose(false);
           },
           (error) => {
+            setOpenErrorModal(true);
+            setNotificationMessage(
+              "Cập nhật thông tin tài khoản người dùng không thành công"
+            );
             setUserName("");
             setPassword("");
             setPhoneNumber("");
@@ -123,14 +152,22 @@ const EditUserModal = ({
         );
     } else {
       userService
-        .createUser(userName, password, fullName, phoneNumber, enabled, role)
+        .createUser(
+          userName,
+          password,
+          fullName,
+          enabled,
+          role,
+          medicalServiceGroupId
+        )
         .then(
           (response) => {
             let newUser = response.data;
             users = [newUser].concat(users);
             setUsers(users);
             onClose(false);
-            setMessages([]);
+            setOpenSuccessModal(true);
+            setNotificationMessage("Tạo tài khoản người dùng thành công");
           },
           (error) => {
             setUserName("");
@@ -138,6 +175,8 @@ const EditUserModal = ({
             setPhoneNumber("");
             setEnabled(true);
             setRole("");
+            setOpenSuccessModal(false);
+            setNotificationMessage("Tạo tài khoản người dùng không thành công");
             if (error.response.data !== undefined) {
               var a = error.response.data;
               let arr = [];
@@ -163,15 +202,20 @@ const EditUserModal = ({
   return (
     <CModal show={modal} onClose={closeModal}>
       <CModalHeader closeButton>
-        <CModalTitle>Tạo người dùng</CModalTitle>
+        {isEditing === false ? (
+          <CModalTitle>Tạo người dùng</CModalTitle>
+        ) : (
+          <CModalTitle>Chỉnh sửa người dùng</CModalTitle>
+        )}
       </CModalHeader>
+
       <form onSubmit={handleSubmit(handleEdit)} novalidate>
         <CModalBody>
-          <div>
+          <Grid container spacing={3}>
             {!isEditing ? (
-              <div>
+              <Grid item xs={12}>
                 <TextField
-                  id="standard-full-width"
+                  id="filled-full-width"
                   value={userName}
                   onChange={(e) => onChangeUserName(e.target.value)}
                   type="username"
@@ -180,15 +224,12 @@ const EditUserModal = ({
                   style={{ margin: 8 }}
                   fullWidth
                   margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
                 />
-              </div>
+              </Grid>
             ) : (
-              <div>
+              <Grid item xs={12}>
                 <TextField
-                  id="standard-full-width"
+                  id="filled-full-width"
                   value={userName}
                   disabled
                   type="username"
@@ -197,13 +238,11 @@ const EditUserModal = ({
                   style={{ margin: 8 }}
                   fullWidth
                   margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
                 />
-              </div>
+              </Grid>
             )}
-            <div>
+            <Grid item xs={12}>
+              {/* <div> */}
               <TextField
                 id="filled-full-width"
                 onChange={(e) => onChangePassword(e.target.value)}
@@ -214,12 +253,9 @@ const EditUserModal = ({
                 style={{ margin: 8 }}
                 fullWidth
                 margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
               />
-            </div>
-            <div>
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 id="filled-full-width"
                 onChange={(e) => onChangeFullName(e.target.value)}
@@ -229,21 +265,9 @@ const EditUserModal = ({
                 style={{ margin: 8 }}
                 fullWidth
                 margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
               />
-            </div>
-            {/* <div>
-              <PhoneInput
-                defaultCountry="VN"
-                id="filled-full-width"
-                placeholder="Số điện thoại"
-                value={phoneNumber}
-                onChange={setPhoneNumber}
-              />
-            </div> */}
-            <div style={{ "padding-left": "10px" }}>
+            </Grid>
+            <Grid item xs={12}>
               <FormControl>
                 <InputLabel id="demo-simple-select-label">Vai trò</InputLabel>
                 <Select
@@ -251,7 +275,6 @@ const EditUserModal = ({
                   id="demo-simple-select"
                   value={role}
                   onChange={onChangeRole}
-                  style={{ paddingTop: 10, width: 300 }}
                 >
                   <MenuItem value={"Admin"}>Admin phòng khám</MenuItem>
                   <MenuItem value={"Receptionist"}>Lễ tân</MenuItem>
@@ -261,8 +284,33 @@ const EditUserModal = ({
                   </MenuItem>
                 </Select>
               </FormControl>
-            </div>
-            <div>
+            </Grid>
+
+            {role === "TestSpecialist" ? (
+              <Grid item xs={12}>
+                <InputLabel id="demo-simple-select-label">
+                  Chuyên môn
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  sx={{ width: "100%" }}
+                  value={medicalServiceGroupId}
+                  label="Nhóm xét nghiệm"
+                  onChange={(e) => setMedicalServiceGroupId(e.target.value)}
+                >
+                  {medicalServiceGroups !== undefined &&
+                  medicalServiceGroups.length > 0
+                    ? medicalServiceGroups.map((entry) => (
+                        <MenuItem value={entry.id}>{entry.name}</MenuItem>
+                      ))
+                    : ""}
+                </Select>
+              </Grid>
+            ) : (
+              ""
+            )}
+            <Grid item xs={12}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -274,8 +322,8 @@ const EditUserModal = ({
                 }
                 label="Kích hoạt"
               />
-            </div>
-          </div>
+            </Grid>
+          </Grid>
         </CModalBody>
         <CModalFooter>
           {messages.length > 0
@@ -283,12 +331,7 @@ const EditUserModal = ({
                 <CAlert color="danger">{message}</CAlert>
               ))
             : ""}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            // disabled={isSubmitting}
-          >
+          <Button type="submit" variant="contained" color="primary">
             Lưu
           </Button>
           <CButton

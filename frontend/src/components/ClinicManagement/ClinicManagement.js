@@ -49,7 +49,7 @@ const ClinicManagement = () => {
       });
   };
 
-  useEffect(retrieveClinics, []);
+  useEffect(retrieveClinics, [clinic]);
 
   const fields = [
     {
@@ -57,7 +57,7 @@ const ClinicManagement = () => {
       label: "TÊN PHÒNG KHÁM",
       _style: { width: "8%" },
     },
-    { key: "address", label: "Địa chỉ" },
+    { key: "emailAddress", label: "Địa chỉ email" },
     { key: "phoneNumber", label: "SỐ ĐIỆN THOẠI" },
     { key: "username", label: "TÀI KHOẢN ADMIN" },
     { key: "username", label: "TÀI KHOẢN ADMIN" },
