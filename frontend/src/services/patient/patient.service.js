@@ -71,7 +71,7 @@ const editPatient = async (
   medicalInsuranceCode
 ) => {
   const response = await axios.put(
-    API_URL + patientId,
+    API_URL + "/" + patientId,
     {
       fullName,
       dateOfBirth,

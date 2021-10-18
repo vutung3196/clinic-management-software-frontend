@@ -83,6 +83,7 @@ const SinglePrescriptionPage = (props) => {
     createdAt: "10/14/2021",
     doctorName: null,
     doctorId: 6,
+    diseaseNote: "aaads",
     medicationInformation: [
       {
         id: 0,
@@ -469,7 +470,8 @@ const SinglePrescriptionPage = (props) => {
                       :
                     </td>
                     <td colspan="4" valign="top">
-                      {prescription.diagnosedDescription}
+                      {prescription.diagnosedDescription} :{" "}
+                      {prescription.diseaseNote}
                     </td>
                   </tr>
                   <tr>

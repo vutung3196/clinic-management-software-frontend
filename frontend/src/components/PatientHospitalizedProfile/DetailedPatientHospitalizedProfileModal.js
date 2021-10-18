@@ -179,6 +179,9 @@ const DetailedPatientHospitalizedProfileModal = ({
             <td>
               <div>{entry.description}</div>
             </td>
+            <td>
+              <div>{entry.status}</div>
+            </td>
           </tr>
         ))
       : "";
@@ -338,7 +341,7 @@ const DetailedPatientHospitalizedProfileModal = ({
                         <th style={style4}>Mã phiếu chỉ định</th>
                         <th style={style4}>Mã phiếu khám</th>
                         <th>Mô tả chỉ định</th>
-                        {/* <th>Kết quả</th> */}
+                        <th style={style4}>Trạng thái</th>
                       </tr>
                       <LabOrderFormsView
                         patientProfile={patientHospitalizedProfile}
@@ -384,6 +387,9 @@ const DetailedPatientHospitalizedProfileModal = ({
           patient={patient}
           patientHospitalizedProfileId={patientHospitalizedProfileId}
           patientDoctorVisitingFormId={patientDoctorVisitingFormId}
+          setOpenSuccessModal={setOpenSuccessModal}
+          setOpenErrorModal={setOpenErrorModal}
+          setNotificationMessage={setNotificationMessage}
         />
         <CreatePrescriptionModal
           modal={prescriptionModal}

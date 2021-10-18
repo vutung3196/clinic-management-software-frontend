@@ -179,14 +179,14 @@ const LabTestsNeededToBePerformed = ({ status }) => {
     // },
     {
       key: "movetoend",
-      label: "XẾP SAU",
+      label: "XẾP SAU CÙNG",
       _style: { width: "3%" },
       sorter: false,
       filter: false,
     },
     {
       key: "movetobeginning",
-      label: "XẾP TRƯỚC",
+      label: "XẾP LÊN ĐẦU",
       _style: { width: "3%" },
       sorter: false,
       filter: false,
@@ -327,6 +327,7 @@ const LabTestsNeededToBePerformed = ({ status }) => {
         setOpenSuccessModal={setOpenSuccessModal}
         setOpenErrorModal={setOpenErrorModal}
         setNotificationMessage={setNotificationMessage}
+        isEditForTestNeededToBePerformed={true}
       />
     </>
   );

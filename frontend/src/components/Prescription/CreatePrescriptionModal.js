@@ -62,6 +62,7 @@ const CreatePrescriptionModal = ({
   const [doctorSuggestion, setDoctorSuggestion] = useState("");
   const [diagnosedDescriptionModal, setDiagnosedDescriptionModal] =
     useState(false);
+  const [diseaseNote, setDiseaseNote] = useState("");
   const handleCloseDiagnosedDescriptionModal = () =>
     setDiagnosedDescriptionModal(false);
 
@@ -191,7 +192,8 @@ const CreatePrescriptionModal = ({
         patientHospitalizedProfileId,
         patient.medicalInsuranceCode,
         code,
-        patientDoctorVisitingFormId
+        patientDoctorVisitingFormId,
+        diseaseNote
       )
       .then(
         (response) => {
@@ -203,9 +205,9 @@ const CreatePrescriptionModal = ({
           window.open("/prescription/" + response.data);
           onClose(false);
 
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 3000);
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
           // onCloseDetailedModal(false);
         },
         (error) => {
@@ -324,9 +326,9 @@ const CreatePrescriptionModal = ({
                               placeholder=""
                               id="ioc66_d_reason"
                               value={diagnosedDescription}
-                              onChange={(e) =>
-                                setDiagnosedDescription(e.target.value)
-                              }
+                              // onChange={(e) =>
+                              //   setDiagnosedDescription(e.target.value)
+                              // }
                               class="ioc_textbox txt-dot fullwidth td-ioc66"
                             ></input>
                           </CFormControl>
@@ -342,6 +344,24 @@ const CreatePrescriptionModal = ({
                           >
                             Chọn chẩn đoán
                           </Button>
+                        </CRow>
+                        <CRow>
+                          <CFormControl className="mb-3">
+                            {/* <CCol> */}
+                            <h8 className="text ahihi td-ioc66">
+                              Ghi chú bệnh:
+                            </h8>
+                            {/* </CCol> */}
+                            {/* <CCol> */}
+                            <input
+                              type="text"
+                              placeholder=""
+                              id="ioc66_d_reason"
+                              value={diseaseNote}
+                              onChange={(e) => setDiseaseNote(e.target.value)}
+                              class="ioc_textbox txt-dot fullwidth td-ioc66"
+                            ></input>
+                          </CFormControl>
                         </CRow>
                         <CRow>
                           {/* <CCol> */}

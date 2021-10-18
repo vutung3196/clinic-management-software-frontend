@@ -79,9 +79,11 @@ const edit = (
 };
 
 const movetoend = async (id) => {
-  return axios.put(MOVE_TO_END_QUEUE_API_URL, {}, config).then((response) => {
-    return response.data;
-  });
+  return axios
+    .put(MOVE_TO_END_QUEUE_API_URL, { id }, config)
+    .then((response) => {
+      return response.data;
+    });
 };
 
 const movetobeginning = async (id) => {

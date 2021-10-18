@@ -317,7 +317,7 @@ const SingleReceiptReportPage = (props) => {
                       Đơn giá
                     </th>
                     <th align="center" width="80px" class="align-th">
-                      Tổng cộng
+                      Phí đã thu
                     </th>
                   </tr>
                   {reportInformation !== undefined

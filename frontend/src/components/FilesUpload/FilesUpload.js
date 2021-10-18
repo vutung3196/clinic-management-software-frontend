@@ -25,6 +25,10 @@ const styleFile = {
   float: "left",
 };
 
+const styleFileName = {
+  "padding-right": "20px",
+};
+
 const FilesUpload = ({
   modal,
   patientId,
@@ -104,7 +108,7 @@ const FilesUpload = ({
                   ? files.map((entry) => (
                       <li>
                         <div class="i">
-                          <d>{entry.createdAt}</d>
+                          <d style={styleFileName}>{entry.name}</d>
                           <div class="icons-file-list">
                             <Icon.Image
                               onClick={() => {
@@ -113,10 +117,10 @@ const FilesUpload = ({
                             ></Icon.Image>
                             {isPrescriptionModal === false ? (
                               <>
-                                <Icon.PencilSquare
+                                {/* <Icon.PencilSquare
                                   class="icon-pencil-square"
                                   onClick={() => toggleEditModal(entry)}
-                                />
+                                /> */}
                                 <Icon.Trash
                                   class="icon-trash"
                                   onClick={() => toggleDeleteModal(entry)}
@@ -127,7 +131,7 @@ const FilesUpload = ({
                             )}
                           </div>
                           <t></t>
-                          <h class="file-jpg"> {entry.name}</h>
+                          <h class="file-jpg"></h>
                           <div class="n"></div>
                         </div>
                       </li>

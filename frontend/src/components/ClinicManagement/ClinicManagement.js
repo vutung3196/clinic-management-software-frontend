@@ -93,7 +93,6 @@ const ClinicManagement = () => {
   };
 
   const openEditModal = (item) => {
-    console.log(item);
     setIsEditing(true);
     setClinic(item);
     setEditModal(!editModal);

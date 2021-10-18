@@ -98,33 +98,36 @@ const EditClinicModal = ({
   };
 
   const handleEdit = () => {
-    if (isEditing) {
+    console.log(clinic);
+    console.log("damn");
+    console.log(enabled);
+    if (isEditing === true) {
       clinicService
         .editClinic(
           clinic.id,
           name,
           phoneNumber,
-          address,
-          username,
+          clinic.emailAddress,
+          clinic.username,
           password,
           enabled
         )
         .then(
           (response) => {
-            let updatedClinic = {
-              id: clinic.id,
-              name,
-              phoneNumber,
-              address,
-              username,
-              password,
-              createdAt: clinic.createdAt,
-              isEnabled: enabled,
-              status: enabled ? "Kích hoạt" : "Khóa",
-            };
-            var updateIndex = clinics.map((item) => item.id).indexOf(clinic.id);
-            clinics[updateIndex] = updatedClinic;
-            setClinics(clinics);
+            // let updatedClinic = {
+            //   id: clinic.id,
+            //   name,
+            //   phoneNumber,
+            //   address,
+            //   username,
+            //   password,
+            //   createdAt: clinic.createdAt,
+            //   isEnabled: enabled,
+            //   status: enabled ? "Kích hoạt" : "Khóa",
+            // };
+            // var updateIndex = clinics.map((item) => item.id).indexOf(clinic.id);
+            // clinics[updateIndex] = updatedClinic;
+            // setClinics(clinics);
             onClose(false);
           },
           (error) => {
@@ -203,7 +206,7 @@ const EditClinicModal = ({
               />
             </div>
             <div>
-              <TextField
+              {/* <TextField
                 id="standard-full-width"
                 value={address}
                 onChange={(e) => onChangeAddress(e.target.value)}
@@ -215,7 +218,7 @@ const EditClinicModal = ({
                 InputLabelProps={{
                   shrink: true,
                 }}
-              />
+              /> */}
             </div>
 
             <div>

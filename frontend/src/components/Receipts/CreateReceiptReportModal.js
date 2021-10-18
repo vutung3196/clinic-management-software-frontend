@@ -21,7 +21,13 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
-const CreateReceiptReportModal = ({ open, onClose }) => {
+const CreateReceiptReportModal = ({
+  open,
+  onClose,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
+}) => {
   console.log("====");
   const { register, handleSubmit, errors, formState } = useForm({
     mode: "all",
@@ -55,6 +61,9 @@ const CreateReceiptReportModal = ({ open, onClose }) => {
         "&containingPatientAddress=" +
         containingPatientAddress
     );
+    setOpenSuccessModal(true);
+    setNotificationMessage("Xuất bảng kê thành công");
+    onClose(false);
   };
 
   React.useEffect(() => {

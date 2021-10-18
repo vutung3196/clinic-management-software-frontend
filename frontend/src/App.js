@@ -33,6 +33,8 @@ import DoctorRoute from "./utils/doctorRoute";
 import TestSpecialistRoute from "./utils/testSpecialistRoute";
 import DoctorAndReceptionistRoute from "./utils/doctorAndReceptionistRoute/doctorAndReceptionistRoute";
 import ReceiptsPage from "./containers/pages/Receipts";
+import MedicalServiceGroupsPage from "./containers/pages/MedicalServiceGroups";
+import MedicalServicesPage from "./containers/pages/MedicalServices";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -123,6 +125,15 @@ const App = () => {
             props
             component={LabTestsPage}
           ></TestSpecialistRoute>
+          <AdminRoute
+            path="/medicalservicegroups"
+            component={MedicalServiceGroupsPage}
+          ></AdminRoute>
+          <AdminRoute
+            path="/medicalservices"
+            component={MedicalServicesPage}
+          ></AdminRoute>
+
           <PrivateRoute
             path="/receipt/:id"
             component={SingleReceiptPage}
