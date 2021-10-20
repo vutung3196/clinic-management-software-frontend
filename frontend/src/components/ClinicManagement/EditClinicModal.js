@@ -44,6 +44,9 @@ const EditClinicModal = ({
   setClinics,
   clinic,
   isEditing,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
 }) => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -1131,6 +1134,19 @@ const EditClinicModal = ({
     console.log(clinic);
     console.log("damn");
     console.log(enabled);
+    console.log(
+      clinic.id,
+      name,
+      phoneNumber,
+      emailAddress,
+      clinic.username,
+      password,
+      addressDetail,
+      addressStreet,
+      addressDistrict,
+      addressCity,
+      enabled
+    );
     if (isEditing === true) {
       clinicService
         .editClinic(
@@ -1148,31 +1164,39 @@ const EditClinicModal = ({
         )
         .then(
           (response) => {
-            // let updatedClinic = {
-            //   id: clinic.id,
-            //   name,
-            //   phoneNumber,
-            //   address,
-            //   username,
-            //   password,
-            //   createdAt: clinic.createdAt,
-            //   isEnabled: enabled,
-            //   status: enabled ? "Kích hoạt" : "Khóa",
-            // };
-            // var updateIndex = clinics.map((item) => item.id).indexOf(clinic.id);
-            // clinics[updateIndex] = updatedClinic;
-            // setClinics(clinics);
+            setOpenSuccessModal(true);
+            setNotificationMessage("Cập nhật phòng khám thành công");
+            let updatedClinic = {
+              id: clinic.id,
+              name,
+              phoneNumber,
+              address,
+              username,
+              password,
+              createdAt: clinic.createdAt,
+              isEnabled: enabled,
+              status: enabled ? "Kích hoạt" : "Khóa",
+              addressDetail,
+              addressStreet,
+              addressDistrict,
+              addressCity,
+            };
+            var updateIndex = clinics.map((item) => item.id).indexOf(clinic.id);
+            clinics[updateIndex] = updatedClinic;
+            setClinics(clinics);
             onClose(false);
           },
           (error) => {
-            if (error.response.data !== undefined) {
-              var a = error.response.data;
-              let arr = [];
-              if (a !== undefined) {
-                arr.push(a);
-              }
-              setMessages(arr);
-            }
+            setOpenSuccessModal(true);
+            setNotificationMessage("Cập nhật phòng khám không thành công");
+            // if (error.response.data !== undefined) {
+            //   var a = error.response.data;
+            //   let arr = [];
+            //   if (a !== undefined) {
+            //     arr.push(a);
+            //   }
+            //   setMessages(arr);
+            // }
           }
         );
     } else {
@@ -1194,9 +1218,13 @@ const EditClinicModal = ({
             let newClinic = response.data;
             clinics = [newClinic].concat(clinics);
             setClinics(clinics);
+            setOpenSuccessModal(true);
+            setNotificationMessage("Tạo mới phòng khám thành công");
             onClose(false);
           },
           (error) => {
+            setOpenErrorModal(true);
+            setNotificationMessage("Tạo mới phòng khám không thành công");
             // if (error.response.data !== undefined) {
             //   var a = error.response.data;
             //   let arr = [];

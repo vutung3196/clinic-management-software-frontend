@@ -23,7 +23,11 @@ import SingleLabTestPage from "./containers/pages/SingleLabTest";
 import PatientHospitalizedProfilesPage from "./containers/pages/PatientHospitalizedProfiles";
 import RegisterPage from "./containers/pages/Register";
 import SingleReceiptReportPage from "./containers/pages/SingleReceiptReport";
-import authService from "./services/authentication/auth.service";
+import ReceiptsPage from "./containers/pages/Receipts";
+import MedicalServiceGroupsPage from "./containers/pages/MedicalServiceGroups";
+import MedicalServicesPage from "./containers/pages/MedicalServices";
+import PrescriptionsPage from "./containers/pages/Prescriptions";
+import FinancialReportPage from "./containers/pages/FinancialReport";
 
 import PrivateRoute from "./utils/privateRoute";
 import AdminRoute from "./utils/adminRoute";
@@ -32,9 +36,7 @@ import ReceptionistRoute from "./utils/receptionistRoute";
 import DoctorRoute from "./utils/doctorRoute";
 import TestSpecialistRoute from "./utils/testSpecialistRoute";
 import DoctorAndReceptionistRoute from "./utils/doctorAndReceptionistRoute/doctorAndReceptionistRoute";
-import ReceiptsPage from "./containers/pages/Receipts";
-import MedicalServiceGroupsPage from "./containers/pages/MedicalServiceGroups";
-import MedicalServicesPage from "./containers/pages/MedicalServices";
+import authService from "./services/authentication/auth.service";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -85,6 +87,12 @@ const App = () => {
           ></AdminRoute>
           <AdminRoute
             exact
+            path="/report"
+            props
+            component={FinancialReportPage}
+          ></AdminRoute>
+          <AdminRoute
+            exact
             path="/informationmanagement"
             props
             component={InformationManagementPage}
@@ -107,6 +115,12 @@ const App = () => {
             props
             component={ReceiptsPage}
           ></ReceptionistRoute>
+          <DoctorRoute
+            exact
+            path="/prescriptions"
+            props
+            component={PrescriptionsPage}
+          ></DoctorRoute>
           <DoctorAndReceptionistRoute
             exact
             path="/doctorvisitingforms"

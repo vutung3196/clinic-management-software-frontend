@@ -3,8 +3,8 @@ import { TheFooter, TheHeader } from "../../index";
 import Sidebar from "../../../components/Sidebar";
 import AuthService from "../../../services/authentication/auth.service";
 import LabOrderFormsForReceptionist from "../../../components/LabOrderForms";
-import LabOrderFormsForDoctor from "../../../components/LabOrderForms";
-import LabOrderFormsForTestSpecialist from "../../../components/LabOrderForms";
+import LabOrderFormsForDoctor from "../../../components/LabOrderForms/LabOrderFormsForDoctor";
+import LabOrderFormsForTestSpecialist from "../../../components/LabOrderForms/LabOrderFormsForTestSpecialist";
 import { Helmet } from "react-helmet";
 
 export const CustomLabOrderFormsPage = () => {
@@ -23,7 +23,7 @@ const LabOrderFormsPage = () => {
   return (
     <div>
       <Helmet>
-        <title>Danh sách phiếu khám</title>
+        <title>Danh sách phiếu chỉ định</title>
       </Helmet>
       <div className="c-app c-default-layout">
         <Sidebar />

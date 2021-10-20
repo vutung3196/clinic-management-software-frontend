@@ -56,7 +56,7 @@ const MedicationElementComponent = ({
           <input
             type="text"
             name="ioc66_d_name"
-            placeholder="Dịch vụ"
+            placeholder="Thuốc"
             value={medicalService.name}
             onChange={onChangeMedicationName}
             class="ioc_textbox txt-dot ioc66name readonly"

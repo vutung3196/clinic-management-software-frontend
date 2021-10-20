@@ -8,15 +8,8 @@ const config = {
   headers: { Authorization: `Bearer ${authHeader()}` },
 };
 
-const getPrescriptions = async (patientId) => {
-  const response = await axios.request({
-    url: API_URL,
-    method: "get",
-    params: {
-      patientId: patientId,
-    },
-  });
-  console.log(response.data);
+const getPrescriptions = async () => {
+  const response = await axios.get(API_URL, config);
   return response.data;
 };
 
@@ -51,6 +44,17 @@ const create = async (
       code,
       patientDoctorVisitingFormId,
       diseaseNote,
+    },
+    config
+  );
+  return response.data;
+};
+
+const sendEmail = async (id) => {
+  const response = await axios.post(
+    API_URL + "sendemail",
+    {
+      id,
     },
     config
   );
@@ -97,4 +101,5 @@ export default {
   editPrescription,
   deletePrescription,
   getPrescriptionsByClinicId,
+  sendEmail,
 };

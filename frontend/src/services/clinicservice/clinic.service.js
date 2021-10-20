@@ -94,8 +94,7 @@ const editClinic = async (
   const response = await axios.put(
     CLINIC_INFORMATION_API_URL + id,
     {
-      id,
-      name,
+      name: name,
       phoneNumber,
       emailAddress: emailAddress,
       username: username,

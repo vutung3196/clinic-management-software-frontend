@@ -14,6 +14,12 @@ import {
 import clinicService from "../../services/clinicservice/clinic.service";
 import EditClinicModal from "./EditClinicModal";
 import DeactivateClinicModal from "./DeactivateClinicModal";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const ClinicManagement = () => {
   const constClinic = {
@@ -36,6 +42,26 @@ const ClinicManagement = () => {
   // modal
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
+
+  const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
+  const [openErrorModal, setOpenErrorModal] = React.useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+
+  const handleCloseSuccessModal = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSuccessModal(false);
+  };
+
+  const handleCloseErrorModal = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenErrorModal(false);
+  };
 
   const retrieveClinics = () => {
     clinicService
@@ -164,12 +190,41 @@ const ClinicManagement = () => {
           </CCardBody>
         </CCard>
       </CCol>
+      <Snackbar
+        open={openSuccessModal}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccessModal}
+      >
+        <Alert
+          onClose={handleCloseSuccessModal}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {notificationMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openErrorModal}
+        autoHideDuration={3000}
+        onClose={handleCloseErrorModal}
+      >
+        <Alert
+          onClose={handleCloseErrorModal}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {notificationMessage}
+        </Alert>
+      </Snackbar>
       <DeactivateClinicModal
         modal={deleteModal}
         onClose={setDeleteModal}
         clinics={clinics}
         setClinics={setClinics}
         clinic={clinic}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
       />
       <EditClinicModal
         modal={editModal}
@@ -178,6 +233,9 @@ const ClinicManagement = () => {
         setClinics={setClinics}
         clinic={clinic}
         isEditing={isEditing}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
       />{" "}
     </CRow>
   );
