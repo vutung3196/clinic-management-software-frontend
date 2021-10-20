@@ -101,11 +101,15 @@ const DoctorVisitingFormsForDoctor = () => {
         .then(
           (response) => {
             let updatedForm = response.data;
+            console.log(updatedForm);
             var updateIndex = doctorVisitingForms
               .map((item) => item.id)
               .indexOf(row.id);
             var a = [...doctorVisitingForms];
             a[updateIndex] = updatedForm;
+            for (let i = 0; i < a.length; i++) {
+              a[i].index = i + 1;
+            }
             setDoctorVisitingForms(a);
             setOpenSuccessModal(true);
             setNotificationMessage(
@@ -135,7 +139,6 @@ const DoctorVisitingFormsForDoctor = () => {
         for (var i = 0; i < arr.length; i++) {
           arr[i].index = i + 1;
         }
-        arr.push(response.data);
         setDoctorVisitingForms(arr);
         setOpenSuccessModal(true);
         setNotificationMessage("Xếp sau bệnh nhân thành công");
@@ -155,6 +158,9 @@ const DoctorVisitingFormsForDoctor = () => {
         var removeIndex = index;
         ~removeIndex && arr.splice(removeIndex, 1);
         arr = [row].concat(arr);
+        for (var i = 0; i < arr.length; i++) {
+          arr[i].index = i + 1;
+        }
         setDoctorVisitingForms(arr);
         setOpenSuccessModal(true);
         setNotificationMessage("Xếp bệnh nhân lên đầu thành công");
@@ -184,6 +190,9 @@ const DoctorVisitingFormsForDoctor = () => {
               .indexOf(row.id);
             var a = [...doctorVisitingForms];
             a[updateIndex] = updatedForm;
+            for (let i = 0; i < a.length; i++) {
+              a[i].index = i + 1;
+            }
             setDoctorVisitingForms(a);
             setOpenSuccessModal(true);
             setNotificationMessage(
@@ -221,7 +230,7 @@ const DoctorVisitingFormsForDoctor = () => {
       });
   };
 
-  useEffect(retrieveAll, [!doctorVisitingForms]);
+  useEffect(retrieveAll, []);
 
   const fields = [
     { key: "index", label: "STT", _style: { width: "1%" } },
@@ -232,7 +241,7 @@ const DoctorVisitingFormsForDoctor = () => {
     { key: "updatedAt", label: "GIỜ CẬP NHẬT" },
     {
       key: "view",
-      label: "XEM",
+      label: "IN PHIẾU KHÁM",
       _style: { width: "1%" },
       sorter: false,
       filter: false,
@@ -253,14 +262,14 @@ const DoctorVisitingFormsForDoctor = () => {
     },
     {
       key: "movetoend",
-      label: "XẾP SAU",
+      label: "XẾP SAU CÙNG",
       _style: { width: "1%" },
       sorter: false,
       filter: false,
     },
     {
       key: "movetobeginning",
-      label: "XẾP ĐẦU",
+      label: "XẾP ĐẦU TIÊN",
       _style: { width: "1%" },
       sorter: false,
       filter: false,
@@ -295,7 +304,8 @@ const DoctorVisitingFormsForDoctor = () => {
                   view: (row, index) => {
                     return (
                       <td className="py-2">
-                        <ArticleIcon
+                        <Icon.Printer
+                          size="23"
                           style={cursorPointerStyle}
                           onClick={() => {
                             window.open("/doctorvisitingform/" + row.id);
@@ -411,7 +421,7 @@ const DoctorVisitingFormsForDoctor = () => {
         setDetailedPatientHospitalizedProfileModal={
           setDetailedPatientHospitalizedProfileModal
         }
-        setHospitalizedProfileId={setId}
+        setHospitalizedProfileId={setPatientHospitalizedProfileId}
       />
       <PatientProfileModal
         modal={patientProfileModal}

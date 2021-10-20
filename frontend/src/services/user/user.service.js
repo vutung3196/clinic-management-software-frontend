@@ -17,9 +17,9 @@ const createUser = async (
   userName,
   password,
   fullName,
-  phoneNumber,
   enabled,
-  role
+  role,
+  medicalServiceGroupId
 ) => {
   const response = await axios.post(
     API_URL,
@@ -27,9 +27,9 @@ const createUser = async (
       userName,
       password,
       fullName: fullName,
-      phoneNumber,
       enabled,
       role: role,
+      medicalServiceGroupForTestSpecialistId: medicalServiceGroupId,
     },
     config
   );
@@ -41,9 +41,9 @@ const editUser = async (
   userName,
   password,
   fullName,
-  phoneNumber,
   enabled,
-  role
+  role,
+  medicalServiceGroupId
 ) => {
   const response = await axios.put(
     API_URL + id,
@@ -51,9 +51,9 @@ const editUser = async (
       userName,
       password,
       fullName: fullName,
-      phoneNumber,
       enabled,
       role: role,
+      medicalServiceGroupForTestSpecialistId: medicalServiceGroupId,
     },
     config
   );

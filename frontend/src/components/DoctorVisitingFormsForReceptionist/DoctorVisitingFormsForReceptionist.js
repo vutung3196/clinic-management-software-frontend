@@ -29,7 +29,6 @@ const DoctorVisitingFormsForReceptionist = () => {
   const [details, setDetails] = useState([]);
   const [createModal, setCreateModal] = useState(false);
   const [id, setId] = useState("");
-  const [notificationMessage, setNotificationMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
   const [detailedModal, setDetailedModal] = useState(false);
@@ -37,6 +36,7 @@ const DoctorVisitingFormsForReceptionist = () => {
   const [doctorVisitingFormModal, setDoctorVisitingFormModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
 
   const handleCloseSuccessModal = (event, reason) => {
     if (reason === "clickaway") {

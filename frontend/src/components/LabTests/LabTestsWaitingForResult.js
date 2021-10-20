@@ -230,6 +230,7 @@ const LabTestsWaitingForResult = ({ status }) => {
         setOpenSuccessModal={setOpenSuccessModal}
         setOpenErrorModal={setOpenErrorModal}
         setNotificationMessage={setNotificationMessage}
+        isEditForTestNeededToBePerformed={false}
       />
     </>
   );

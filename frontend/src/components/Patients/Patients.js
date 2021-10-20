@@ -204,7 +204,7 @@ const Patients = () => {
               <SearchBar
                 onChange={(e) => setSearchTerm(e)}
                 value={searchTerm}
-                onRequestSearch={() => retrievePatients(searchTerm)}
+                onRequestSearch={() => retrievePatients(searchTerm.trim())}
                 style={{
                   margin: "0 auto",
                   maxWidth: 800,

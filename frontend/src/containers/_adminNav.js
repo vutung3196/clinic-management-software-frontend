@@ -10,9 +10,21 @@ const _adminNav = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Dịch vụ",
+    name: "Chỉ định xét nghiệm",
     route: "/notifications",
     icon: "cil-bell",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Nhóm chỉ định xét nghiệm",
+        to: "/medicalservicegroups",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Xét nghiệm",
+        to: "/medicalservices",
+      },
+    ],
   },
   {
     _tag: "CSidebarNavItem",

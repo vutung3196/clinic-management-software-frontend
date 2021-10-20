@@ -220,7 +220,7 @@ const CreatePaymentForLabOrderForm = ({
                       <TableCell rowSpan={3} />
                       <TableCell rowSpan={3} />
                       <TableCell rowSpan={3} />
-                      <TableCell align="">: </TableCell>
+                      <TableCell align="">Tổng cộng: </TableCell>
                       <TableCell>{total} đồng</TableCell>
                     </TableRow>
                   </TableBody>

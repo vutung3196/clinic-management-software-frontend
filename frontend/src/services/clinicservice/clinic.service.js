@@ -30,23 +30,27 @@ const getAllClinics = async () => {
 const createClinic = async (
   name,
   phoneNumber,
-  address,
-  username,
+  emailAddress,
+  userName,
   password,
+  addressDetail,
+  addressStreet,
+  addressDistrict,
+  addressCity,
   enabled
 ) => {
-  const response = await axios.post(
-    CLINIC_INFORMATION_API_URL,
-    {
-      name,
-      address,
-      phoneNumber,
-      userName: username,
-      password: password,
-      enabled: enabled,
-    },
-    config
-  );
+  const response = await axios.post(CLINIC_INFORMATION_API_URL, {
+    name,
+    phoneNumber,
+    emailAddress,
+    userName,
+    password,
+    addressDetail,
+    addressStreet,
+    addressDistrict,
+    addressCity,
+    enabled,
+  });
   return response.data;
 };
 
@@ -78,20 +82,27 @@ const editClinic = async (
   id,
   name,
   phoneNumber,
-  address,
+  emailAddress,
   username,
   password,
+  addressDetail,
+  addressStreet,
+  addressDistrict,
+  addressCity,
   enabled
 ) => {
   const response = await axios.put(
     CLINIC_INFORMATION_API_URL + id,
     {
-      id,
-      name,
+      name: name,
       phoneNumber,
-      address,
+      emailAddress: emailAddress,
       username: username,
       password: password,
+      addressDetail,
+      addressStreet,
+      addressDistrict,
+      addressCity,
       enabled: enabled,
     },
     config

@@ -9,7 +9,16 @@ import {
 } from "@coreui/react";
 import userService from "src/services/user/user.service";
 
-const DeactivateUserModal = ({ modal, onClose, users, setUsers, user }) => {
+const DeactivateUserModal = ({
+  modal,
+  onClose,
+  users,
+  setUsers,
+  user,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
+}) => {
   console.log(
     user.id,
     user.userName,
@@ -29,15 +38,21 @@ const DeactivateUserModal = ({ modal, onClose, users, setUsers, user }) => {
           fullName: user.fullName,
           createdAt: user.createdAt,
           enabled: false,
+          role: user.role,
+          roleDescription: user.roleDescription,
           status: "Khóa",
         };
         var updateIndex = users.map((item) => item.id).indexOf(user.id);
         users[updateIndex] = updatedUser;
         setUsers(users);
+        setOpenSuccessModal(true);
+        setNotificationMessage("Khóa tài khoản người dùng thành công");
         onClose(false);
       },
       (error) => {
         console.log(error);
+        setOpenErrorModal(true);
+        setNotificationMessage("Khóa tài khoản người dùng không thành công");
       }
     );
   };

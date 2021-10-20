@@ -37,6 +37,9 @@ const SingleLabOrderFormModal = ({
     p: 4,
   };
 
+  const cursorPointerStyle = {
+    cursor: "pointer",
+  };
   return (
     <Modal open={open} onClose={onClose}>
       <Box sx={style}>
@@ -165,6 +168,8 @@ const SingleLabOrderFormModal = ({
                       <TableCell>STT</TableCell>
                       <TableCell>Chỉ định</TableCell>
                       <TableCell>Mô tả</TableCell>
+                      <TableCell>Trạng thái</TableCell>
+                      <TableCell>Kết quả</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -179,8 +184,17 @@ const SingleLabOrderFormModal = ({
                         <TableCell component="th" scope="row">
                           {index + 1}
                         </TableCell>
-                        <TableCell>{row.name}</TableCell>
+                        <TableCell
+                          style={cursorPointerStyle}
+                          onClick={() => {
+                            window.open("/labtest/" + row.id);
+                          }}
+                        >
+                          {row.name}
+                        </TableCell>
                         <TableCell>{row.description}</TableCell>
+                        <TableCell>{row.status}</TableCell>
+                        <TableCell>{row.result}</TableCell>
                       </TableRow>
                     ))}
                     <TableRow>

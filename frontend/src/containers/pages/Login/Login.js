@@ -129,6 +129,16 @@ const Login = (props) => {
                   <div>
                     <h2>CMS</h2>
                     <p>Clinic management software</p>
+                    <Link to="/register">
+                      <CButton
+                        color="primary"
+                        className="mt-3"
+                        active
+                        tabIndex={-1}
+                      >
+                        Đăng ký phòng khám lần đầu
+                      </CButton>
+                    </Link>
                   </div>
                 </CCardBody>
               </CCard>

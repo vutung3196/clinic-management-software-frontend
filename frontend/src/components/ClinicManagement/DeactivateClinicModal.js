@@ -16,6 +16,9 @@ const DeactivateClinicModal = ({
   clinics,
   setClinics,
   clinic,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
 }) => {
   const handleDelete = () => {
     clinicService

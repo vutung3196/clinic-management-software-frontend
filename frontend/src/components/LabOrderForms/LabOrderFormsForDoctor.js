@@ -12,7 +12,14 @@ import {
 import * as Icon from "react-bootstrap-icons";
 import ArticleIcon from "@mui/icons-material/Article";
 import SingleLabOrderFormModal from "./SingleLabOrderFormModal";
+import CIcon from "@coreui/icons-react";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import LabOrderFormDeleteModal from "./LabOrderFormDeleteModal";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 const LabOrderFormsForDoctor = () => {
   const [labOrderForms, setLabOrderForms] = useState([]);
   const [labOrderForm, setLabOrderForm] = useState([]);
@@ -54,6 +61,13 @@ const LabOrderFormsForDoctor = () => {
     cursor: "pointer",
   };
   const [patient, setPatient] = useState("");
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSuccessModal(false);
+  };
 
   const toggleCreatePayment = (row) => {
     if (row.status === "Đã thanh toán") {
@@ -71,6 +85,13 @@ const LabOrderFormsForDoctor = () => {
   };
 
   const toggleDelete = (row) => {
+    if (row.status !== "Chưa thanh toán") {
+      setOpenErrorModal(true);
+      setNotificationMessage(
+        "Bạn chỉ được phép hủy phiếu chỉ định chưa thanh toán"
+      );
+      return;
+    }
     setDeleteModal(!deleteModal);
     setId(row.id);
   };
@@ -121,7 +142,7 @@ const LabOrderFormsForDoctor = () => {
     },
     {
       key: "delete",
-      label: "XÓA",
+      label: "HỦY",
       _style: { width: "3%" },
       sorter: false,
       filter: false,
@@ -189,11 +210,12 @@ const LabOrderFormsForDoctor = () => {
                   delete: (row) => {
                     return (
                       <td className="py-2">
-                        <Icon.Printer
-                          size="23"
+                        <CIcon
+                          name="cilTrash"
+                          size="xl"
                           style={cursorPointerStyle}
                           onClick={() => {
-                            window.open("/laborderform/" + row.id);
+                            toggleDelete(row);
                           }}
                         />
                       </td>
@@ -212,6 +234,37 @@ const LabOrderFormsForDoctor = () => {
         patient={patient}
         labOrderForm={labOrderForm}
       />
+      <LabOrderFormDeleteModal
+        modal={deleteModal}
+        id={id}
+        onClose={setDeleteModal}
+        labOrderForms={labOrderForms}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
+      />
+      <Snackbar
+        open={openSuccessModal}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          {notificationMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openErrorModal}
+        autoHideDuration={3000}
+        onClose={handleCloseErrorModal}
+      >
+        <Alert
+          onClose={handleCloseErrorModal}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {notificationMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

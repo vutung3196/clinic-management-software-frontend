@@ -26,14 +26,21 @@ const createReceipt = async (
   return response.data;
 };
 
-const get = async (clinicId) => {
-  const response = await axios.request({
-    url: API_URL,
-    method: "get",
-    params: {
-      clinicId: clinicId,
-    },
-  });
+const get = async () => {
+  const response = await axios.get(API_URL, config);
+  return response.data;
+};
+
+const getReport = async (startDate, endDate) => {
+  const response = await axios.get(
+    API_URL +
+      "/receiptreport?" +
+      "startDate=" +
+      startDate +
+      "&endDate=" +
+      endDate,
+    config
+  );
   return response.data;
 };
 
@@ -74,4 +81,5 @@ export default {
   getById,
   deleteReceipt,
   editReceipt,
+  getReport,
 };

@@ -37,7 +37,11 @@ const CreateLabOrderFormModal = ({
   onClose,
   patientHospitalizedProfileId,
   patientDoctorVisitingFormId,
+  setOpenSuccessModal,
+  setOpenErrorModal,
+  setNotificationMessage,
 }) => {
+  console.log("profile id is: " + patientHospitalizedProfileId);
   const a = {
     index: 0,
     id: "",
@@ -150,7 +154,8 @@ const CreateLabOrderFormModal = ({
       };
       labTestInformation.push(a);
     }
-    console.log(labTestInformation);
+    console.log("AYYA");
+    console.log(patientHospitalizedProfileId);
     laborderformService
       .create(
         description,
@@ -164,11 +169,20 @@ const CreateLabOrderFormModal = ({
           setDescription("");
           setLabTests(initialArray);
           setNumberMedicalServicesChildren(0);
+          setOpenSuccessModal(true);
+          setNotificationMessage("Tạo phiếu chỉ định thành công");
+          window.open("/laborderform/" + response.data);
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
           onClose(false);
         },
         (error) => {
           console.log("=========");
-          console.log(error.response.data);
+          console.log(error);
+          setOpenErrorModal(true);
+          setNotificationMessage("Tạo phiếu chỉ định không thành công");
           console.log("ahahah");
           // if (error.response.data.errors !== undefined) {
           //   var a = error.response.data.errors.DiagnosedDescription;

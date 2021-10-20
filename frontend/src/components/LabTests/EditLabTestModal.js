@@ -45,6 +45,7 @@ const EditLabTestModal = ({
   setOpenSuccessModal,
   setOpenErrorModal,
   setNotificationMessage,
+  isEditForTestNeededToBePerformed,
 }) => {
   const a = {
     index: 0,
@@ -322,9 +323,13 @@ const EditLabTestModal = ({
                                     setLabTestStatus(e.target.value)
                                   }
                                 >
-                                  <MenuItem value={1}>
-                                    Đang chờ thực hiện xét nghiệm
-                                  </MenuItem>
+                                  {isEditForTestNeededToBePerformed === true ? (
+                                    <MenuItem value={1}>
+                                      Đang chờ thực hiện xét nghiệm
+                                    </MenuItem>
+                                  ) : (
+                                    ""
+                                  )}
                                   <MenuItem value={2}>
                                     Đang chờ kết quả xét nghiệm
                                   </MenuItem>
