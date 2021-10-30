@@ -10,7 +10,7 @@ const _adminNav = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Chỉ định xét nghiệm",
+    name: "Quản lý dịch vụ xét nghiệm",
     route: "/notifications",
     icon: "cil-bell",
     _children: [

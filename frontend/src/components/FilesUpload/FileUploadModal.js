@@ -29,7 +29,24 @@ const FileUploadModal = ({
     isDragActive,
     isDragAccept,
     isDragReject,
-  } = useDropzone({ accept: "image/*" });
+  } = useDropzone({
+    accept: "image/*",
+    onDrop: (acceptedFiles, fileRejections) => {
+      fileRejections.forEach((file) => {
+        file.errors.forEach((err) => {
+          console.log(err);
+          if (err.code === "file-too-large") {
+            console.log(`Error: ${err.message}`);
+          }
+
+          if (err.code === "file-invalid-type") {
+            console.log(`Error: ${err.message}`);
+          }
+        });
+      });
+    },
+  });
+
   const init = [];
   const [readyFiles, setReadyFiles] = useState(init);
   const [currentData, setCurrentData] = useState("");
@@ -84,6 +101,7 @@ const FileUploadModal = ({
         }, 1000);
       },
       (error) => {
+        console.log(error);
         console.log("=========");
         setOpenErrorModal(true);
         setNotificationMessage("Ảnh tải lên không thành công");
@@ -161,10 +179,29 @@ const FileUploadModal = ({
             dropzoneActive={{ borderColor: "green" }}
             accept="image/jpg,image/jpeg,image/png"
             onSubmit={handleSubmit}
-            onDrop={(acceptedFiles) => {
+            onDrop={(acceptedFiles, rejectedFiles) => {
+              rejectedFiles.forEach((file) => {
+                file.errors.forEach((err) => {
+                  setOpenErrorModal(true);
+                  var message = "";
+                  if (err.code === "file-too-large") {
+                    console.log(`Error: ${err.message}`);
+                    message += err.message;
+                  }
+
+                  if (err.code === "file-invalid-type") {
+                    console.log(`Error: ${err.message}`);
+                    message += ", " + err.message;
+                    setNotificationMessage(err.message);
+                  }
+                  setNotificationMessage(message);
+                });
+              });
               onDrop(acceptedFiles);
             }}
+            maxSize={5242880}
             onChangeStatus={({ meta, file }, status) => {
+              console.log(status);
               console.log(status, meta, file);
             }}
           >
@@ -202,7 +239,7 @@ const FileUploadModal = ({
           onClick={() => upload()}
           disabled={readyFiles.length === 0}
         >
-          OK
+          LƯU
         </CButton>{" "}
         <CButton color="secondary" onClick={() => setCloseModal()}>
           THOÁT

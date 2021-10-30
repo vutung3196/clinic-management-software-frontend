@@ -38,12 +38,6 @@ const _receptionistNav = [
     to: "/receipts",
     icon: "cil-bell",
   },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Dịch vụ",
-    route: "/notifications",
-    icon: "cil-bell",
-  },
 ];
 
 export default _receptionistNav;

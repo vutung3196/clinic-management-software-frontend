@@ -62,53 +62,7 @@ const InformationManagement = () => {
     setOpenErrorModal(false);
   };
 
-  const handleCreate = () => {
-    if (password !== verifiedPassword) {
-      setOpenErrorModal(true);
-      setNotificationMessage("Mật khẩu và xác nhận mật khẩu phải khớp nhau");
-      return;
-    }
-    clinicService
-      .createClinic(
-        clinicName,
-        emailAddress,
-        username,
-        phoneNumber,
-        password,
-        false
-      )
-      .then(
-        (response) => {
-          setOpenSuccessModal(true);
-          setNotificationMessage(
-            "Tạo mới tài khoản thành công, bạn sẽ nhận được email khi tài khoản được phê duyệt"
-          );
-        },
-        (error) => {
-          if (error.response.data.errors !== undefined) {
-            let arr = [];
-            var error1 = error.response.data.errors.UserName;
-            if (error1 !== undefined) {
-              arr.push(error1);
-            }
-            var error2 = error.response.data.errors.Password;
-            if (error2 !== undefined) {
-              arr.push(error2);
-            }
-
-            var errorMessage = "";
-            for (let index = 0; index < arr.length; index++) {
-              errorMessage += arr[index];
-              if (index !== arr.length - 1) {
-                errorMessage += " và ";
-              }
-            }
-            setOpenErrorModal(true);
-            setNotificationMessage(errorMessage);
-          }
-        }
-      );
-  };
+  const handleCreate = () => {};
 
   const { register, handleSubmit, errors, formState } = useForm({
     mode: "all",

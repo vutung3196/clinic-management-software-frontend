@@ -21,7 +21,7 @@ const testSpecialistNav = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách phiếu chỉ định",
+        name: "Phiếu chỉ định",
         to: "/laborderforms",
       },
     ],

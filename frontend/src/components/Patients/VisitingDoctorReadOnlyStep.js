@@ -9,6 +9,8 @@ const VisitingDoctorReadOnlyStep = ({
   doctorName,
   visitingFormCode,
 }) => {
+  console.log("ahahahhaa");
+  console.log(patient);
   return (
     <React.Fragment>
       <Typography component="h1" variant="h4" align="center">

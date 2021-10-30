@@ -14,7 +14,7 @@ const _masterAdminNav = [
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Phòng khám",
+    name: "Quản lý phòng khám",
     to: "/clinicmanagement",
     icon: "cil-people",
   },

@@ -254,7 +254,7 @@ const CreatePaymentForLabOrderForm = ({
             onClick={handleCreate}
             sx={{ mt: 3, ml: 1 }}
           >
-            LƯU
+            LƯU VÀ IN
           </Button>
           <Button
             variant="contained"

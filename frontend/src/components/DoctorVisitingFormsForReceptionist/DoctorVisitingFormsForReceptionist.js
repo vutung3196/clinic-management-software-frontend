@@ -80,12 +80,14 @@ const DoctorVisitingFormsForReceptionist = () => {
   const toggleEdit = (row) => {
     setIsEditing(true);
     setDoctorVisitingForm(row);
+    setPatient(row.patientInformation);
     setDoctorVisitingFormModal(!doctorVisitingFormModal);
   };
 
   const toggleView = (row) => {
     setIsEditing(false);
     setDoctorVisitingForm(row);
+    setPatient(row.patientInformation);
     setDoctorVisitingFormModal(!doctorVisitingFormModal);
   };
 
@@ -118,7 +120,7 @@ const DoctorVisitingFormsForReceptionist = () => {
     { key: "visitingStatusDisplayed", label: "TRẠNG THÁI" },
     { key: "updatedAt", label: "GIỜ CẬP NHẬT" },
     {
-      key: "print1",
+      key: "view",
       label: "XEM",
       _style: { width: "5%" },
       sorter: false,
@@ -165,7 +167,7 @@ const DoctorVisitingFormsForReceptionist = () => {
                 sorter
                 pagination
                 scopedSlots={{
-                  print1: (row) => {
+                  view: (row) => {
                     return (
                       <td className="py-2">
                         <ArticleIcon
@@ -174,7 +176,6 @@ const DoctorVisitingFormsForReceptionist = () => {
                           onClick={() => {
                             toggleView(row);
                           }}
-                          toggleView
                         />
                       </td>
                     );

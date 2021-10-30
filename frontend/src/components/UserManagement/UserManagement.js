@@ -15,6 +15,7 @@ import DeactivateUserModal from "./DeactivateUserModal";
 import EditUserModal from "./EditUserModal";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import LockIcon from "@mui/icons-material/Lock";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -78,7 +79,7 @@ const UserManagement = () => {
   const fields = [
     {
       key: "userName",
-      label: "Tên đăng nhập",
+      label: "TÊN ĐĂNG NHẬP",
       _style: { width: "8%" },
     },
     { key: "fullName", label: "Họ tên" },
@@ -171,9 +172,7 @@ const UserManagement = () => {
                 deactivate: (item) => {
                   return (
                     <td className="py-2">
-                      <CIcon
-                        name="cilTrash"
-                        size="xl"
+                      <LockIcon
                         style={cursorPointerStyle}
                         onClick={() => {
                           openDeactivateModal(item);

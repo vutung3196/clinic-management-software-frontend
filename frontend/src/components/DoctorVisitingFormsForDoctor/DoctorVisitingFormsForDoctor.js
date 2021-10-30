@@ -130,6 +130,13 @@ const DoctorVisitingFormsForDoctor = () => {
   };
 
   const toggleAddAnElementToTheEndOfAQueue = (row, index) => {
+    if (doctorVisitingForms.length <= 1) {
+      setOpenErrorModal(true);
+      setNotificationMessage(
+        "Không thể xếp xuống cuối do danh sách chỉ có 1 phiếu khám"
+      );
+      return;
+    }
     patientdoctorvisitingformService.movetoend(row.id).then(
       (response) => {
         var arr = [...doctorVisitingForms];
@@ -152,6 +159,13 @@ const DoctorVisitingFormsForDoctor = () => {
   };
 
   const toggleAddAnElementToTheBeginningOfAQueue = (row, index) => {
+    if (doctorVisitingForms.length <= 1) {
+      setOpenErrorModal(true);
+      setNotificationMessage(
+        "Không thể xếp lên đầu do danh sách chỉ có 1 phiếu khám"
+      );
+      return;
+    }
     patientdoctorvisitingformService.movetobeginning(row.id).then(
       (response) => {
         var arr = [...doctorVisitingForms];

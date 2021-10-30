@@ -119,7 +119,7 @@ const RegisterPage = () => {
               <form onSubmit={handleSubmit(handleCreate)} novalidate>
                 <CCardBody className="p-4">
                   <h1>Đăng ký</h1>
-                  <p className="text-muted">Tạo tài khoản</p>
+                  {/* <p className="text-muted">Tạo tài khoản</p> */}
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
                       <TextField

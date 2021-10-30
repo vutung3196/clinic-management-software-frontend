@@ -73,6 +73,13 @@ const LabTestsNeededToBePerformed = ({ status }) => {
   };
 
   const toggleAddElementToTheEndOfAQueue = (row, index) => {
+    if (labTests.length <= 1) {
+      setOpenErrorModal(true);
+      setNotificationMessage(
+        "Không thể xếp sau do danh sách chỉ có 1 xét nghiệm"
+      );
+      return;
+    }
     labtestService.movetoend(row.id).then(
       (response) => {
         var arr = [...labTests];
@@ -126,6 +133,13 @@ const LabTestsNeededToBePerformed = ({ status }) => {
   };
 
   const toggleAddAnElementToTheBeginningOfAQueue = (row, index) => {
+    if (labTests.length <= 1) {
+      setOpenErrorModal(true);
+      setNotificationMessage(
+        "Không thể xếp lên đầu do danh sách chỉ có 1 xét nghiệm"
+      );
+      return;
+    }
     labtestService.movetobeginning(row.id).then(
       (response) => {
         var arr = [...labTests];

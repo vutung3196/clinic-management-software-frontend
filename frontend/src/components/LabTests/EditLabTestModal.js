@@ -70,6 +70,7 @@ const EditLabTestModal = ({
   const [result, setResult] = useState("");
   const [medicalServiceName, setMedicalServiceName] = useState("");
   const [labTestStatus, setLabTestStatus] = useState("");
+  const [labTestId, setLabTestId] = useState("");
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
@@ -80,18 +81,20 @@ const EditLabTestModal = ({
     setDay(day);
     setMonth(month);
     setYear(year);
-
-    var currentMillis = new Date().getUTCMilliseconds();
-    setCode("CĐ" + patient.id.toString() + currentMillis.toString());
     var currentUser = authService.getCurrentUser();
     setSpecialistName(currentUser.fullName);
     if (labTest !== undefined) {
+      setLabTestId(labTest.id);
       setMedicalServiceName(labTest.medicalServiceName);
       setLabTestStatus(labTest.status);
       setFiles(labTest.imageFiles);
+      if (labTest.result !== null) {
+        setResult(labTest.result);
+      } else {
+        setResult("");
+      }
     }
-    setResult(labTest.result);
-  }, [patient, modal, labTest]);
+  }, [modal]);
 
   const cursorPointerStyle = {
     cursor: "pointer",
@@ -128,6 +131,9 @@ const EditLabTestModal = ({
       (response) => {
         var responseData = response.data.labTests;
         var labTestsResult = [...responseData];
+        for (var i = 0; i < labTestsResult.length; i++) {
+          labTestsResult[i].index = i + 1;
+        }
         setLabTests(labTestsResult);
         setDescription("");
         setOpenSuccessModal(true);
@@ -391,7 +397,7 @@ const EditLabTestModal = ({
                   <FilesUpload
                     modal={modal}
                     patientId={patientId}
-                    labTestId={labTest.id}
+                    labTestId={labTestId}
                     files={files}
                     setFiles={setFiles}
                     setOpenSuccessModal={setOpenSuccessModal}

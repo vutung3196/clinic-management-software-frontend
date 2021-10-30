@@ -41,7 +41,6 @@ const FilesUpload = ({
   isPrescriptionModal,
   visitingFormId,
 }) => {
-  console.log("LOL");
   console.log(isPrescriptionModal);
   const [uploadModal, setUploadModal] = useState(false);
   const [uploadFiles, setUploadFiles] = useState([]);

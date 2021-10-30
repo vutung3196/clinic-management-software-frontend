@@ -111,7 +111,7 @@ const PatientProfileModal = ({
             <td>{entry.diseaseName}</td>
             <td>{entry.description}</td>
             <td valign="top" align="center">
-              {entry.revisitDate}
+              {entry.revisitDateDisplayed}
             </td>
           </tr>
         ))
@@ -183,7 +183,7 @@ const PatientProfileModal = ({
                           <td>{patient.phoneNumber}</td>
                         </tr>
                         <tr>
-                          <td valign="top">Địa chỉ</td>
+                          <td valign="top">Địa chỉ (tỉnh)</td>
                           <td valign="top" class="s">
                             :
                           </td>

@@ -270,7 +270,10 @@ const SinglePrescriptionPage = (props) => {
                 <p>
                   Tên đơn vị: Phòng khám {prescription.clinicInformation.name}
                 </p>
-                <p>Địa chỉ: {prescription.clinicInformation.address}</p>
+                <p>
+                  Địa chỉ:{" "}
+                  {prescription.clinicInformation.addressDetailInformation}
+                </p>
                 <p>Điện thoại: {prescription.clinicInformation.phoneNumber}</p>
               </div>
             </div>
@@ -516,7 +519,8 @@ const SinglePrescriptionPage = (props) => {
                   <div style={style30}>- {prescription.doctorSuggestion}</div>
                 </div>
                 <div>
-                  <strong>Ngày tái khám</strong>: {prescription.revisitDate}
+                  <strong>Ngày tái khám</strong>:{" "}
+                  {prescription.revisitDateDisplayed}
                 </div>
               </div>
               <div class="r" style={style8}>
