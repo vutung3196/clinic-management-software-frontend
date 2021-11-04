@@ -132,7 +132,10 @@ const SingleDoctorVisitingFormPage = (props) => {
                 <p>
                   Tên đơn vị: Phòng khám {visitingForm.clinicInformation.name}
                 </p>
-                <p>Địa chỉ: {visitingForm.clinicInformation.address}</p>
+                <p>
+                  Địa chỉ:{" "}
+                  {visitingForm.clinicInformation.addressDetailInformation}
+                </p>
                 <p>Điện thoại: {visitingForm.clinicInformation.phoneNumber}</p>
               </div>
             </div>

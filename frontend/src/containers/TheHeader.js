@@ -9,8 +9,12 @@ import {
   CHeaderNavLink,
   CSubheader,
   CBreadcrumbRouter,
+  CImg,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import { Image, Transformation } from "cloudinary-react";
+import clinicService from "src/services/clinicservice/clinic.service";
+import authService from "src/services/authentication/auth.service";
 
 // routes config
 import routes from "../routes";
@@ -18,6 +22,7 @@ import routes from "../routes";
 import { TheHeaderDropdown } from "./index";
 
 const TheHeader = () => {
+  const [clinic, setClinic] = React.useState("");
   const dispatch = useDispatch();
   const sidebarShow = useSelector((state) => state.sidebarShow);
 
@@ -34,6 +39,25 @@ const TheHeader = () => {
       : "responsive";
     dispatch({ type: "set", sidebarShow: val });
   };
+
+  const retrieveClinicInformation = () => {
+    var currentUser = authService.getCurrentUser();
+    console.log("=====");
+    console.log(currentUser);
+    clinicService
+      .getClinicInformation(currentUser.clinicId)
+      .then((response) => {
+        var clinic = response.data;
+        setClinic(clinic);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  React.useEffect(() => {
+    retrieveClinicInformation();
+  }, []);
 
   return (
     <CHeader withSubheader>
@@ -52,9 +76,37 @@ const TheHeader = () => {
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">
+        {clinic.imageFile !== undefined ? (
+          <div className="c-avatar">
+            <Image
+              cloudName="dzftzmcxb"
+              secure="true"
+              upload_preset="xdf93shk"
+              publicId={clinic.imageFile.publicId}
+            >
+              <Transformation
+                width="50"
+                height="50"
+                gravity="south"
+                crop="fill"
+              />
+            </Image>
+          </div>
+        ) : (
+          ""
+        )}
+
         <CHeaderNavItem className="px-3">
-          <CHeaderNavLink to="/dashboard">Trang chủ</CHeaderNavLink>
+          {/* <CHeaderNavLink class="header-text1">
+            Phòng khám Hà Phạm
+          </CHeaderNavLink> */}
+          <p class="header-text1">Phòng khám {clinic.name}</p>
         </CHeaderNavItem>
+
+        <CHeaderNavItem className="px-3"></CHeaderNavItem>
+        {/* <CHeaderNavItem className="px-3">
+          <CHeaderNavLink to="/dashboard">Phòng khám Hà Phạm</CHeaderNavLink>
+        </CHeaderNavItem> */}
       </CHeaderNav>
 
       <CHeaderNav className="px-3">

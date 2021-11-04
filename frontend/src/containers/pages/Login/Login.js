@@ -18,14 +18,36 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { Helmet } from "react-helmet";
-
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 const Login = (props) => {
   const form = useRef();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState("");
   const [message, setMessage] = useState("");
+  const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
+  const [openErrorModal, setOpenErrorModal] = React.useState(false);
+  const [notificationMessage, setNotificationMessage] = React.useState("");
 
+  const handleCloseSuccessModal = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSuccessModal(false);
+  };
+
+  const handleCloseErrorModal = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenErrorModal(false);
+  };
   const onChangeUsername = (event) => {
     const userName = event.target.value;
     setUsername(userName);
@@ -45,16 +67,18 @@ const Login = (props) => {
     console.log(password);
     AuthService.login(username, password).then(
       () => {
-        console.log("login successfully");
+        setOpenErrorModal(true);
+        setNotificationMessage("Đăng nhập thành công");
         props.history.push("/");
       },
       (error) => {
-        console.log("=========");
         console.log(error);
-        console.log(error.response);
-        const resMessage = error.response.data;
-        setLoading(false);
-        setMessage(resMessage);
+        if (error.response.data !== undefined) {
+          const resMessage = error.response.data;
+          setOpenErrorModal(true);
+          setNotificationMessage(resMessage);
+          setLoading(false);
+        }
       }
     );
   };
@@ -144,6 +168,32 @@ const Login = (props) => {
               </CCard>
             </CCardGroup>
           </CCol>
+          <Snackbar
+            open={openSuccessModal}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccessModal}
+          >
+            <Alert
+              onClose={handleCloseSuccessModal}
+              severity="success"
+              sx={{ width: "100%" }}
+            >
+              {notificationMessage}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openErrorModal}
+            autoHideDuration={3000}
+            onClose={handleCloseErrorModal}
+          >
+            <Alert
+              onClose={handleCloseErrorModal}
+              severity="error"
+              sx={{ width: "100%" }}
+            >
+              {notificationMessage}
+            </Alert>
+          </Snackbar>
         </CRow>
       </CContainer>
     </div>

@@ -142,7 +142,7 @@ const ReadOnlyDetailedPatientHospitalizedProfileModal = ({
             <td>{entry.diagnosedDescription}</td>
             <td>{entry.doctorSuggestion}</td>
             <td valign="top" align="center">
-              {entry.revisitDate}
+              {entry.revisitDateDisplayed}
             </td>
           </tr>
         ))

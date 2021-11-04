@@ -109,6 +109,7 @@ const DetailedPatientHospitalizedProfileModal = ({
     hospitalizedprofileService
       .getById(patientHospitalizedProfileId)
       .then((response) => {
+        console.log("hjejejeje");
         console.log(response.data);
         setPatientHospitalizedProfile(response.data);
       })
@@ -124,7 +125,6 @@ const DetailedPatientHospitalizedProfileModal = ({
   ]);
 
   const PatientPrescriptionView = (props) => {
-    console.log("============aaa==============");
     console.log(props.patientProfile.prescriptions);
     return props.patientProfile !== undefined &&
       props.patientProfile.prescriptions !== undefined
@@ -143,10 +143,11 @@ const DetailedPatientHospitalizedProfileModal = ({
                 {entry.code}
               </Link>
             </td>
+            <td>{entry.doctorVisitingFormCode}</td>
             <td>{entry.diagnosedDescription}</td>
             <td>{entry.doctorSuggestion}</td>
             <td valign="top" align="center">
-              {entry.revisitDate}
+              {entry.revisitDateDisplayed}
             </td>
           </tr>
         ))
@@ -248,6 +249,9 @@ const DetailedPatientHospitalizedProfileModal = ({
                 <div class="head-div-1" data-darkreader-inline-color="">
                   Hồ Sơ y tế
                 </div>
+                <div class="head-div-1" data-darkreader-inline-color="">
+                  Mã số: {patientHospitalizedProfile.code}
+                </div>
               </div>
               <div id="d_lr">
                 <div id="d_left"></div>
@@ -291,6 +295,20 @@ const DetailedPatientHospitalizedProfileModal = ({
                           </td>
                           <td>{patient.medicalInsuranceCode}</td>
                         </tr>
+                        <tr>
+                          <td valign="top">Tên bệnh</td>
+                          <td valign="top" class="s">
+                            :
+                          </td>
+                          <td>{patientHospitalizedProfile.diseaseName}</td>
+                        </tr>
+                        <tr>
+                          <td valign="top">Mô tả</td>
+                          <td valign="top" class="s">
+                            :
+                          </td>
+                          <td>{patientHospitalizedProfile.description}</td>
+                        </tr>
                       </tbody>
                     </table>
                   </center>
@@ -313,6 +331,7 @@ const DetailedPatientHospitalizedProfileModal = ({
                       <tr>
                         <th style={style4}>Ngày</th>
                         <th style={style4}>Mã đơn thuốc</th>
+                        <th style={style4}>Mã phiếu khám</th>
                         <th>Chẩn đoán</th>
                         <th>Lời dặn</th>
                         <th style={style11}>Ngày tái khám</th>

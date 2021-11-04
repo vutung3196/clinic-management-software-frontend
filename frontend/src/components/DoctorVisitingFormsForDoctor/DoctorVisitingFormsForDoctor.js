@@ -130,6 +130,13 @@ const DoctorVisitingFormsForDoctor = () => {
   };
 
   const toggleAddAnElementToTheEndOfAQueue = (row, index) => {
+    if (doctorVisitingForms.length <= 1) {
+      setOpenErrorModal(true);
+      setNotificationMessage(
+        "Không thể xếp xuống cuối do danh sách chỉ có 1 phiếu khám"
+      );
+      return;
+    }
     patientdoctorvisitingformService.movetoend(row.id).then(
       (response) => {
         var arr = [...doctorVisitingForms];
@@ -152,6 +159,13 @@ const DoctorVisitingFormsForDoctor = () => {
   };
 
   const toggleAddAnElementToTheBeginningOfAQueue = (row, index) => {
+    if (doctorVisitingForms.length <= 1) {
+      setOpenErrorModal(true);
+      setNotificationMessage(
+        "Không thể xếp lên đầu do danh sách chỉ có 1 phiếu khám"
+      );
+      return;
+    }
     patientdoctorvisitingformService.movetobeginning(row.id).then(
       (response) => {
         var arr = [...doctorVisitingForms];
@@ -236,7 +250,7 @@ const DoctorVisitingFormsForDoctor = () => {
     { key: "index", label: "STT", _style: { width: "1%" } },
     { key: "code", label: "MÃ PHIẾU KHÁM", _style: { width: "8%" } },
     { key: "patientDetailedInformation", label: "TÊN BỆNH NHÂN" },
-    { key: "description", label: "MÔ TẢ" },
+    { key: "description", label: "LÝ DO KHÁM" },
     { key: "visitingStatusDisplayed", label: "TRẠNG THÁI" },
     { key: "updatedAt", label: "GIỜ CẬP NHẬT" },
     {

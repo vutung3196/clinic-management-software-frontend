@@ -146,7 +146,7 @@ const VisitingDoctorSecondStep = ({
                       <TableCell rowSpan={3} />
                       <TableCell rowSpan={3} />
                       <TableCell rowSpan={3} />
-                      <TableCell align="">Tổng tiền: </TableCell>
+                      <TableCell align="">Tổng cộng: </TableCell>
                       <TableCell>{total}</TableCell>
                     </TableRow>
                   </TableBody>

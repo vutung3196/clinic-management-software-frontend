@@ -108,7 +108,9 @@ const LabTestsHavingResult = ({ status }) => {
     labtestService
       .getByStatus(status)
       .then((response) => {
-        console.log("really");
+        for (var i = 0; i < response.data.length; i++) {
+          response.data[i].index = i + 1;
+        }
         setLabTests(response.data);
       })
       .catch((e) => {

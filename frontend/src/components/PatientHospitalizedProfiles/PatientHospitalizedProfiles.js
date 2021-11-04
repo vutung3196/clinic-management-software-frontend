@@ -137,13 +137,13 @@ const PatientHospitalizedProfiles = () => {
       sorter: false,
       filter: false,
     },
-    {
-      key: "delete",
-      label: "XÓA",
-      _style: { width: "1%" },
-      sorter: false,
-      filter: false,
-    },
+    // {
+    //   key: "delete",
+    //   label: "XÓA",
+    //   _style: { width: "1%" },
+    //   sorter: false,
+    //   filter: false,
+    // },
   ];
 
   const rowsPerPageOption = {
@@ -213,20 +213,20 @@ const PatientHospitalizedProfiles = () => {
                       </td>
                     );
                   },
-                  delete: (row, index) => {
-                    return (
-                      <td className="py-2">
-                        <CIcon
-                          name="cilTrash"
-                          size="xl"
-                          style={cursorPointerStyle}
-                          onClick={() => {
-                            toggleDelete(row.id);
-                          }}
-                        />
-                      </td>
-                    );
-                  },
+                  // delete: (row, index) => {
+                  //   return (
+                  //     <td className="py-2">
+                  //       <CIcon
+                  //         name="cilTrash"
+                  //         size="xl"
+                  //         style={cursorPointerStyle}
+                  //         onClick={() => {
+                  //           toggleDelete(row.id);
+                  //         }}
+                  //       />
+                  //     </td>
+                  //   );
+                  // },
                 }}
               ></CDataTable>
             </CCardBody>

@@ -47,7 +47,7 @@ const DeleteMedicalServiceModal = ({
       <CModalHeader closeButton>
         <CModalTitle>XÓA</CModalTitle>
       </CModalHeader>
-      <CModalBody>Bạn chắc muốn xóa xét nghiệm này chứ?</CModalBody>
+      <CModalBody>Bạn chắc muốn xóa dịch vụ này chứ?</CModalBody>
       <CModalFooter>
         <CButton color="primary" onClick={() => handleDelete()}>
           XÓA

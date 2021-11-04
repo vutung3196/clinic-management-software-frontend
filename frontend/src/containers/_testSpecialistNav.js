@@ -16,12 +16,7 @@ const testSpecialistNav = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách bệnh nhân",
-        to: "/patients",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Danh sách phiếu chỉ định",
+        name: "Phiếu chỉ định",
         to: "/laborderforms",
       },
     ],

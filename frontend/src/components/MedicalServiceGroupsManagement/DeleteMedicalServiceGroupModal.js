@@ -23,7 +23,7 @@ const DeleteMedicalServiceGroupModal = ({
     medicalService.deleteMedicalServiceGroup(medicalServiceGroup.id).then(
       () => {
         setOpenSuccessModal(true);
-        setNotificationMessage("Xóa nhóm chỉ định thành công");
+        setNotificationMessage("Xóa nhóm chỉ định xét nghiệm thành công");
         var removeIndex = groups
           .map((item) => item.id)
           .indexOf(medicalServiceGroup.id);
@@ -33,7 +33,7 @@ const DeleteMedicalServiceGroupModal = ({
       },
       (error) => {
         setOpenErrorModal(true);
-        setNotificationMessage("Xóa nhóm chỉ định không thành công");
+        setNotificationMessage("Xóa nhóm chỉ định xét nghiệm không thành công");
       }
     );
   };
@@ -47,7 +47,9 @@ const DeleteMedicalServiceGroupModal = ({
       <CModalHeader closeButton>
         <CModalTitle>XÓA</CModalTitle>
       </CModalHeader>
-      <CModalBody>Bạn chắc muốn xóa nhóm chỉ định này chứ?</CModalBody>
+      <CModalBody>
+        Bạn chắc muốn xóa nhóm chỉ định xét nghiệm này chứ?
+      </CModalBody>
       <CModalFooter>
         <CButton color="primary" onClick={() => handleDelete()}>
           XÓA

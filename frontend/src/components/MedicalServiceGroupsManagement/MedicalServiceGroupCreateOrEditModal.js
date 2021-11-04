@@ -57,13 +57,16 @@ const MedicalServiceGroupCreateOrEditModal = ({
           onClose(false);
         },
         (error) => {
+          console.log("=================");
           if (error.response.data.errors !== undefined) {
+            console.log("=================");
+            console.log(error.response.data.errors);
             let arr = [];
-            var error1 = error.response.data.errors.AddressStreet;
+            var error1 = error.response.data.errors.Name;
             if (error1 !== undefined) {
               arr.push(error1);
             }
-            var error2 = error.response.data.errors.MedicalInsuranceCode;
+            var error2 = error.response.data.errors.Description;
             if (error2 !== undefined) {
               arr.push(error2);
             }
@@ -96,13 +99,16 @@ const MedicalServiceGroupCreateOrEditModal = ({
             onClose(false);
           },
           (error) => {
+            console.log("=================");
             if (error.response.data.errors !== undefined) {
+              console.log("=================");
+              console.log(error.response.data.errors);
               let arr = [];
-              var error1 = error.response.data.errors.AddressStreet;
+              var error1 = error.response.data.errors.Name;
               if (error1 !== undefined) {
                 arr.push(error1);
               }
-              var error2 = error.response.data.errors.MedicalInsuranceCode;
+              var error2 = error.response.data.errors.Description;
               if (error2 !== undefined) {
                 arr.push(error2);
               }

@@ -16,6 +16,7 @@ import EditClinicModal from "./EditClinicModal";
 import DeactivateClinicModal from "./DeactivateClinicModal";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import LockIcon from "@mui/icons-material/Lock";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -77,17 +78,21 @@ const ClinicManagement = () => {
 
   useEffect(retrieveClinics, [clinic]);
 
+  const rowsPerPageOption = {
+    label: "Số bản ghi trên trang",
+    values: [5, 10, 20],
+  };
+
   const fields = [
     {
       key: "name",
       label: "TÊN PHÒNG KHÁM",
       _style: { width: "8%" },
     },
-    { key: "emailAddress", label: "Địa chỉ email" },
+    { key: "emailAddress", label: "EMAIL" },
     { key: "phoneNumber", label: "SỐ ĐIỆN THOẠI" },
     { key: "username", label: "TÀI KHOẢN ADMIN" },
-    { key: "username", label: "TÀI KHOẢN ADMIN" },
-    { key: "status", label: "Trạng thái" },
+    { key: "status", label: "TRẠNG THÁI" },
     { key: "createdAt", label: "NGÀY TẠO" },
     {
       key: "edit",
@@ -153,7 +158,7 @@ const ClinicManagement = () => {
               striped
               bordered
               size="sm"
-              itemsPerPageSelect
+              itemsPerPageSelect={rowsPerPageOption}
               itemsPerPage={10}
               sorter
               pagination
@@ -174,9 +179,7 @@ const ClinicManagement = () => {
                 deactivate: (item) => {
                   return (
                     <td className="py-2">
-                      <CIcon
-                        name="cilTrash"
-                        size="xl"
+                      <LockIcon
                         style={cursorPointerStyle}
                         onClick={() => {
                           openDeactivateModal(item);

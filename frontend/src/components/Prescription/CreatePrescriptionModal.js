@@ -213,25 +213,42 @@ const CreatePrescriptionModal = ({
         (error) => {
           console.log("=========");
           console.log(error.response.data);
-          console.log("ahahah");
+          console.log("ahihihi");
+          var errorMessage = "";
+          if (error.response.data.errors !== undefined) {
+            let arr = [];
+            var a = error.response.data.errors.DiagnosedDescription;
+            if (a !== undefined) {
+              arr.push(a);
+            }
+            var b = error.response.data.errors.DoctorSuggestion;
+            if (b !== undefined) {
+              arr.push(b);
+            }
+
+            var c = error.response.data.errors.DiseaseNote;
+            if (c !== undefined) {
+              arr.push(c);
+            }
+
+            for (let index = 0; index < arr.length; index++) {
+              errorMessage += arr[index];
+              if (index !== arr.length - 1) {
+                errorMessage += " và ";
+              }
+            }
+          }
+          console.log(error.response.data);
+          if (
+            (error.response.data !== null &&
+              typeof error.response.data === "string") ||
+            error.response.data instanceof String
+          ) {
+            console.log("hehehhehe");
+            errorMessage += error.response.data;
+          }
           setOpenErrorModal(true);
-          setNotificationMessage("Tạo đơn thuốc không thành công");
-          // if (error.response.data.errors !== undefined) {
-          //   var a = error.response.data.errors.DiagnosedDescription;
-          //   let arr = [];
-          //   if (a !== undefined) {
-          //     arr.push(a);
-          //   }
-          //   setMessages(arr);
-          // }
-          // if (typeof error.response.data === "string") {
-          //   let b = error.response.data;
-          //   let arr = [];
-          //   if (b !== undefined) {
-          //     arr.push(b);
-          //   }
-          //   setMessages(arr);
-          // }
+          setNotificationMessage(errorMessage);
         }
       );
   };

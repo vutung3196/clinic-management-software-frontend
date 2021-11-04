@@ -111,10 +111,10 @@ const LabOrderFormsForReceptionist = () => {
       _style: { width: "8%" },
     },
     { key: "patientDetailedInformation", label: "THÔNG TIN BỆNH NHÂN" },
-    { key: "doctorName", label: "Bác sĩ khám" },
+    { key: "doctorName", label: "BÁC SĨ CHỈ ĐỊNH" },
     { key: "description", label: "MÔ TẢ" },
     { key: "status", label: "TRẠNG THÁI" },
-    { key: "createdAt", label: "GIỜ CẬP NHẬT" },
+    { key: "createdAt", label: "NGÀY TẠO" },
     {
       key: "view",
       label: "XEM",
@@ -131,7 +131,7 @@ const LabOrderFormsForReceptionist = () => {
     },
     {
       key: "createPayment",
-      label: "Tạo phiếu thu",
+      label: "TẠO PHIẾU THU",
       _style: { width: "5%" },
       sorter: false,
       filter: false,

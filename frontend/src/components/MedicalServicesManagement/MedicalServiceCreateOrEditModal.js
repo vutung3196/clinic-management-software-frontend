@@ -55,6 +55,7 @@ const MedicalServiceCreateOrEditModal = ({
     } else {
       setName("");
       setDescription("");
+      setPrice("");
     }
   }, [modal, medicalService, isEditing]);
 
@@ -76,17 +77,22 @@ const MedicalServiceCreateOrEditModal = ({
             medicalServices = [newMedicalService].concat(medicalServices);
             setMedicalServices(medicalServices);
             setOpenSuccessModal(true);
-            setNotificationMessage("Tạo mới nhóm xét nghiệm thành công");
+            setNotificationMessage("Tạo mới xét nghiệm thành công");
             onClose(false);
           },
           (error) => {
             if (error.response.data.errors !== undefined) {
               let arr = [];
-              var error1 = error.response.data.errors.AddressStreet;
+              var error1 = error.response.data.errors.Name;
               if (error1 !== undefined) {
                 arr.push(error1);
               }
-              var error2 = error.response.data.errors.MedicalInsuranceCode;
+              var error2 = error.response.data.errors.Description;
+              if (error2 !== undefined) {
+                arr.push(error2);
+              }
+
+              error2 = error.response.data.errors.Price;
               if (error2 !== undefined) {
                 arr.push(error2);
               }
@@ -115,14 +121,13 @@ const MedicalServiceCreateOrEditModal = ({
         .then(
           (response) => {
             let updatedPatient = response.data;
-            console.log("YEAH");
             var updateIndex = medicalServices
               .map((item) => item.id)
               .indexOf(medicalServiceElement.id);
             medicalServices[updateIndex] = updatedPatient;
             setMedicalServices(medicalServices);
             setOpenSuccessModal(true);
-            setNotificationMessage("Cập nhật nhóm chỉ định thành công");
+            setNotificationMessage("Cập nhật thông tin xét nghiệm thành công");
             onClose(false);
           },
           (error) => {
@@ -168,12 +173,12 @@ const MedicalServiceCreateOrEditModal = ({
       <form onSubmit={handleSubmit(handleCreate)} novalidate>
         <CModalBody>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 required
                 id="fullName"
                 name="fullName"
-                label="Tên nhóm xét nghiệm"
+                label="Tên xét nghiệm"
                 fullWidth
                 variant="standard"
                 value={name}
@@ -186,7 +191,7 @@ const MedicalServiceCreateOrEditModal = ({
                 required
                 id="fullName"
                 name="fullName"
-                label="Giá tiền"
+                label="Giá tiền (VNĐ)"
                 type="number"
                 fullWidth
                 variant="standard"

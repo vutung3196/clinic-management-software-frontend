@@ -15,6 +15,8 @@ import prescriptionService from "src/services/prescription/prescription.service"
 import ViewPrescriptionModal from "./ViewPrescriptionModal";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import EmailIcon from "@mui/icons-material/Email";
+import ArticleIcon from "@mui/icons-material/Article";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -94,7 +96,7 @@ const Prescriptions = () => {
     {
       key: "send",
       label: "GỬI EMAIL",
-      _style: { width: "1%" },
+      _style: { width: "2%" },
       sorter: false,
       filter: false,
     },
@@ -164,26 +166,26 @@ const Prescriptions = () => {
                 view: (row) => {
                   return (
                     <td className="py-2">
-                      <Icon.PencilSquare
+                      <ArticleIcon
                         size="25"
                         style={cursorPointerStyle}
                         onClick={() => {
                           openViewModal(row);
                         }}
-                      ></Icon.PencilSquare>
+                      ></ArticleIcon>
                     </td>
                   );
                 },
                 send: (row) => {
                   return (
                     <td className="py-2">
-                      <Icon.Mailbox2
-                        size="25"
+                      <EmailIcon
+                        size="l"
                         style={cursorPointerStyle}
                         onClick={() => {
                           sendEmail(row);
                         }}
-                      ></Icon.Mailbox2>
+                      ></EmailIcon>
                     </td>
                   );
                 },

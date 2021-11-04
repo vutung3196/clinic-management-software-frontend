@@ -73,6 +73,13 @@ const LabTestsNeededToBePerformed = ({ status }) => {
   };
 
   const toggleAddElementToTheEndOfAQueue = (row, index) => {
+    if (labTests.length <= 1) {
+      setOpenErrorModal(true);
+      setNotificationMessage(
+        "Không thể xếp sau do danh sách chỉ có 1 xét nghiệm"
+      );
+      return;
+    }
     labtestService.movetoend(row.id).then(
       (response) => {
         var arr = [...labTests];
@@ -106,11 +113,6 @@ const LabTestsNeededToBePerformed = ({ status }) => {
     cursor: "pointer",
   };
 
-  const toggleDelete = (row) => {
-    setDeleteModal(!deleteModal);
-    setId(row.id);
-  };
-
   const retrieveAll = () => {
     labtestService
       .getByStatus(status)
@@ -126,6 +128,13 @@ const LabTestsNeededToBePerformed = ({ status }) => {
   };
 
   const toggleAddAnElementToTheBeginningOfAQueue = (row, index) => {
+    if (labTests.length <= 1) {
+      setOpenErrorModal(true);
+      setNotificationMessage(
+        "Không thể xếp lên đầu do danh sách chỉ có 1 xét nghiệm"
+      );
+      return;
+    }
     labtestService.movetobeginning(row.id).then(
       (response) => {
         var arr = [...labTests];
@@ -170,13 +179,6 @@ const LabTestsNeededToBePerformed = ({ status }) => {
       sorter: false,
       filter: false,
     },
-    // {
-    //   key: "print",
-    //   label: "IN",
-    //   _style: { width: "3%" },
-    //   sorter: false,
-    //   filter: false,
-    // },
     {
       key: "movetoend",
       label: "XẾP SAU CÙNG",
@@ -200,27 +202,9 @@ const LabTestsNeededToBePerformed = ({ status }) => {
 
   const toggleEdit = (row, index) => {
     if (index > 0) {
-      labtestService.movetobeginning(row.id).then(
-        (response) => {
-          var arr = [...labTests];
-          var removeIndex = index;
-          ~removeIndex && arr.splice(removeIndex, 1);
-          const newArray = [row].concat(arr); // [ 4, 3, 2, 1 ]
-          for (var i = 0; i < arr.length; i++) {
-            newArray[i].index = i + 1;
-          }
-          setLabTests(newArray);
-          setOpenSuccessModal(true);
-          setNotificationMessage("Xếp phiếu xét nghiệm lên đầu thành công");
-        },
-        (error) => {
-          console.log(error);
-          setOpenErrorModal(true);
-          setNotificationMessage(
-            "Xếp sau phiếu xét nghiệm lên đầu không thành công"
-          );
-        }
-      );
+      setOpenErrorModal(true);
+      setNotificationMessage("Bạn cần làm xét nghiệm cho bệnh nhân đầu tiên");
+      return;
     }
     setPatient(row.patientInformation);
     setId(row.id);

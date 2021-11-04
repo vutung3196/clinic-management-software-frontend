@@ -60,8 +60,6 @@ const CreateOrEditHospitalizedProfileModal = ({
           },
           (error) => {
             console.log(error);
-            //
-
             if (error.response.data.errors !== undefined) {
               console.log(error.response.data.errors);
               let arr = [];
@@ -69,9 +67,9 @@ const CreateOrEditHospitalizedProfileModal = ({
               if (descriptionError !== undefined) {
                 arr.push(descriptionError);
               }
-              var doctorError = error.response.data.errors.doctorId;
-              if (doctorError !== undefined) {
-                arr.push(doctorError);
+              var diseaseNameError = error.response.data.errors.DiseaseName;
+              if (diseaseNameError !== undefined) {
+                arr.push(diseaseNameError);
               }
 
               var errorMessage = "";
@@ -280,7 +278,7 @@ const CreateOrEditHospitalizedProfileModal = ({
                     </Button>
                     <Button
                       variant="contained"
-                      onClick={onClose}
+                      onClick={handleClose}
                       sx={{ mt: 3, ml: 1 }}
                     >
                       HỦY
@@ -289,16 +287,8 @@ const CreateOrEditHospitalizedProfileModal = ({
                 </form>
               </React.Fragment>
             </React.Fragment>
-            {/* </Paper> */}
           </Container>
         </ThemeProvider>
-        {/* <DetailedPatientHospitalizedProfileModal
-          modal={detailedPatientHospitalizedProfileModal}
-          onClose={setDetailedPatientHospitalizedProfileModal}
-          patient={patient}
-          // clinic={clinic}
-          // patientHospitalizedProfileId={patientHospitalizedProfileId}
-        /> */}
       </Box>
     </Modal>
   );

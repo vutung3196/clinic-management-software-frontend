@@ -43,6 +43,7 @@ const EditUserModal = ({
   const [messages, setMessages] = useState([]);
   const [medicalServiceGroupId, setMedicalServiceGroupId] = useState("");
   const [medicalServiceGroups, setMedicalServiceGroups] = useState([]);
+  const [emailAddress, setEmailAddress] = useState("");
 
   const retrieveGroups = () => {
     medicalService
@@ -68,11 +69,13 @@ const EditUserModal = ({
       setUserName(user.userName);
       setPhoneNumber(user.phoneNumber);
       setEnabled(user.enabled);
+      setEmailAddress(user.emailAddress);
       setMedicalServiceGroupId(user.medicalServiceGroupForTestSpecialistId);
     } else {
       setRole("Admin");
       setFullName("");
       setUserName("");
+      setEmailAddress("");
       setPhoneNumber("");
       setEnabled(true);
     }
@@ -111,6 +114,7 @@ const EditUserModal = ({
       userService
         .editUser(
           user.id,
+          emailAddress,
           userName,
           password,
           fullName,
@@ -131,28 +135,50 @@ const EditUserModal = ({
             onClose(false);
           },
           (error) => {
-            setOpenErrorModal(true);
-            setNotificationMessage(
-              "Cập nhật thông tin tài khoản người dùng không thành công"
-            );
-            setUserName("");
-            setPassword("");
-            setPhoneNumber("");
-            setEnabled(true);
-            setRole("");
-            if (error.response.data !== undefined) {
-              var a = error.response.data;
+            var errorMessage = "";
+            if (error.response.data.errors !== undefined) {
+              console.log("===================");
+              console.log(error.response.data.errors);
+              var a = error.response.data.errors.UserName;
               let arr = [];
               if (a !== undefined) {
                 arr.push(a);
               }
-              setMessages(arr);
+
+              a = error.response.data.errors.FullName;
+              if (a !== undefined) {
+                arr.push(a);
+              }
+              a = error.response.data.errors.PassWord;
+              if (a !== undefined) {
+                arr.push(a);
+              }
+              for (let index = 0; index < arr.length; index++) {
+                errorMessage += arr[index];
+                if (index !== arr.length - 1) {
+                  errorMessage += " và ";
+                }
+              }
             }
+            if (typeof error.response.data === "string") {
+              let b = error.response.data;
+              if (b !== undefined) {
+                errorMessage += b;
+              }
+            }
+            setOpenErrorModal(true);
+            setNotificationMessage(errorMessage);
+            setUserName("");
+            setPassword("");
+            setPhoneNumber("");
+            setEnabled(true);
+            setRole("Admin");
           }
         );
     } else {
       userService
         .createUser(
+          emailAddress,
           userName,
           password,
           fullName,
@@ -174,20 +200,45 @@ const EditUserModal = ({
             setPassword("");
             setPhoneNumber("");
             setEnabled(true);
-            setRole("");
-            setOpenSuccessModal(false);
-            setNotificationMessage("Tạo tài khoản người dùng không thành công");
-            if (error.response.data !== undefined) {
-              var a = error.response.data;
+            setRole("Admin");
+            var errorMessage = "";
+            if (error.response.data.errors !== undefined) {
               let arr = [];
+              var a = error.response.data.errors.FullName;
               if (a !== undefined) {
                 arr.push(a);
               }
-              setMessages(arr);
+
+              a = error.response.data.errors.UserName;
+              if (a !== undefined) {
+                arr.push(a);
+              }
+              a = error.response.data.errors.PassWord;
+              if (a !== undefined) {
+                arr.push(a);
+              }
+              for (let index = 0; index < arr.length; index++) {
+                errorMessage += arr[index];
+                if (index !== arr.length - 1) {
+                  errorMessage += " và ";
+                }
+              }
             }
+            if (typeof error.response.data === "string") {
+              let b = error.response.data;
+              if (b !== undefined) {
+                errorMessage += b;
+              }
+            }
+            setOpenErrorModal(true);
+            setNotificationMessage(errorMessage);
           }
         );
     }
+  };
+
+  const onChangeEmail = (email) => {
+    setEmailAddress(email);
   };
 
   const closeModal = () => {
@@ -212,6 +263,19 @@ const EditUserModal = ({
       <form onSubmit={handleSubmit(handleEdit)} novalidate>
         <CModalBody>
           <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                id="filled-full-width"
+                label="Email (ví dụ: abcde@gmail.com)"
+                type="email"
+                fullWidth
+                margin="normal"
+                variant="standard"
+                required
+                value={emailAddress}
+                onChange={(e) => onChangeEmail(e.target.value)}
+              />
+            </Grid>
             {!isEditing ? (
               <Grid item xs={12}>
                 <TextField
@@ -326,11 +390,6 @@ const EditUserModal = ({
           </Grid>
         </CModalBody>
         <CModalFooter>
-          {messages.length > 0
-            ? messages.map((message) => (
-                <CAlert color="danger">{message}</CAlert>
-              ))
-            : ""}
           <Button type="submit" variant="contained" color="primary">
             Lưu
           </Button>

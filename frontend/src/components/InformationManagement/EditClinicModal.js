@@ -1,44 +1,76 @@
 import React, { useState, useEffect } from "react";
 import {
-  CModal,
   CButton,
-  CModalBody,
-  CModalFooter,
+  CCard,
+  CCardBody,
+  CCardFooter,
+  CCol,
+  CContainer,
+  CFormGroup,
+  CForm,
+  CInput as textarea,
+  CInputGroup as CFormControl,
+  CInputGroupPrepend,
+  CInputGroupText,
+  CRow,
+  CCardHeader,
+  CModal,
   CModalHeader,
+  CModalBody,
   CModalTitle,
+  CLabel as h4,
+  CModalFooter,
+  CInputGroup,
+  CInput,
+  CDropdown,
+  CLabel,
+  CAlert,
 } from "@coreui/react";
-import { Alert } from "reactstrap";
-import TextField from "@mui/material/TextField";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { vi } from "date-fns/locale";
-import Stack from "@mui/material/Stack";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import PatientService from "../../services/patient/patient.service";
-import PhoneInput from "react-phone-number-input";
-import Button from "@mui/material/Button";
-import { useForm } from "react-hook-form";
 import Autocomplete from "@mui/material/Autocomplete";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
-import Input from "@material-ui/core/Input";
-import Typography from "@mui/material/Typography";
+import { useForm } from "react-hook-form";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import clinicService from "src/services/clinicservice/clinic.service";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import FileUploadModal from "./FileUploadModal";
 
-const PatientCreateOrEditModal = ({
+const EditClinicModal = ({
   modal,
   onClose,
-  patients,
-  setPatients,
-  patient,
-  isEditing,
+  setClinic,
+  clinic,
+  file,
+  setFile,
   setOpenSuccessModal,
   setOpenErrorModal,
   setNotificationMessage,
 }) => {
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [provinces, setProvinces] = useState([]);
+  const [address, setAddress] = useState("");
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [enabled, setEnabled] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [emailAddress, setEmailAddress] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
+  const [addressCity, setAddressCity] = useState("");
+  const [addressDistrict, setAddressDistrict] = useState("");
+  const [addressStreet, setAddressStreet] = useState("");
+  const [uploadModal, setUploadModal] = useState(false);
+
+  const cursorPointerStyle = {
+    cursor: "pointer",
+  };
+  const { register, handleSubmit, errors, formState } = useForm({
+    mode: "all",
+  });
   const cities = [
     {
       name: "Thành phố Cần Thơ",
@@ -1055,135 +1087,114 @@ const PatientCreateOrEditModal = ({
     },
   ];
 
-  const [fullName, setFullName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [gender, setGender] = useState("Nữ");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [addressDetail, setAddressDetail] = useState("");
-  const [addressCity, setAddressCity] = useState("");
-  const [addressDistrict, setAddressDistrict] = useState("");
-  const [addressStreet, setAddressStreet] = useState("");
-  const [medicalInsuranceCode, setMedicalInsuranceCode] = useState("");
-  const [provinces, setProvinces] = useState([]);
-  const [dateOfBirth, handleDateOfBirthChange] = useState(new Date());
-  const [messages, setMessages] = useState([]);
-
   useEffect(() => {
-    if (isEditing) {
-      setFullName(patient.fullName);
-      setEmailAddress(patient.emailAddress);
-      setPhoneNumber(patient.phoneNumber);
-      setGender(patient.gender);
-      setAddressDetail(patient.addressDetail);
-      setAddressCity(patient.addressCity);
-      setAddressStreet(patient.addressStreet);
-      setAddressDistrict(patient.addressDistrict);
-      setMedicalInsuranceCode(patient.medicalInsuranceCode);
-      handleDateOfBirthChange(patient.dateOfBirth);
-    } else {
-      setProvinces(cities[0].districts);
-      setFullName("");
-      setEmailAddress("");
-      setPhoneNumber("");
-      setGender("Nữ");
-      setAddressDetail("");
-      setAddressCity(cities[0].name);
-      setAddressStreet("");
-      setAddressDistrict("");
-      setMedicalInsuranceCode("");
-      handleDateOfBirthChange(new Date());
-    }
-  }, [patient, isEditing]);
+    setName(clinic.name);
+    setUserName(clinic.username);
+    setAddress(clinic.address);
+    setPhoneNumber(clinic.phoneNumber);
+    setEnabled(clinic.enabled);
+    setEmailAddress(clinic.emailAddress);
+    setAddressDetail(clinic.addressDetail);
+    setAddressCity(clinic.addressCity);
+    setAddressStreet(clinic.addressStreet);
+    setAddressDistrict(clinic.addressDistrict);
+  }, [clinic, modal]);
 
-  const onChangeFullName = (patientName) => {
-    setFullName(patientName);
+  const onChangeUsername = (value) => {
+    setUserName(value);
   };
 
-  const onChangeEmail = (email) => {
-    setEmailAddress(email);
+  const onChangeAddress = (value) => {
+    setAddress(value);
   };
 
-  const onChangeGender = (event) => {
-    const gender = event.target.value;
-    console.log("tung");
-    console.log(gender);
-    setGender(gender);
+  const onChangePhoneNumber = (value) => {
+    setPhoneNumber(value);
   };
 
-  const onChangePhoneNumber = (event) => {
-    const phoneNumber = event.target.value;
-    setPhoneNumber(phoneNumber);
+  const onChangePassword = (value) => {
+    setPassword(value);
   };
 
-  const onChangeDetailedAddress = (detailedAddress) => {
-    setAddressDetail(detailedAddress);
+  const onChangeName = (value) => {
+    setName(value);
   };
 
-  const onChangeAddressCity = (addressCity) => {
-    setAddressCity(addressCity);
+  const handleEnabledChange = (e) => {
+    setEnabled(e.target.checked);
+    console.log(enabled);
   };
 
-  const onChangeOccupation = (occupation) => {
-    setMedicalInsuranceCode(occupation);
-  };
-
-  const handleGenderChange = (e) => {
-    console.log(e.target.value);
-    setGender(e.target.value);
-    console.log("ahahahha");
-  };
-
-  const handleCreate = () => {
-    if (isEditing === false) {
-      PatientService.addPatient(
-        fullName,
-        dateOfBirth,
-        gender,
+  const handleEdit = () => {
+    console.log("ahahahhaha");
+    console.log(emailAddress);
+    clinicService
+      .editClinic(
+        clinic.id,
+        name,
         phoneNumber,
         emailAddress,
+        "clinic.username",
+        "password",
         addressDetail,
         addressStreet,
         addressDistrict,
         addressCity,
-        medicalInsuranceCode
-      ).then(
+        true
+      )
+      .then(
         (response) => {
-          let patient = response.data;
-          patients = [patient].concat(patients);
-          setPatients(patients);
           setOpenSuccessModal(true);
-          setNotificationMessage("Tạo mới bệnh nhân thành công");
+          setNotificationMessage("Cập nhật phòng khám thành công");
+          let updatedClinic = {
+            id: clinic.id,
+            name,
+            phoneNumber,
+            address,
+            username,
+            password,
+            createdAt: clinic.createdAt,
+            addressDetail,
+            addressStreet,
+            addressDistrict,
+            addressCity,
+            emailAddress: emailAddress,
+          };
+          updatedClinic.addressDetailInformation =
+            updatedClinic.addressDetail +
+            ", " +
+            updatedClinic.addressStreet +
+            ", " +
+            updatedClinic.addressDistrict +
+            ", " +
+            updatedClinic.addressCity;
+          setClinic(updatedClinic);
           onClose(false);
         },
         (error) => {
           if (error.response.data.errors !== undefined) {
             let arr = [];
-            var error1 = error.response.data.errors.AddressStreet;
+            var error1 = error.response.data.errors.UserName;
             if (error1 !== undefined) {
               arr.push(error1);
             }
-            var error2 = error.response.data.errors.MedicalInsuranceCode;
+            var error2 = error.response.data.errors.Password;
             if (error2 !== undefined) {
               arr.push(error2);
             }
 
-            var error3 = error.response.data.errors.AddressDetail;
+            var error3 = error.response.data.errors.Name;
             if (error3 !== undefined) {
               arr.push(error3);
             }
 
             var error4 = error.response.data.errors.EmailAddress;
-            var error5 = error.response.data.errors.FullName;
+            var error5 = error.response.data.errors.PhoneNumber;
             if (error4 !== undefined) {
               arr.push(error4);
             }
             if (error5 !== undefined) {
               arr.push(error5);
-            }
-
-            var error6 = error.response.data.errors.EmailAddress;
-            if (error6 !== undefined) {
-              arr.push(error6);
             }
 
             var errorMessage = "";
@@ -1193,179 +1204,86 @@ const PatientCreateOrEditModal = ({
                 errorMessage += " và ";
               }
             }
-            setOpenErrorModal(true);
-            setNotificationMessage(errorMessage);
           }
+          setOpenErrorModal(true);
+          setNotificationMessage(errorMessage);
         }
       );
-    } else {
-      PatientService.editPatient(
-        patient.id,
-        fullName,
-        dateOfBirth,
-        gender,
-        phoneNumber,
-        emailAddress,
-        addressDetail,
-        addressStreet,
-        addressDistrict,
-        addressCity,
-        medicalInsuranceCode
-      ).then(
-        (response) => {
-          let updatedPatient = response.data;
-          var updateIndex = patients.map((item) => item.id).indexOf(patient.id);
-          patients[updateIndex] = updatedPatient;
-          setPatients(patients);
-          setMessages([]);
-          setOpenSuccessModal(true);
-          setNotificationMessage("Cập nhật bệnh nhân thành công");
-          onClose(false);
-        },
-        (error) => {
-          if (error.response.data.errors !== undefined) {
-            let arr = [];
-            var error1 = error.response.data.errors.AddressStreet;
-            if (error1 !== undefined) {
-              arr.push(error1);
-            }
-            var error2 = error.response.data.errors.MedicalInsuranceCode;
-            if (error2 !== undefined) {
-              arr.push(error2);
-            }
-
-            var error3 = error.response.data.errors.AddressDetail;
-            if (error3 !== undefined) {
-              arr.push(error3);
-            }
-
-            var error4 = error.response.data.errors.EmailAddress;
-            var error5 = error.response.data.errors.FullName;
-            if (error4 !== undefined) {
-              arr.push(error4);
-            }
-            if (error5 !== undefined) {
-              arr.push(error5);
-            }
-
-            var error6 = error.response.data.errors.EmailAddress;
-            if (error6 !== undefined) {
-              arr.push(error6);
-            }
-
-            var errorMessage = "";
-            for (let index = 0; index < arr.length; index++) {
-              errorMessage += arr[index];
-              if (index !== arr.length - 1) {
-                errorMessage += " và ";
-              }
-            }
-            setOpenErrorModal(true);
-            setNotificationMessage(errorMessage);
-          }
-        }
-      );
-    }
   };
 
   const closeModal = () => {
+    setPassword(clinic.total);
+    setName(clinic.description);
+    setUserName(clinic.payerName);
     setMessages([]);
-    onClose(false);
+    onClose(!modal);
   };
-
-  const { register, handleSubmit, errors, formState } = useForm({
-    mode: "all",
-  });
 
   return (
     <CModal show={modal} onClose={closeModal}>
       <CModalHeader closeButton>
-        <CModalTitle>Bệnh nhân</CModalTitle>
+        <CModalTitle>Cập nhật phòng khám</CModalTitle>
       </CModalHeader>
-      <form onSubmit={handleSubmit(handleCreate)} novalidate>
+      <form onSubmit={handleSubmit(handleEdit)} novalidate>
         <CModalBody>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
+                id="filled-full-width"
+                value={name}
+                onChange={(e) => onChangeName(e.target.value)}
+                label="Tên phòng khám"
                 required
-                id="fullName"
-                name="fullName"
-                label="Họ và tên"
+                style={{ margin: 8 }}
                 fullWidth
+                margin="normal"
                 variant="standard"
-                value={fullName}
-                onChange={(e) => onChangeFullName(e.target.value)}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <LocalizationProvider locale={vi} dateAdapter={AdapterDateFns}>
-                <Stack spacing={1} sx={{ width: 250 }}>
-                  <DesktopDatePicker
-                    label="Ngày tháng năm sinh"
-                    value={dateOfBirth}
-                    minDate={new Date("1900-01-01")}
-                    onChange={(newValue) => {
-                      handleDateOfBirthChange(newValue);
-                    }}
-                    variant="standard"
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </Stack>
-              </LocalizationProvider>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl component="fieldset">
-                <FormLabel component="legend">Giới tính</FormLabel>
-                <RadioGroup
-                  row
-                  defaultValue="Nam"
-                  required
-                  aria-label="gender"
-                  name="row-radio-buttons-group"
-                  value={gender}
-                  onChange={onChangeGender}
-                >
-                  <FormControlLabel value="Nữ" control={<Radio />} label="Nữ" />
-                  <FormControlLabel
-                    value="Nam"
-                    control={<Radio />}
-                    label="Nam"
-                  />
-                  {/* <FormControlLabel
-                    value="other"
-                    control={<Radio />}
-                    label="Khác"
-                  /> */}
-                </RadioGroup>
-              </FormControl>
             </Grid>
             <Grid item xs={12}>
               <PhoneInput
                 defaultCountry="VN"
                 id="filled-full-width"
-                placeholder="Số điện thoại di động (ví dụ 912068946)"
+                placeholder="Số điện thoại"
                 value={phoneNumber}
                 onChange={setPhoneNumber}
               />
-              {/* <Typography component="h2" variant="h6" align="left">
-                Ví dụ: 912068946
-              </Typography> */}
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 id="filled-full-width"
                 label="Email (ví dụ: abcde@gmail.com)"
                 type="email"
                 fullWidth
+                required
                 margin="normal"
                 variant="standard"
                 value={emailAddress}
-                onChange={(e) => onChangeEmail(e.target.value)}
+                onChange={(e) => setEmailAddress(e.target.value)}
               />
             </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="city"
+                name="city"
+                label="Logo"
+                fullWidth
+                autoComplete="shipping address-level2"
+                variant="standard"
+                value={file.name}
+              />
+              <FileUploadIcon
+                style={{ cursorPointerStyle }}
+                onClick={() => setUploadModal(!uploadModal)}
+              />
+            </Grid>
+
             <Grid item xs={12} sm={7}>
               <Autocomplete
                 options={cities}
+                required
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -1401,6 +1319,7 @@ const PatientCreateOrEditModal = ({
                 options={provinces}
                 freeSolo
                 autoSelect
+                required
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -1423,6 +1342,7 @@ const PatientCreateOrEditModal = ({
                 id="city"
                 name="city"
                 label="Phố"
+                required
                 fullWidth
                 autoComplete="shipping address-level2"
                 variant="standard"
@@ -1435,6 +1355,7 @@ const PatientCreateOrEditModal = ({
                 id="address2"
                 name="address2"
                 label="Số nhà, ngõ"
+                required
                 fullWidth
                 autoComplete="shipping address-line2"
                 variant="standard"
@@ -1442,24 +1363,14 @@ const PatientCreateOrEditModal = ({
                 onChange={(e) => setAddressDetail(e.target.value)}
               />
             </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <TextField
-                id="insurance-code"
-                type="number"
-                name="insurance-code"
-                label="Mã số thẻ BHYT (nếu có)"
-                fullWidth
-                autoComplete="shipping country"
-                variant="standard"
-                value={medicalInsuranceCode}
-                onChange={(e) => setMedicalInsuranceCode(e.target.value)}
-              />
-            </Grid>
           </Grid>
         </CModalBody>
-
         <CModalFooter>
+          {messages.length > 0
+            ? messages.map((message) => (
+                <CAlert color="danger">{message}</CAlert>
+              ))
+            : ""}
           <Button
             type="submit"
             variant="contained"
@@ -1468,14 +1379,21 @@ const PatientCreateOrEditModal = ({
           >
             Lưu
           </Button>
-
           <CButton color="secondary" onClick={() => closeModal()}>
             Hủy
           </CButton>
         </CModalFooter>
       </form>
+      <FileUploadModal
+        modal={uploadModal}
+        onClose={setUploadModal}
+        setFile={setFile}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
+      />
     </CModal>
   );
 };
 
-export default PatientCreateOrEditModal;
+export default EditClinicModal;

@@ -88,7 +88,7 @@ const LabOrderFormsForTestSpecialist = () => {
       <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>Danh sách cần khám</CCardHeader>
+            <CCardHeader>Danh sách phiếu chỉ định</CCardHeader>
             <CCardBody>
               <CDataTable
                 items={labOrderForms}

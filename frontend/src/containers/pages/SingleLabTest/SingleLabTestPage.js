@@ -130,7 +130,9 @@ const SingleLabTestPage = (props) => {
             <div class="dochead2">
               <div style={{ "line-height": "0.3" }}>
                 <p>Tên đơn vị: Phòng khám {labTest.clinicInformation.name}</p>
-                <p>Địa chỉ: {labTest.clinicInformation.address}</p>
+                <p>
+                  Địa chỉ: {labTest.clinicInformation.addressDetailInformation}
+                </p>
                 <p>Điện thoại: {labTest.clinicInformation.phoneNumber}</p>
               </div>
             </div>

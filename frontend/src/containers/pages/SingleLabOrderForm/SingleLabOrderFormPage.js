@@ -146,7 +146,13 @@ const SingleLabOrderFormPage = (props) => {
                   Tên đơn vị: Phòng khám{" "}
                   {labOrderInformation.clinicInformation.name}
                 </p>
-                <p>Địa chỉ: {labOrderInformation.clinicInformation.address}</p>
+                <p>
+                  Địa chỉ:{" "}
+                  {
+                    labOrderInformation.clinicInformation
+                      .addressDetailInformation
+                  }
+                </p>
                 <p>
                   Điện thoại:{" "}
                   {labOrderInformation.clinicInformation.phoneNumber}
@@ -519,7 +525,7 @@ const SingleLabOrderFormPage = (props) => {
                 <br />
                 <br />
                 <br />
-                Người lập
+                {labOrderInformation.doctorName}
               </div>
               <div class="clear"></div>
             </div>

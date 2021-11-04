@@ -38,7 +38,105 @@ const LabTestsWaitingForResult = ({ status }) => {
     dateOfBirthDetail: "10/04/2021",
     medicalInsuranceCode: "0312312313",
   };
-  const [labTest, setLabTest] = useState([]);
+
+  const constlabTest = {
+    id: 2,
+    createdAt: "10/11/2021",
+    labOrderFormId: 2,
+    labOrderFormCode: "CĐ7591",
+    description: "đầu gối trái",
+    medicalServiceName: "MRI đầu gối",
+    doctorVisitingFormCode: null,
+    statusDisplayed: "Đang chờ kết quả",
+    status: 2,
+    doctorVisitingFormId: 16,
+    patientDetailedInformation: "Vũ Tùng-Nam-0 tuổi",
+    result: "khớp gối bình thường.",
+    imageFiles: [
+      {
+        id: 3,
+        publicId: "hapham/2021-10-13/pkn2tzahcnolmspjlwy7",
+        filePath: null,
+        base64Image: null,
+        url: "http://res.cloudinary.com/dzftzmcxb/image/upload/v1634117967/hapham/2021-10-13/pkn2tzahcnolmspjlwy7.png",
+        secureUrl:
+          "https://res.cloudinary.com/dzftzmcxb/image/upload/v1634117967/hapham/2021-10-13/pkn2tzahcnolmspjlwy7.png",
+        createdAt: "10/13/2021",
+        name: "signature (1)",
+        description: null,
+      },
+      {
+        id: 6,
+        publicId: "hapham/2021-10-13/soizrdmlxcgu954tujec",
+        filePath: null,
+        base64Image: null,
+        url: "http://res.cloudinary.com/dzftzmcxb/image/upload/v1634119329/hapham/2021-10-13/soizrdmlxcgu954tujec.png",
+        secureUrl:
+          "https://res.cloudinary.com/dzftzmcxb/image/upload/v1634119329/hapham/2021-10-13/soizrdmlxcgu954tujec.png",
+        createdAt: "10/13/2021",
+        name: "signature (1)",
+        description: null,
+      },
+      {
+        id: 7,
+        publicId: "hapham/2021-10-13/cw8w30s9fdsfbs0uiueh",
+        filePath: null,
+        base64Image: null,
+        url: "http://res.cloudinary.com/dzftzmcxb/image/upload/v1634119377/hapham/2021-10-13/cw8w30s9fdsfbs0uiueh.png",
+        secureUrl:
+          "https://res.cloudinary.com/dzftzmcxb/image/upload/v1634119377/hapham/2021-10-13/cw8w30s9fdsfbs0uiueh.png",
+        createdAt: "10/13/2021",
+        name: "signature",
+        description: null,
+      },
+      {
+        id: 8,
+        publicId: "hapham/2021-10-13/p9jkb1caa8peefisnt8v",
+        filePath: null,
+        base64Image: null,
+        url: "http://res.cloudinary.com/dzftzmcxb/image/upload/v1634119472/hapham/2021-10-13/p9jkb1caa8peefisnt8v.png",
+        secureUrl:
+          "https://res.cloudinary.com/dzftzmcxb/image/upload/v1634119472/hapham/2021-10-13/p9jkb1caa8peefisnt8v.png",
+        createdAt: "10/13/2021",
+        name: "signature",
+        description: null,
+      },
+      {
+        id: 9,
+        publicId: "hapham/2021-10-13/ycxguvfeunw30evmeq5n",
+        filePath: null,
+        base64Image: null,
+        url: "http://res.cloudinary.com/dzftzmcxb/image/upload/v1634119606/hapham/2021-10-13/ycxguvfeunw30evmeq5n.png",
+        secureUrl:
+          "https://res.cloudinary.com/dzftzmcxb/image/upload/v1634119606/hapham/2021-10-13/ycxguvfeunw30evmeq5n.png",
+        createdAt: "10/13/2021",
+        name: "signature",
+        description: null,
+      },
+    ],
+    patientInformation: {
+      id: 7,
+      clinicId: 1,
+      fullName: "Vũ Tùng",
+      emailAddress: "mr.mocmoc@gmail.com",
+      phoneNumber: "+84912068946",
+      gender: "Nam",
+      createdAt: "10/04/2021",
+      updatedAt: "10/04/2021",
+      addressDetail: "399",
+      addressCity: "Thành phố Hà Nội",
+      addressStreet: "Hoang Mai",
+      addressDistrict: "Hoang Mai ",
+      dateOfBirth: "2021-10-08T13:38:13",
+      dateOfBirthDetail: "10/08/2021",
+      age: 0,
+      medicalInsuranceCode: "3132393913",
+    },
+    clinicInformation: null,
+    doctorName: "Doctor 1",
+    index: 0,
+  };
+  const [labTest, setLabTest] = useState(constlabTest);
   const [labTests, setLabTests] = useState([]);
   const [doctorVisitingForm, setDoctorVisitingForm] = useState("");
   const [details, setDetails] = useState([]);
@@ -90,6 +188,9 @@ const LabTestsWaitingForResult = ({ status }) => {
       .then((response) => {
         console.log("really");
         console.log(response.data);
+        for (let i = 0; i < response.data.length; i++) {
+          response.data[i].index = i + 1;
+        }
         setLabTests(response.data);
       })
       .catch((e) => {
@@ -132,25 +233,14 @@ const LabTestsWaitingForResult = ({ status }) => {
     values: [5, 10, 20],
   };
 
-  // const toggleView = (row) => {
-  //   setPatient(row.patientInformation);
-  //   setId(row.id);
-  //   setLabTests(row.labTests);
-  //   setLabOrderForm(row);
-  //   setDetailedModal(true);
-  // };
-
   const toggleEdit = (row) => {
+    console.log(row);
+    console.log("ahihihi");
     setPatient(row.patientInformation);
     setId(row.id);
-    setLabTests(row.labTests);
     setLabTest(row);
     setLabTestModal(!labTestModal);
   };
-
-  // const handleChangeStatus = (event) => {
-  //   // setStatus(event.target.value);
-  // };
 
   return (
     <>

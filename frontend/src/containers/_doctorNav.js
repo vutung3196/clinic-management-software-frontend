@@ -22,7 +22,7 @@ const _doctorNav = [
       {
         _tag: "CSidebarNavItem",
         name: "Hồ sơ y tế",
-        to: "/doctorvisitingforms",
+        to: "/patienthospitalizedprofiles",
       },
       {
         _tag: "CSidebarNavItem",

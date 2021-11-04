@@ -37,7 +37,8 @@ const createClinic = async (
   addressStreet,
   addressDistrict,
   addressCity,
-  enabled
+  enabled,
+  firstTimeRegistration
 ) => {
   const response = await axios.post(CLINIC_INFORMATION_API_URL, {
     name,
@@ -50,6 +51,7 @@ const createClinic = async (
     addressDistrict,
     addressCity,
     enabled,
+    firstTimeRegistration,
   });
   return response.data;
 };

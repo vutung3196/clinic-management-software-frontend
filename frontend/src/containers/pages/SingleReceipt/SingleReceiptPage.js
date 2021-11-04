@@ -142,7 +142,13 @@ const SingleReceiptPage = (props) => {
                   Tên đơn vị: Phòng khám{" "}
                   {receiptInformation.clinicInformation.name}
                 </p>
-                <p>Địa chỉ: {receiptInformation.clinicInformation.address}</p>
+                <p>
+                  Địa chỉ:{" "}
+                  {
+                    receiptInformation.clinicInformation
+                      .addressDetailInformation
+                  }
+                </p>
                 <p>
                   Điện thoại: {receiptInformation.clinicInformation.phoneNumber}
                 </p>
