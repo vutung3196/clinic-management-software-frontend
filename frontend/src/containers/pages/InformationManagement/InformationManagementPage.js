@@ -2,6 +2,7 @@ import React from "react";
 import { TheFooter, TheHeader } from "../../index";
 import InformationManagement from "../../../components/InformationManagement";
 import Sidebar from "../../../components/Sidebar";
+import TextField from "@mui/material/Button";
 
 const InformationManagementPage = (props) => {
   return (

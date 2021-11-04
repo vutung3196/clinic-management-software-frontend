@@ -154,8 +154,6 @@ const CreateLabOrderFormModal = ({
       };
       labTestInformation.push(a);
     }
-    console.log("AYYA");
-    console.log(patientHospitalizedProfileId);
     laborderformService
       .create(
         description,
@@ -179,27 +177,31 @@ const CreateLabOrderFormModal = ({
           onClose(false);
         },
         (error) => {
-          console.log("=========");
-          console.log(error);
+          console.log(error.response.data);
+          var errorMessage = "";
+          if (error.response.data.errors !== undefined) {
+            console.log(error.response.data.errors);
+            let arr = [];
+            var descriptionError = error.response.data.errors.Description;
+            if (descriptionError !== undefined) {
+              arr.push(descriptionError);
+            }
+            for (let index = 0; index < arr.length; index++) {
+              errorMessage += arr[index];
+              if (index !== arr.length - 1) {
+                errorMessage += " và ";
+              }
+            }
+          }
+          if (
+            (error.response.data !== null &&
+              typeof error.response.data === "string") ||
+            error.response.data instanceof String
+          ) {
+            errorMessage += error.response.data;
+          }
           setOpenErrorModal(true);
-          setNotificationMessage("Tạo phiếu chỉ định không thành công");
-          console.log("ahahah");
-          // if (error.response.data.errors !== undefined) {
-          //   var a = error.response.data.errors.DiagnosedDescription;
-          //   let arr = [];
-          //   if (a !== undefined) {
-          //     arr.push(a);
-          //   }
-          //   setMessages(arr);
-          // }
-          // if (typeof error.response.data === "string") {
-          //   let b = error.response.data;
-          //   let arr = [];
-          //   if (b !== undefined) {
-          //     arr.push(b);
-          //   }
-          //   setMessages(arr);
-          // }
+          setNotificationMessage(errorMessage);
         }
       );
   };

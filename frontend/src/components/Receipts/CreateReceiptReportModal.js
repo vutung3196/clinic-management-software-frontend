@@ -44,6 +44,12 @@ const CreateReceiptReportModal = ({
   const [containingPatientPhoneNumber, setContainingPatientPhoneNumber] =
     React.useState(false);
   const handleViewReport = () => {
+    if (startDate > endDate) {
+      setOpenErrorModal(true);
+      setNotificationMessage("Ngày bắt đầu cần sớm hơn ngày kết thúc");
+      return;
+    }
+
     console.log(startDate.toJSON());
     console.log(endDate.toJSON());
     window.open(

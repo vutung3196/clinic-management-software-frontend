@@ -116,10 +116,6 @@ const FilesUpload = ({
                             ></Icon.Image>
                             {isPrescriptionModal === false ? (
                               <>
-                                {/* <Icon.PencilSquare
-                                  class="icon-pencil-square"
-                                  onClick={() => toggleEditModal(entry)}
-                                /> */}
                                 <Icon.Trash
                                   class="icon-trash"
                                   onClick={() => toggleDeleteModal(entry)}

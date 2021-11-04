@@ -162,25 +162,28 @@ const EditLabTestModal = ({
         onClose(false);
       },
       (error) => {
-        console.log("=========");
-        console.log(error.response.data);
-        console.log("ahahah");
-        // if (error.response.data.errors !== undefined) {
-        //   var a = error.response.data.errors.DiagnosedDescription;
-        //   let arr = [];
-        //   if (a !== undefined) {
-        //     arr.push(a);
-        //   }
-        //   setMessages(arr);
-        // }
-        // if (typeof error.response.data === "string") {
-        //   let b = error.response.data;
-        //   let arr = [];
-        //   if (b !== undefined) {
-        //     arr.push(b);
-        //   }
-        //   setMessages(arr);
-        // }
+        var errorMessage = "";
+        if (error.response.data.errors !== undefined) {
+          var a = error.response.data.errors.Result;
+          let arr = [];
+          if (a !== undefined) {
+            arr.push(a);
+          }
+          for (let index = 0; index < arr.length; index++) {
+            errorMessage += arr[index];
+            if (index !== arr.length - 1) {
+              errorMessage += " và ";
+            }
+          }
+        }
+        if (typeof error.response.data === "string") {
+          let b = error.response.data;
+          if (b !== undefined) {
+            errorMessage += b;
+          }
+        }
+        setOpenErrorModal(true);
+        setNotificationMessage(errorMessage);
       }
     );
   };

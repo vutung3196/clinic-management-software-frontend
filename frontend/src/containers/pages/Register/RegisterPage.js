@@ -67,11 +67,16 @@ const RegisterPage = () => {
     clinicService
       .createClinic(
         clinicName,
+        phoneNumber,
         emailAddress,
         username,
-        phoneNumber,
         password,
-        false
+        "",
+        "",
+        "",
+        "",
+        false,
+        true
       )
       .then(
         (response) => {
@@ -81,6 +86,7 @@ const RegisterPage = () => {
           );
         },
         (error) => {
+          var errorMessage = "";
           if (error.response.data.errors !== undefined) {
             let arr = [];
             var error1 = error.response.data.errors.UserName;
@@ -92,16 +98,36 @@ const RegisterPage = () => {
               arr.push(error2);
             }
 
-            var errorMessage = "";
+            var error3 = error.response.data.errors.Name;
+            if (error3 !== undefined) {
+              arr.push(error3);
+            }
+
+            var error4 = error.response.data.errors.EmailAddress;
+            var error5 = error.response.data.errors.PhoneNumber;
+            if (error4 !== undefined) {
+              arr.push(error4);
+            }
+            if (error5 !== undefined) {
+              arr.push(error5);
+            }
+
             for (let index = 0; index < arr.length; index++) {
               errorMessage += arr[index];
               if (index !== arr.length - 1) {
                 errorMessage += " và ";
               }
             }
-            setOpenErrorModal(true);
-            setNotificationMessage(errorMessage);
           }
+
+          if (typeof error.response.data === "string") {
+            let b = error.response.data;
+            if (b !== undefined) {
+              errorMessage += b;
+            }
+          }
+          setOpenErrorModal(true);
+          setNotificationMessage(errorMessage);
         }
       );
   };

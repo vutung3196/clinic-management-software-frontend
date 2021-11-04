@@ -18,6 +18,26 @@ const upload = async (labTestId, cloudinaryFiles) => {
   return response.data;
 };
 
+const uploadLogo = async (cloudinaryFile) => {
+  const response = await axios.post(
+    API_URL + "/cliniclogo",
+    {
+      cloudinaryFile,
+    },
+    config
+  );
+  return response.data;
+};
+
+const deleteCloudinaryFile = async (publicId) => {
+  const response = await axios.delete(API_URL + "/cloudinary", {
+    data: {
+      publicId,
+    },
+  });
+  return response.data;
+};
+
 const getByLabTestId = async (id) => {
   const response = await axios.get(API_URL + "?labTestId=" + id, config);
   return response.data;
@@ -54,4 +74,6 @@ export default {
   edit,
   deleteFile,
   getByVisitingForm,
+  uploadLogo,
+  deleteCloudinaryFile,
 };

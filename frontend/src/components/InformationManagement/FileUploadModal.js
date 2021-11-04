@@ -16,9 +16,7 @@ import * as Icon from "react-bootstrap-icons";
 const FileUploadModal = ({
   modal,
   onClose,
-  patientId,
-  retrieveFiles,
-  labTestId,
+  setFile,
   setOpenSuccessModal,
   setOpenErrorModal,
   setNotificationMessage,
@@ -47,12 +45,11 @@ const FileUploadModal = ({
     },
   });
 
-  const init = [];
-  const [readyFiles, setReadyFiles] = useState(init);
+  const [readyFile, setReadyFile] = useState("");
   const [currentData, setCurrentData] = useState("");
 
   const setCloseModal = () => {
-    setReadyFiles(init);
+    setReadyFile("");
     onClose(false);
   };
 
@@ -78,31 +75,34 @@ const FileUploadModal = ({
       .then((data) => {
         console.log(data);
         setCurrentData(data);
-        setReadyFiles((prev) => [...readyFiles, data]);
+        console.log(data);
+        setReadyFile(data);
       })
       .catch((err) => console.log(err));
   };
 
   const onDrop = (files) => {
+    if (readyFile !== "") {
+      setOpenErrorModal(true);
+      setNotificationMessage("Bạn chỉ được tải lên 1 file");
+      return;
+    }
     files.map((file) => {
       uploadImage(file);
     });
   };
 
   const upload = async () => {
-    fileService.upload(labTestId, readyFiles).then(
+    fileService.uploadLogo(readyFile).then(
       (response) => {
         // go to the dashboard page
+        setFile(response.data);
         console.log("upload successfully");
         setOpenSuccessModal(true);
         setNotificationMessage("Ảnh tải lên thành công");
-        setTimeout(() => {
-          retrieveFiles();
-        }, 1000);
       },
       (error) => {
         console.log(error);
-        console.log("=========");
         setOpenErrorModal(true);
         setNotificationMessage("Ảnh tải lên không thành công");
         console.log(error.response);
@@ -148,6 +148,20 @@ const FileUploadModal = ({
     allFiles.forEach((f) => f.remove());
   };
 
+  const removeFile = () => {
+    console.log(readyFile.public_id);
+    fileService.deleteCloudinaryFile(readyFile.public_id).then(
+      (response) => {
+        setNotificationMessage("Xóa ảnh thành công");
+        setReadyFile("");
+      },
+      (error) => {
+        setOpenErrorModal(true);
+        setNotificationMessage("Xóa ảnh không thành công");
+      }
+    );
+  };
+
   const style = useMemo(
     () => ({
       ...baseStyle,
@@ -163,17 +177,8 @@ const FileUploadModal = ({
     "margin-top": "5px",
   };
 
-  const removeElement = (entry, index) => {
-    fileService.deleteCloudinaryFile(entry.public_id).then(
-      (response) => {
-        setNotificationMessage("Xóa ảnh thành công");
-        setReadyFiles(readyFiles.filter((_, i) => i !== index));
-      },
-      (error) => {
-        setOpenErrorModal(true);
-        setNotificationMessage("Xóa ảnh không thành công");
-      }
-    );
+  const removeElement = (index) => {
+    setReadyFile(readyFile.filter((_, i) => i !== index));
   };
 
   return (
@@ -228,17 +233,19 @@ const FileUploadModal = ({
           <div>
             <aside>
               <ul className="list-group mt-2">
-                {readyFiles.map((entry, index) => (
+                {readyFile !== "" ? (
                   <li className="list-group-item list-group-item-success">
-                    {entry.original_filename}
+                    {readyFile.original_filename}
                     <Icon.Trash
                       style={styleRemove}
                       onClick={() => {
-                        removeElement(entry, index);
+                        removeFile();
                       }}
                     ></Icon.Trash>
                   </li>
-                ))}
+                ) : (
+                  ""
+                )}
               </ul>
             </aside>
           </div>
@@ -248,7 +255,7 @@ const FileUploadModal = ({
         <CButton
           color="primary"
           onClick={() => upload()}
-          disabled={readyFiles.length === 0}
+          disabled={readyFile.length === 0}
         >
           LƯU
         </CButton>{" "}

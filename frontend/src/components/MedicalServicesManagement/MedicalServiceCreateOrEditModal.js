@@ -55,6 +55,7 @@ const MedicalServiceCreateOrEditModal = ({
     } else {
       setName("");
       setDescription("");
+      setPrice("");
     }
   }, [modal, medicalService, isEditing]);
 
@@ -82,11 +83,16 @@ const MedicalServiceCreateOrEditModal = ({
           (error) => {
             if (error.response.data.errors !== undefined) {
               let arr = [];
-              var error1 = error.response.data.errors.AddressStreet;
+              var error1 = error.response.data.errors.Name;
               if (error1 !== undefined) {
                 arr.push(error1);
               }
-              var error2 = error.response.data.errors.MedicalInsuranceCode;
+              var error2 = error.response.data.errors.Description;
+              if (error2 !== undefined) {
+                arr.push(error2);
+              }
+
+              error2 = error.response.data.errors.Price;
               if (error2 !== undefined) {
                 arr.push(error2);
               }
@@ -185,7 +191,7 @@ const MedicalServiceCreateOrEditModal = ({
                 required
                 id="fullName"
                 name="fullName"
-                label="Giá tiền"
+                label="Giá tiền (VNĐ)"
                 type="number"
                 fullWidth
                 variant="standard"

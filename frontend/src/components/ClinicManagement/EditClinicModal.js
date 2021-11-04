@@ -1180,6 +1180,7 @@ const EditClinicModal = ({
               addressStreet,
               addressDistrict,
               addressCity,
+              emailAddress,
             };
             var updateIndex = clinics.map((item) => item.id).indexOf(clinic.id);
             clinics[updateIndex] = updatedClinic;
@@ -1187,16 +1188,32 @@ const EditClinicModal = ({
             onClose(false);
           },
           (error) => {
-            setOpenSuccessModal(true);
-            setNotificationMessage("Cập nhật phòng khám không thành công");
-            // if (error.response.data !== undefined) {
-            //   var a = error.response.data;
-            //   let arr = [];
-            //   if (a !== undefined) {
-            //     arr.push(a);
-            //   }
-            //   setMessages(arr);
-            // }
+            if (error.response.data.errors !== undefined) {
+              let arr = [];
+              var error3 = error.response.data.errors.Name;
+              if (error3 !== undefined) {
+                arr.push(error3);
+              }
+
+              var error4 = error.response.data.errors.EmailAddress;
+              var error5 = error.response.data.errors.PhoneNumber;
+              if (error4 !== undefined) {
+                arr.push(error4);
+              }
+              if (error5 !== undefined) {
+                arr.push(error5);
+              }
+
+              var errorMessage = "";
+              for (let index = 0; index < arr.length; index++) {
+                errorMessage += arr[index];
+                if (index !== arr.length - 1) {
+                  errorMessage += " và ";
+                }
+              }
+            }
+            setOpenErrorModal(true);
+            setNotificationMessage(errorMessage);
           }
         );
     } else {

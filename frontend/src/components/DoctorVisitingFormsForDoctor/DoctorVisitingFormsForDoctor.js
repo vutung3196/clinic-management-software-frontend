@@ -250,7 +250,7 @@ const DoctorVisitingFormsForDoctor = () => {
     { key: "index", label: "STT", _style: { width: "1%" } },
     { key: "code", label: "MÃ PHIẾU KHÁM", _style: { width: "8%" } },
     { key: "patientDetailedInformation", label: "TÊN BỆNH NHÂN" },
-    { key: "description", label: "MÔ TẢ" },
+    { key: "description", label: "LÝ DO KHÁM" },
     { key: "visitingStatusDisplayed", label: "TRẠNG THÁI" },
     { key: "updatedAt", label: "GIỜ CẬP NHẬT" },
     {

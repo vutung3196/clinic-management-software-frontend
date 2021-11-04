@@ -78,6 +78,11 @@ const ClinicManagement = () => {
 
   useEffect(retrieveClinics, [clinic]);
 
+  const rowsPerPageOption = {
+    label: "Số bản ghi trên trang",
+    values: [5, 10, 20],
+  };
+
   const fields = [
     {
       key: "name",
@@ -86,7 +91,6 @@ const ClinicManagement = () => {
     },
     { key: "emailAddress", label: "EMAIL" },
     { key: "phoneNumber", label: "SỐ ĐIỆN THOẠI" },
-    { key: "username", label: "TÀI KHOẢN ADMIN" },
     { key: "username", label: "TÀI KHOẢN ADMIN" },
     { key: "status", label: "TRẠNG THÁI" },
     { key: "createdAt", label: "NGÀY TẠO" },
@@ -154,7 +158,7 @@ const ClinicManagement = () => {
               striped
               bordered
               size="sm"
-              itemsPerPageSelect
+              itemsPerPageSelect={rowsPerPageOption}
               itemsPerPage={10}
               sorter
               pagination

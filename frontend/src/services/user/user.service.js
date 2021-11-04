@@ -14,6 +14,7 @@ const getUsers = async () => {
 };
 
 const createUser = async (
+  emailAddress,
   userName,
   password,
   fullName,
@@ -24,6 +25,7 @@ const createUser = async (
   const response = await axios.post(
     API_URL,
     {
+      emailAddress: emailAddress,
       userName,
       password,
       fullName: fullName,
@@ -38,6 +40,7 @@ const createUser = async (
 
 const editUser = async (
   id,
+  emailAddress,
   userName,
   password,
   fullName,
@@ -48,6 +51,7 @@ const editUser = async (
   const response = await axios.put(
     API_URL + id,
     {
+      emailAddress,
       userName,
       password,
       fullName: fullName,

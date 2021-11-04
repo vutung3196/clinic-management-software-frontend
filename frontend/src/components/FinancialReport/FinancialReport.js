@@ -354,7 +354,7 @@ const FinancialReports = () => {
       <div class="dm_title_0 addnew0">
         <div class="dm-title-c">
           <div id="ucDMDataManager2_dm_title" class="dm_title">
-            Số liệu thu chi
+            Báo cáo phòng khám
           </div>
           <div id="ucDMDataManager2_dm_act_btn" class="dm-act-btn"></div>
           <div id="dm_act_close"></div>
@@ -596,79 +596,6 @@ const FinancialReports = () => {
                           }}
                         />
                       </CCol> */}
-                      <div class="col2">
-                        <div class="t">
-                          10 bệnh nhân có tổng số tiền thu cao nhất trong kỳ
-                        </div>
-                        <div class="full-tbl-c">
-                          <div class="chart-sec">
-                            <div
-                              id="d_topkhdt"
-                              class="jqplot-target"
-                              style={{ position: "relative", height: "300px;" }}
-                            >
-                              <table
-                                id="tbl_st0"
-                                cellpadding="0"
-                                cellspacing="1"
-                                border="0"
-                                class="table_normal"
-                                style={{ width: "auto" }}
-                              >
-                                <thead>
-                                  <tr>
-                                    <th class="hcol">STT</th>
-                                    <th class="hcol">Tên</th>
-                                    <th class="light">Ngày tháng năm sinh</th>
-                                    <th class="light">Giới tính</th>
-                                    <th class="light">Email</th>
-                                    <th class="light">Số điện thoại</th>
-                                    <th class="light">Số tiền</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {{ patientPaymentInformation } !==
-                                    undefined && patientPaymentInformation
-                                    ? patientPaymentInformation.map(
-                                        (element, index) => (
-                                          <tr class="tr_sum">
-                                            <td class="hcol">{index + 1}</td>
-                                            <td class="hcol">{element.name}</td>
-                                            <td class="light">
-                                              <div class="z">
-                                                {element.dateOfBirth}
-                                              </div>
-                                            </td>
-                                            <td class="light">
-                                              <div class="z">
-                                                {element.gender}
-                                              </div>
-                                            </td>
-                                            <td class="light">
-                                              <div class="z">
-                                                {element.emailAddress}
-                                              </div>
-                                            </td>
-                                            <td class="light">
-                                              <div class="z">
-                                                {element.phoneNumber}
-                                              </div>
-                                            </td>
-                                            <td class="light">
-                                              <div class="z">
-                                                {element.amountDisplayed}
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        )
-                                      )
-                                    : ""}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                     <div class="clear"></div>
                   </div>

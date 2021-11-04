@@ -88,8 +88,24 @@ const CreatePaymentForLabOrderForm = ({
           onClose();
         },
         (error) => {
-          setNotificationMessage("Thanh toán phiếu chỉ định không thành công");
-          setOpenErrorModal(true);
+          if (error.response.data.errors !== undefined) {
+            console.log(error.response.data.errors);
+            let arr = [];
+            var descriptionError =
+              error.response.data.errors.PaymentDescription;
+            if (descriptionError !== undefined) {
+              arr.push(descriptionError);
+            }
+            var errorMessage = "";
+            for (let index = 0; index < arr.length; index++) {
+              errorMessage += arr[index];
+              if (index !== arr.length - 1) {
+                errorMessage += " và ";
+              }
+            }
+            setOpenErrorModal(true);
+            setNotificationMessage(errorMessage);
+          }
         }
       );
   };
