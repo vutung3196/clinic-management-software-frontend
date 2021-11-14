@@ -219,11 +219,21 @@ const SingleReceiptReportPage = (props) => {
               <div style={{ "line-height": "0.3" }}>
                 <p>
                   Tên đơn vị: Phòng khám{" "}
-                  {reportInformation.clinicInformation.name}
+                  {reportInformation.clinicInformation !== undefined
+                    ? reportInformation.clinicInformation.name
+                    : ""}
                 </p>
-                <p>Địa chỉ: {reportInformation.clinicInformation.address}</p>
                 <p>
-                  Điện thoại: {reportInformation.clinicInformation.phoneNumber}
+                  Địa chỉ:{" "}
+                  {reportInformation.clinicInformation !== undefined
+                    ? reportInformation.clinicInformation.address
+                    : ""}
+                </p>
+                <p>
+                  Điện thoại:{" "}
+                  {reportInformation.clinicInformation !== undefined
+                    ? reportInformation.clinicInformation.phoneNumber
+                    : ""}
                 </p>
               </div>
             </div>
@@ -320,7 +330,7 @@ const SingleReceiptReportPage = (props) => {
                       Phí đã thu
                     </th>
                   </tr>
-                  {reportInformation !== undefined
+                  {reportInformation.medicalServices !== undefined
                     ? reportInformation.medicalServices.map((entry, index) => (
                         <tr>
                           <td align="center">{index + 1}</td>

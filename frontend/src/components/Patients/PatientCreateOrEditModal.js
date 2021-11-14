@@ -25,8 +25,6 @@ import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
-import Input from "@material-ui/core/Input";
-import Typography from "@mui/material/Typography";
 
 const PatientCreateOrEditModal = ({
   modal,
@@ -1181,7 +1179,7 @@ const PatientCreateOrEditModal = ({
               arr.push(error5);
             }
 
-            var error6 = error.response.data.errors.EmailAddress;
+            var error6 = error.response.data.errors.PhoneNumber;
             if (error6 !== undefined) {
               arr.push(error6);
             }
@@ -1248,7 +1246,7 @@ const PatientCreateOrEditModal = ({
               arr.push(error5);
             }
 
-            var error6 = error.response.data.errors.EmailAddress;
+            var error6 = error.response.data.errors.PhoneNumber;
             if (error6 !== undefined) {
               arr.push(error6);
             }
