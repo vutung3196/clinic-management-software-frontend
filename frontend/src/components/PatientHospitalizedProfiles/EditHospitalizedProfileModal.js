@@ -54,7 +54,7 @@ const EditHospitalizedProfileModal = ({
           updatedHospitalizedProfile.revisitDate = revisitDate;
 
           updatedHospitalizedProfile.revisitDateDisplayed =
-            revisitDate.toLocaleDateString("en-US");
+            response.data.revisitDateDisplayed;
           console.log(updatedHospitalizedProfile);
           var updateIndex = patientHospitalizedProfiles
             .map((item) => item.id)
@@ -62,7 +62,7 @@ const EditHospitalizedProfileModal = ({
           patientHospitalizedProfiles[updateIndex] = updatedHospitalizedProfile;
           setPatientHospitalizedProfiles(patientHospitalizedProfiles);
           setOpenSuccessModal(true);
-          setNotificationMessage("Chỉnh sửa hồ sơ y tế thành công");
+          setNotificationMessage("Cập nhật hồ sơ y tế thành công");
           setDiseaseName("");
           setDescription("");
           onClose(false);

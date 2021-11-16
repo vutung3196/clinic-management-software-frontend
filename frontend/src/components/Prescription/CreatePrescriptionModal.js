@@ -205,15 +205,13 @@ const CreatePrescriptionModal = ({
           window.open("/prescription/" + response.data);
           onClose(false);
 
-          setTimeout(() => {
-            window.location.reload();
-          }, 3000);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 3000);
           // onCloseDetailedModal(false);
         },
         (error) => {
-          console.log("=========");
           console.log(error.response.data);
-          console.log("ahihihi");
           var errorMessage = "";
           if (error.response.data.errors !== undefined) {
             let arr = [];
@@ -244,7 +242,6 @@ const CreatePrescriptionModal = ({
               typeof error.response.data === "string") ||
             error.response.data instanceof String
           ) {
-            console.log("hehehhehe");
             errorMessage += error.response.data;
           }
           setOpenErrorModal(true);

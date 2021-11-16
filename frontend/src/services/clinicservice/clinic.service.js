@@ -175,12 +175,18 @@ const getCurrentClinicService = async (clinicId) => {
   return response.data;
 };
 
+const deativateClinic = async (id) => {
+  const response = await axios.delete(CLINIC_INFORMATION_API_URL + id, config);
+  return response.data;
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getClinicService,
   getClinicInformation,
   getCurrentClinicService,
   editClinic,
+  deativateClinic,
   getClinicServiceForClinicServiceManagementPage,
   createClinicService,
   editClinicService,

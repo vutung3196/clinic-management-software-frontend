@@ -22,6 +22,7 @@ import DetailedPatientHospitalizedProfileModal from "../PatientHospitalizedProfi
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArticleIcon from "@mui/icons-material/Article";
+import EditDoctorVisitingFormModal from "../DoctorVisitingFormsForReceptionist/EditDoctorVisitingFormModal";
 
 // import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -48,6 +49,9 @@ const DoctorVisitingFormsForDoctor = () => {
     detailedPatientHospitalizedProfileModal,
     setDetailedPatientHospitalizedProfileModal,
   ] = React.useState(false);
+
+  const [doctorVisitingForm, setDoctorVisitingForm] = useState("");
+  const [doctorVisitingFormModal, setDoctorVisitingFormModal] = useState(false);
 
   const handleCloseSuccessModal = (event, reason) => {
     if (reason === "clickaway") {
@@ -88,6 +92,9 @@ const DoctorVisitingFormsForDoctor = () => {
   };
   const [patient, setPatient] = useState(constPatient);
 
+  const handleCloseDoctorVisitingFormModal = () =>
+    setDoctorVisitingFormModal(false);
+
   const toggleCreateHospitalizedProfile = (row, index) => {
     console.log(row);
     if (index > 0) {
@@ -101,12 +108,24 @@ const DoctorVisitingFormsForDoctor = () => {
         .then(
           (response) => {
             let updatedForm = response.data;
-            console.log(updatedForm);
+            var oldIndex = doctorVisitingForms
+              .map((item) => item.visitingStatus)
+              .indexOf(2);
             var updateIndex = doctorVisitingForms
               .map((item) => item.id)
               .indexOf(row.id);
+
             var a = [...doctorVisitingForms];
             a[updateIndex] = updatedForm;
+            // a[oldIndex].visitingStatus = 1;
+            // a[oldIndex].visitingStatusDisplayed = "Đang chờ khám";
+            for (let i = 0; i < a.length; i++) {
+              if (updateIndex !== i && a[i].visitingStatus === 2) {
+                a[i].visitingStatus = 1;
+                a[i].visitingStatusDisplayed = "Đang chờ khám";
+              }
+              a[i].index = i + 1;
+            }
             for (let i = 0; i < a.length; i++) {
               a[i].index = i + 1;
             }
@@ -115,6 +134,7 @@ const DoctorVisitingFormsForDoctor = () => {
             setNotificationMessage(
               "Tiếp nhận bệnh nhân " + row.patientInformation.fullName
             );
+            //   window.location.reload();
           },
           (error) => {
             setOpenErrorModal(true);
@@ -127,6 +147,13 @@ const DoctorVisitingFormsForDoctor = () => {
     setPatient(row.patientInformation);
     setHospitalizedProfile(row);
     setHospitalizedModal(!hospitalizedModal);
+  };
+
+  const toggleView = (row) => {
+    // setIsEditing(false);
+    setDoctorVisitingForm(row);
+    setPatient(row.patientInformation);
+    setDoctorVisitingFormModal(!doctorVisitingFormModal);
   };
 
   const toggleAddAnElementToTheEndOfAQueue = (row, index) => {
@@ -205,6 +232,10 @@ const DoctorVisitingFormsForDoctor = () => {
             var a = [...doctorVisitingForms];
             a[updateIndex] = updatedForm;
             for (let i = 0; i < a.length; i++) {
+              if (updateIndex !== i && a[i].visitingStatus === 2) {
+                a[i].visitingStatus = 1;
+                a[i].visitingStatusDisplayed = "Đang chờ khám";
+              }
               a[i].index = i + 1;
             }
             setDoctorVisitingForms(a);
@@ -255,7 +286,7 @@ const DoctorVisitingFormsForDoctor = () => {
     { key: "updatedAt", label: "GIỜ CẬP NHẬT" },
     {
       key: "view",
-      label: "IN PHIẾU KHÁM",
+      label: "XEM",
       _style: { width: "1%" },
       sorter: false,
       filter: false,
@@ -318,11 +349,13 @@ const DoctorVisitingFormsForDoctor = () => {
                   view: (row, index) => {
                     return (
                       <td className="py-2">
-                        <Icon.Printer
+                        <ArticleIcon
                           size="23"
                           style={cursorPointerStyle}
                           onClick={() => {
-                            window.open("/doctorvisitingform/" + row.id);
+                            toggleView(row);
+
+                            // window.open("/doctorvisitingform/" + row.id);
                           }}
                         />
                       </td>
@@ -436,6 +469,18 @@ const DoctorVisitingFormsForDoctor = () => {
           setDetailedPatientHospitalizedProfileModal
         }
         setHospitalizedProfileId={setPatientHospitalizedProfileId}
+      />
+      <EditDoctorVisitingFormModal
+        open={doctorVisitingFormModal}
+        onClose={handleCloseDoctorVisitingFormModal}
+        patient={patient}
+        doctorVisitingForm={doctorVisitingForm}
+        // doctorVisitingForms={doctorVisitingForms}
+        // setDoctorVisitingForms={setDoctorVisitingForms}
+        setOpenSuccessModal={setOpenSuccessModal}
+        setOpenErrorModal={setOpenErrorModal}
+        setNotificationMessage={setNotificationMessage}
+        isEditing={false}
       />
       <PatientProfileModal
         modal={patientProfileModal}

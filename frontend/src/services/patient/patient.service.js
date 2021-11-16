@@ -90,7 +90,7 @@ const editPatient = async (
 };
 
 const deletePatient = async (patientId) => {
-  const response = await axios.delete(API_URL + patientId, config);
+  const response = await axios.delete(API_URL + "/" + patientId, config);
   return response.data;
 };
 

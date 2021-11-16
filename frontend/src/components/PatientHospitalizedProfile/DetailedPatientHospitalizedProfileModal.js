@@ -188,6 +188,13 @@ const DetailedPatientHospitalizedProfileModal = ({
       : "";
   };
 
+  const closeModal = () => {
+    onClose(false);
+    // setTimeout(() => {
+    window.location.reload();
+    // }, 3000);
+  };
+
   const showViewImageModal = (file) => {
     setCurrentFile(file);
     setViewImageModal(!viewImageModal);
@@ -453,7 +460,7 @@ const DetailedPatientHospitalizedProfileModal = ({
           shape="square"
           size="sm"
           sx={{ mt: 3, ml: 1 }}
-          onClick={() => onClose(false)}
+          onClick={() => closeModal()}
         >
           THOÁT
         </Button>
