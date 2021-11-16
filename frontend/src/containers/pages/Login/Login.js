@@ -97,8 +97,10 @@ const Login = (props) => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm ref={form} onSubmit={handleLogin}>
-                    <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
+                    <h1>Đăng nhập</h1>
+                    <p className="text-muted">
+                      Đăng nhập vào tài khoản của bạn
+                    </p>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
                         <CInputGroupText>

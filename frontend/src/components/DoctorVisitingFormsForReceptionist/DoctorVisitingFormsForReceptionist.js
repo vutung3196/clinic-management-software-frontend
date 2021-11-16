@@ -25,7 +25,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const DoctorVisitingFormsForReceptionist = () => {
   const [doctorVisitingForms, setDoctorVisitingForms] = useState([]);
-  const [doctorVisitingForm, setDoctorVisitingForm] = useState("");
   const [details, setDetails] = useState([]);
   const [createModal, setCreateModal] = useState(false);
   const [id, setId] = useState("");
@@ -33,6 +32,7 @@ const DoctorVisitingFormsForReceptionist = () => {
 
   const [detailedModal, setDetailedModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [doctorVisitingForm, setDoctorVisitingForm] = useState("");
   const [doctorVisitingFormModal, setDoctorVisitingFormModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [openErrorModal, setOpenErrorModal] = React.useState(false);

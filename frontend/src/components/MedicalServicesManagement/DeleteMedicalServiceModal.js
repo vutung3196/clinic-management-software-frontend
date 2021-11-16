@@ -33,6 +33,10 @@ const DeleteMedicalServiceModal = ({
       },
       (error) => {
         setOpenErrorModal(true);
+        if (typeof error.response.data === "string") {
+          setNotificationMessage(error.response.data);
+          return;
+        }
         setNotificationMessage("Xóa xét nghiệm không thành công");
       }
     );
