@@ -540,6 +540,11 @@ const SinglePrescriptionPage = (props) => {
                 Theo dõi tác dụng thuốc/ hẹn tái khám.
                 <br />
                 Gọi BÁC SĨ {prescription.clinicInformation.phoneNumber}
+                <br />
+                Tên bố hoặc mẹ của trẻ hoặc người đưa trẻ đến khám bệnh, chữa
+                bệnh:
+                <br />
+                ............................................................................................................................................................
               </div>
             </div>
           </div>

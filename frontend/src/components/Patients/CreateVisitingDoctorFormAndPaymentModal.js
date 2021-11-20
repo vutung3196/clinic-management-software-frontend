@@ -70,6 +70,8 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
           setOpenSuccessModal(true);
           setNotificationMessage("Tạo mới phiếu khám thành công");
           onClose(false);
+          window.location.reload();
+
           window.open(
             "/doctorvisitingform/" + response.data.doctorVisitingFormId
           );
