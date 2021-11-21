@@ -30,7 +30,9 @@ const create = async (
   medicalInsuranceCode,
   code,
   patientDoctorVisitingFormId,
-  diseaseNote
+  diseaseNote,
+  weight,
+  supervisorName
 ) => {
   const response = await axios.post(
     API_URL,
@@ -44,6 +46,8 @@ const create = async (
       code,
       patientDoctorVisitingFormId,
       diseaseNote,
+      weight,
+      supervisorName,
     },
     config
   );

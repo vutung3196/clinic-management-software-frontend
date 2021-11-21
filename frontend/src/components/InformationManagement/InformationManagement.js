@@ -28,11 +28,30 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const InformationManagement = () => {
+  const constClinic = {
+    id: 24,
+    name: "Hà phạm Clinic",
+    emailAddress: "tungvu3196@gmail.com",
+    phoneNumber: "+84912068946",
+    description: null,
+    addressStreet: "",
+    addressDistrict: "",
+    addressCity: "",
+    addressDetailInformation: ", , , ",
+    addressDetail: "",
+    imageFile: {
+      PublicId: "",
+      CreatedAt: "",
+      Name: "",
+      Url: "",
+      SecureUrl: "",
+    },
+  };
   const [viewImageModal, setViewImageModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = React.useState("");
-  const [clinic, setClinic] = React.useState("");
+  const [clinic, setClinic] = React.useState(constClinic);
   const [editModal, setEditModal] = React.useState(false);
   const [file, setFile] = React.useState("");
 
@@ -179,11 +198,15 @@ const InformationManagement = () => {
             file={file}
             setFile={setFile}
           />
-          <ViewImageModal
-            modal={viewImageModal}
-            onClose={setViewImageModal}
-            file={file}
-          />
+          {file !== null ? (
+            <ViewImageModal
+              modal={viewImageModal}
+              onClose={setViewImageModal}
+              file={file}
+            />
+          ) : (
+            ""
+          )}
         </CRow>
       </CContainer>
     </div>
