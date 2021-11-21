@@ -33,6 +33,10 @@ const DeleteMedicalServiceGroupModal = ({
       },
       (error) => {
         setOpenErrorModal(true);
+        if (typeof error.response.data === "string") {
+          setNotificationMessage(error.response.data);
+          return;
+        }
         setNotificationMessage("Xóa nhóm chỉ định xét nghiệm không thành công");
       }
     );

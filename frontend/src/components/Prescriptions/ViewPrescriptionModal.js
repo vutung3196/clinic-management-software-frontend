@@ -158,6 +158,46 @@ const ViewPrescriptionModal = ({
                             </p>
                           </CCol>
                         </CRow>
+                        {patient.age <= 6 ? (
+                          <>
+                            <CRow>
+                              <CFormControl className="mb-3">
+                                <h8 className="text ahihi td-ioc66">
+                                  Cân nặng (cho trẻ dưới 72 tháng tuổi, đơn vị
+                                  kg):{" "}
+                                </h8>
+                                <input
+                                  type="text"
+                                  placeholder=""
+                                  id="ioc66_d_reason"
+                                  value={prescription.weight}
+                                  // onChange={(e) => setWeight(e.target.value)}
+                                  class="ioc_textbox txt-dot fullwidth td-ioc66"
+                                ></input>
+                              </CFormControl>
+                            </CRow>
+                            <CRow>
+                              <CFormControl className="mb-3">
+                                <h8 className="text ahihi td-ioc66">
+                                  Tên người đưa trẻ đến khám (cho trẻ dưới 72
+                                  tháng tuổi):{" "}
+                                </h8>
+                                <input
+                                  type="text"
+                                  placeholder=""
+                                  id="ioc66_d_reason"
+                                  value={prescription.supervisorName}
+                                  // onChange={(e) =>
+                                  //   setSupervisorName(e.target.value)
+                                  // }
+                                  class="ioc_textbox txt-dot fullwidth td-ioc66"
+                                ></input>
+                              </CFormControl>
+                            </CRow>
+                          </>
+                        ) : (
+                          ""
+                        )}
                         <CRow>
                           <CFormControl className="mb-3">
                             {/* <CCol> */}

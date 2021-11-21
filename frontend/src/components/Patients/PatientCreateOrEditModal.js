@@ -1154,15 +1154,20 @@ const PatientCreateOrEditModal = ({
           onClose(false);
         },
         (error) => {
+          console.log(error.response.data);
+          var errorMessage = "";
+          if (
+            error.response.data !== null &&
+            typeof error.response.data === "string"
+          ) {
+            console.log("eoeoeo");
+            errorMessage += error.response.data;
+          }
           if (error.response.data.errors !== undefined) {
             let arr = [];
             var error1 = error.response.data.errors.AddressStreet;
             if (error1 !== undefined) {
               arr.push(error1);
-            }
-            var error2 = error.response.data.errors.MedicalInsuranceCode;
-            if (error2 !== undefined) {
-              arr.push(error2);
             }
 
             var error3 = error.response.data.errors.AddressDetail;
@@ -1191,9 +1196,9 @@ const PatientCreateOrEditModal = ({
                 errorMessage += " và ";
               }
             }
-            setOpenErrorModal(true);
-            setNotificationMessage(errorMessage);
           }
+          setOpenErrorModal(true);
+          setNotificationMessage(errorMessage);
         }
       );
     } else {
@@ -1221,15 +1226,20 @@ const PatientCreateOrEditModal = ({
           onClose(false);
         },
         (error) => {
+          console.log(error.response.data);
+          var errorMessage = "";
+          if (
+            (error.response.data !== null &&
+              typeof error.response.data === "string") ||
+            error.response.data instanceof String
+          ) {
+            errorMessage += error.response.data;
+          }
           if (error.response.data.errors !== undefined) {
             let arr = [];
             var error1 = error.response.data.errors.AddressStreet;
             if (error1 !== undefined) {
               arr.push(error1);
-            }
-            var error2 = error.response.data.errors.MedicalInsuranceCode;
-            if (error2 !== undefined) {
-              arr.push(error2);
             }
 
             var error3 = error.response.data.errors.AddressDetail;
@@ -1251,16 +1261,15 @@ const PatientCreateOrEditModal = ({
               arr.push(error6);
             }
 
-            var errorMessage = "";
             for (let index = 0; index < arr.length; index++) {
               errorMessage += arr[index];
               if (index !== arr.length - 1) {
                 errorMessage += " và ";
               }
             }
-            setOpenErrorModal(true);
-            setNotificationMessage(errorMessage);
           }
+          setOpenErrorModal(true);
+          setNotificationMessage(errorMessage);
         }
       );
     }

@@ -70,6 +70,7 @@ const Login = (props) => {
         setOpenErrorModal(true);
         setNotificationMessage("Đăng nhập thành công");
         props.history.push("/");
+        window.location.reload();
       },
       (error) => {
         console.log(error);

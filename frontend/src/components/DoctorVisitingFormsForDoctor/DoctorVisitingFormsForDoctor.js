@@ -96,7 +96,6 @@ const DoctorVisitingFormsForDoctor = () => {
     setDoctorVisitingFormModal(false);
 
   const toggleCreateHospitalizedProfile = (row, index) => {
-    console.log(row);
     if (index > 0) {
       setOpenErrorModal(true);
       setNotificationMessage("Bạn cần khám cho bệnh nhân đầu tiên");

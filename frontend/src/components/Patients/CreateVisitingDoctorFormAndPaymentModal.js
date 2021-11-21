@@ -70,14 +70,17 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
           setOpenSuccessModal(true);
           setNotificationMessage("Tạo mới phiếu khám thành công");
           onClose(false);
+          setTimeout(() => {
+            window.location.reload();
+          }, 5000);
+
           window.open(
             "/doctorvisitingform/" + response.data.doctorVisitingFormId
           );
           window.open("/receipt/" + response.data.receiptId);
         },
         (error) => {
-          console.log("=========");
-          console.log(error.response.data.errors);
+          var errorMessage = "";
           if (error.response.data.errors !== undefined) {
             console.log(error.response.data.errors);
             let arr = [];
@@ -97,16 +100,20 @@ const CreateVisitingDoctorFormAndPaymentModal = ({
               arr.push(paymentDescriptionError);
             }
 
-            var errorMessage = "";
+            var supervisorNameError = error.response.data.errors.SupervisorName;
+            if (supervisorNameError !== undefined) {
+              arr.push(supervisorNameError);
+            }
+
             for (let index = 0; index < arr.length; index++) {
               errorMessage += arr[index];
               if (index !== arr.length - 1) {
                 errorMessage += " và ";
               }
             }
-            setOpenErrorModal(true);
-            setNotificationMessage(errorMessage);
           }
+          setOpenErrorModal(true);
+          setNotificationMessage(errorMessage);
         }
       );
   };

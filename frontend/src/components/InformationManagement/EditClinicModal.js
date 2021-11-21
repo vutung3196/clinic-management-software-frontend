@@ -1272,7 +1272,7 @@ const EditClinicModal = ({
                 fullWidth
                 autoComplete="shipping address-level2"
                 variant="standard"
-                value={file.name}
+                value={file !== null ? file.name : ""}
               />
               <FileUploadIcon
                 style={{ cursorPointerStyle }}

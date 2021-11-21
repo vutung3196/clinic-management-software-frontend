@@ -44,8 +44,11 @@ const DiagnosedDescriptionModal = ({
     labtestService
       .getDiseases()
       .then((response) => {
+        console.log(response.data);
         setDiseases(response.data);
-        // setDiseaseGroups(response.data[0]);
+        setDiseaseGroup(response.data[0].diseaseGroupName);
+        setDiseaseNames(response.data[0].diseaseNames);
+        setDisease(response.data[0].diseaseNames[0]);
       })
       .catch((e) => {
         setDiseases([]);
@@ -102,8 +105,6 @@ const DiagnosedDescriptionModal = ({
                   setDiseaseGroup(newValue.diseaseGroupName);
                   if (newValue.diseaseNames !== undefined) {
                     // setDiseases(newValue.diseaseNames);
-                    console.log("===================================");
-                    console.log(newValue);
                     setDiseaseNames(newValue.diseaseNames);
                     setDisease(newValue.diseaseNames[0]);
                   }

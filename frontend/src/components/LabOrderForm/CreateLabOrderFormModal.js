@@ -24,7 +24,6 @@ import {
 import * as Icon from "react-bootstrap-icons";
 
 import MedicalServiceElementComponent from "./MedicalServiceElementComponent";
-import FilesUpload from "../FilesUpload";
 import laborderformService from "src/services/laborderform/laborderform.service";
 import MedicalServiceSelection from "../MedicalServiceSelection";
 import authService from "src/services/authentication/auth.service";

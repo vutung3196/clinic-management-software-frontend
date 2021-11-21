@@ -22,7 +22,21 @@ import routes from "../routes";
 import { TheHeaderDropdown } from "./index";
 
 const TheHeader = () => {
-  const [clinic, setClinic] = React.useState("");
+  const constClinic = {
+    id: 24,
+    name: "Hà phạm Clinic 123",
+    emailAddress: "tungvu3196@gmail.com",
+    phoneNumber: "+84912068946",
+    description: null,
+    addressStreet: "",
+    addressDistrict: "",
+    addressCity: "",
+    addressDetailInformation: ", , , ",
+    addressDetail: "",
+    imageFile: null,
+  };
+
+  const [clinic, setClinic] = React.useState(constClinic);
   const dispatch = useDispatch();
   const sidebarShow = useSelector((state) => state.sidebarShow);
 
@@ -42,13 +56,12 @@ const TheHeader = () => {
 
   const retrieveClinicInformation = () => {
     var currentUser = authService.getCurrentUser();
-    console.log("=====");
-    console.log(currentUser);
     clinicService
       .getClinicInformation(currentUser.clinicId)
       .then((response) => {
         var clinic = response.data;
         setClinic(clinic);
+        console.log(clinic);
       })
       .catch((e) => {
         console.log(e);
@@ -76,7 +89,7 @@ const TheHeader = () => {
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">
-        {clinic.imageFile !== undefined ? (
+        {clinic.imageFile !== null ? (
           <div className="c-avatar">
             <Image
               cloudName="dzftzmcxb"

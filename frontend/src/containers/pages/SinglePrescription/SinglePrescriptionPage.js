@@ -270,10 +270,10 @@ const SinglePrescriptionPage = (props) => {
                 <p>
                   Tên đơn vị: Phòng khám {prescription.clinicInformation.name}
                 </p>
-                <p>
+                {/* <p>
                   Địa chỉ:{" "}
                   {prescription.clinicInformation.addressDetailInformation}
-                </p>
+                </p> */}
                 <p>Điện thoại: {prescription.clinicInformation.phoneNumber}</p>
               </div>
             </div>
@@ -340,44 +340,30 @@ const SinglePrescriptionPage = (props) => {
                     >
                       :
                     </td>
-                    <td
-                      style={{
-                        width: "80px",
-                        "vertical-align": "top",
-                        padding: "3px",
-                      }}
-                    >
-                      {prescription.patientInformation.age}
-                    </td>
+                    {prescription.patientInformation.age <= 6 ? (
+                      // <>
+                      <td
+                        style={{
+                          width: "80px",
+                          "vertical-align": "top",
+                          padding: "3px",
+                        }}
+                      >
+                        {prescription.patientInformation.month} tháng
+                      </td>
+                    ) : (
+                      <td
+                        style={{
+                          width: "80px",
+                          "vertical-align": "top",
+                          padding: "3px",
+                        }}
+                      >
+                        {prescription.patientInformation.age}
+                      </td>
+                    )}
                   </tr>
                   <tr>
-                    {/* <td
-                      style={{
-                        "vertical-align": "top",
-                        padding: "3px",
-                      }}
-                    >
-                      Điện thoại
-                    </td>
-                    <td
-                      class="s"
-                      style={{
-                        width: "10px",
-                        "text-align": "center",
-                        "padding-left": 0,
-                        "padding-right": 0,
-                      }}
-                    >
-                      :
-                    </td>
-                    <td
-                      style={{
-                        "vertical-align": "top",
-                        padding: "3px",
-                      }}
-                    >
-                      {prescription.patientInformation.phoneNumber}
-                    </td> */}
                     <td
                       style={{
                         "vertical-align": "top",
@@ -433,7 +419,44 @@ const SinglePrescriptionPage = (props) => {
                       {prescription.patientInformation.gender}
                     </td>
                   </tr>
-                  <tr></tr>
+                  <tr>
+                    <td
+                      style={{
+                        "vertical-align": "top",
+                        padding: "3px",
+                      }}
+                    >
+                      Cân nặng
+                    </td>
+                    <td
+                      class="s"
+                      style={{
+                        width: "10px",
+                        "text-align": "center",
+                        "padding-left": 0,
+                        "padding-right": 0,
+                      }}
+                    >
+                      :
+                    </td>
+                    {prescription.patientInformation.age <= 6 ? (
+                      <td
+                        style={{
+                          "vertical-align": "top",
+                          padding: "3px",
+                        }}
+                      >
+                        {prescription.weight} kg
+                      </td>
+                    ) : (
+                      <td
+                        style={{
+                          "vertical-align": "top",
+                          padding: "3px",
+                        }}
+                      ></td>
+                    )}
+                  </tr>
                   <tr>
                     <td
                       valign="top"
@@ -540,6 +563,11 @@ const SinglePrescriptionPage = (props) => {
                 Theo dõi tác dụng thuốc/ hẹn tái khám.
                 <br />
                 Gọi BÁC SĨ {prescription.clinicInformation.phoneNumber}
+                <br />
+                Tên bố hoặc mẹ của trẻ hoặc người đưa trẻ đến khám bệnh, chữa
+                bệnh:
+                <br />
+                {prescription.supervisorName}
               </div>
             </div>
           </div>

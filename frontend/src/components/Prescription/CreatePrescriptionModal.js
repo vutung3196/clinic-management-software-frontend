@@ -29,7 +29,6 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import FilesUpload from "../FilesUpload";
-import laborderformService from "src/services/laborderform/laborderform.service";
 import { vi } from "date-fns/locale";
 import DiagnosedDescriptionModal from "./DiagnosedDescriptionModal";
 import MedicationElementComponent from "./MedicationElementComponent";
@@ -80,6 +79,8 @@ const CreatePrescriptionModal = ({
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [doctorName, setDoctorName] = useState("");
+  const [weight, setWeight] = useState(null);
+  const [supervisorName, setSupervisorName] = useState("");
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
@@ -168,6 +169,15 @@ const CreatePrescriptionModal = ({
   };
 
   const createPrescription = () => {
+    if (
+      patient.age <= 6 &&
+      (weight === null || weight === 0 || weight === "")
+    ) {
+      setOpenErrorModal(true);
+      setNotificationMessage("Cân nặng là bắt buộc cho trẻ dưới 72 tháng tuổi");
+      return;
+    }
+
     // console.log(medicationList);
     var medicationsInformation = [];
     for (let i = 0; i < medicationList.length; i++) {
@@ -193,7 +203,9 @@ const CreatePrescriptionModal = ({
         patient.medicalInsuranceCode,
         code,
         patientDoctorVisitingFormId,
-        diseaseNote
+        diseaseNote,
+        weight,
+        supervisorName
       )
       .then(
         (response) => {
@@ -329,6 +341,46 @@ const CreatePrescriptionModal = ({
                             </p>
                           </CCol>
                         </CRow>
+                        {patient.age <= 6 ? (
+                          <>
+                            <CRow>
+                              <CFormControl className="mb-3">
+                                <h8 className="text ahihi td-ioc66">
+                                  Cân nặng (cho trẻ dưới 72 tháng tuổi, đơn vị
+                                  kg):{" "}
+                                </h8>
+                                <input
+                                  type="number"
+                                  placeholder=""
+                                  id="ioc66_d_reason"
+                                  value={weight}
+                                  onChange={(e) => setWeight(e.target.value)}
+                                  class="ioc_textbox txt-dot fullwidth td-ioc66"
+                                ></input>
+                              </CFormControl>
+                            </CRow>
+                            <CRow>
+                              <CFormControl className="mb-3">
+                                <h8 className="text ahihi td-ioc66">
+                                  Tên người đưa trẻ đến khám (cho trẻ dưới 72
+                                  tháng tuổi):{" "}
+                                </h8>
+                                <input
+                                  type="text"
+                                  placeholder=""
+                                  id="ioc66_d_reason"
+                                  value={supervisorName}
+                                  onChange={(e) =>
+                                    setSupervisorName(e.target.value)
+                                  }
+                                  class="ioc_textbox txt-dot fullwidth td-ioc66"
+                                ></input>
+                              </CFormControl>
+                            </CRow>
+                          </>
+                        ) : (
+                          ""
+                        )}
                         <CRow>
                           <CFormControl className="mb-3">
                             {/* <CCol> */}
