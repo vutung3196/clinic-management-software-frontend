@@ -1189,7 +1189,6 @@ const PatientCreateOrEditModal = ({
               arr.push(error6);
             }
 
-            var errorMessage = "";
             for (let index = 0; index < arr.length; index++) {
               errorMessage += arr[index];
               if (index !== arr.length - 1) {

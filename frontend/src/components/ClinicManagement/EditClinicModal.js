@@ -1092,6 +1092,7 @@ const EditClinicModal = ({
       setAddressCity(clinic.addressCity);
       setAddressStreet(clinic.addressStreet);
       setAddressDistrict(clinic.addressDistrict);
+      setEmailAddress(clinic.emailAddress);
     } else {
       setName("");
       setUserName("");
@@ -1101,6 +1102,8 @@ const EditClinicModal = ({
       setAddressStreet("");
       setAddressDistrict("");
       setPhoneNumber("");
+      setEmailAddress("");
+
       // setEnabled(true);
     }
   }, [clinic, isEditing]);
@@ -1237,19 +1240,38 @@ const EditClinicModal = ({
             setClinics(clinics);
             setOpenSuccessModal(true);
             setNotificationMessage("Tạo mới phòng khám thành công");
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
             onClose(false);
           },
           (error) => {
+            if (error.response.data.errors !== undefined) {
+              let arr = [];
+              var error3 = error.response.data.errors.UserName;
+              if (error3 !== undefined) {
+                arr.push(error3);
+              }
+
+              var error4 = error.response.data.errors.EmailAddress;
+              var error5 = error.response.data.errors.PhoneNumber;
+              if (error4 !== undefined) {
+                arr.push(error4);
+              }
+              if (error5 !== undefined) {
+                arr.push(error5);
+              }
+
+              var errorMessage = "";
+              for (let index = 0; index < arr.length; index++) {
+                errorMessage += arr[index];
+                if (index !== arr.length - 1) {
+                  errorMessage += " và ";
+                }
+              }
+            }
             setOpenErrorModal(true);
-            setNotificationMessage("Tạo mới phòng khám không thành công");
-            // if (error.response.data !== undefined) {
-            //   var a = error.response.data;
-            //   let arr = [];
-            //   if (a !== undefined) {
-            //     arr.push(a);
-            //   }
-            //   setMessages(arr);
-            // }
+            setNotificationMessage(errorMessage);
           }
         );
     }

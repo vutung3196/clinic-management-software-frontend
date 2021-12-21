@@ -155,7 +155,7 @@ const Patients = () => {
     { key: "dateOfBirthDetail", label: "NGÀY THÁNG NĂM SINH" },
     { key: "phoneNumber", label: "SỐ ĐIỆN THOẠI" },
     { key: "addressCity", label: "ĐỊA CHỈ (TỈNH)" },
-    { key: "createdAt", label: "NGÀY TẠO" },
+    { key: "activeDate", label: "NGÀY HOẠT ĐỘNG GẦN ĐÂY" },
     {
       key: "doctorvisitingform",
       label: "TẠO PHIẾU KHÁM",

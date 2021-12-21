@@ -365,9 +365,11 @@ const EditUserModal = ({
                 >
                   {medicalServiceGroups !== undefined &&
                   medicalServiceGroups.length > 0
-                    ? medicalServiceGroups.map((entry) => (
-                        <MenuItem value={entry.id}>{entry.name}</MenuItem>
-                      ))
+                    ? medicalServiceGroups
+                        .filter((entry) => entry.name !== "Khám bệnh")
+                        .map((entry) => (
+                          <MenuItem value={entry.id}>{entry.name}</MenuItem>
+                        ))
                     : ""}
                 </Select>
               </Grid>

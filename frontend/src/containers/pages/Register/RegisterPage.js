@@ -31,7 +31,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const RegisterPage = () => {
+const RegisterPage = (props) => {
   const [clinicName, setClinicName] = React.useState("");
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const [emailAddress, setEmailAddress] = React.useState("");
@@ -84,6 +84,10 @@ const RegisterPage = () => {
           setNotificationMessage(
             "Tạo mới tài khoản thành công, bạn sẽ nhận được email khi tài khoản được phê duyệt"
           );
+          setTimeout(() => {
+            props.history.push("/");
+            window.location.reload();
+          }, 3000);
         },
         (error) => {
           var errorMessage = "";
