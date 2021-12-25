@@ -564,6 +564,8 @@ const SinglePrescriptionPage = (props) => {
                 <br />
                 Gọi BÁC SĨ {prescription.clinicInformation.phoneNumber}
                 <br />
+                Khám lại xin mang theo đơn này
+                <br />
                 Tên bố hoặc mẹ của trẻ hoặc người đưa trẻ đến khám bệnh, chữa
                 bệnh:
                 <br />

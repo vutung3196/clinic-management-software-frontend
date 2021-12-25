@@ -73,7 +73,6 @@ const Login = (props) => {
         window.location.reload();
       },
       (error) => {
-        console.log(error);
         if (error.response.data !== undefined) {
           const resMessage = error.response.data;
           setOpenErrorModal(true);

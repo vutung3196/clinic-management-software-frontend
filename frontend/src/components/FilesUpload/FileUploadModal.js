@@ -59,7 +59,7 @@ const FileUploadModal = ({
   const uploadImage = (file) => {
     const data = new FormData();
     data.append("file", file);
-    data.append("upload_preset", "xdf93shk");
+    data.append("upload_preset", "your-pre-set");
     var today = new Date();
     var date =
       today.getFullYear() +
@@ -69,8 +69,8 @@ const FileUploadModal = ({
       today.getDate();
 
     data.append("folder", "hapham/" + date);
-    data.append("cloud_name", "dzftzmcxb");
-    fetch("  https://api.cloudinary.com/v1_1/dzftzmcxb/image/upload", {
+    data.append("cloud_name", "your-cloud-nam");
+    fetch("your-cloudinary-url", {
       method: "post",
       body: data,
     })
