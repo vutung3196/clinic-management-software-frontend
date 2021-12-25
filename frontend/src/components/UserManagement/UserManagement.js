@@ -108,7 +108,10 @@ const UserManagement = () => {
 
   const openDeactivateModal = (item) => {
     if (!item.enabled) {
-      alert("Người dùng đã khóa");
+      setOpenErrorModal(true);
+      setNotificationMessage(
+        "Không thể khóa người dùng, do người dùng đã khóa"
+      );
     } else {
       setUser(item);
       setDeactivateModal(!deactivateModal);

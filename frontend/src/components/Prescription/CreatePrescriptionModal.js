@@ -147,7 +147,7 @@ const CreatePrescriptionModal = ({
 
   const closeModal = () => {
     setDescription("");
-    setMedicationList(initialArray);
+    setMedicationList([]);
     setNumberMedicalServicesChildren(0);
     onClose(false);
   };

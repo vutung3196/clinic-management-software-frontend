@@ -63,7 +63,7 @@ const MedicationElementComponent = ({
           />
         </div>
         <div class="cr">
-          <span>Số lượng: </span>
+          <span>Số lượng (viên): </span>
           <CInput
             type="number"
             name="ioc66_d_num"

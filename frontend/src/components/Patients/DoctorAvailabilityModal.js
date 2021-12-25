@@ -102,7 +102,7 @@ const DoctorAvailabilityModal = ({
                     onClick={() => selectDoctor(row)}
                   >
                     <TableCell component="th" scope="row">
-                      {row.doctorName}
+                      Bác sĩ {row.doctorName}
                     </TableCell>
                     <TableCell>
                       {"Đang tiếp nhận " + row.patientNumber + " bệnh nhân"}
