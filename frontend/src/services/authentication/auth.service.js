@@ -2,11 +2,6 @@ import axios from "axios";
 import authHeader from "../authentication/auth.header";
 
 const AUTH_API_URL = "http://localhost:57679/api/tokenauth/auth";
-const MEDICATION_API_URL = "http://localhost:57679/api/medication";
-const CLINIC_SERVICE_API_URL = "http://localhost:57679/api/clinicservice";
-const MEDICATION_GROUP_API_URL = "http://localhost:57679/api/medication/group";
-const MEDICATION_UNIT_API_URL = "http://localhost:57679/api/medication/unit";
-const CLINIC_INFORMATIONAL_API_URL = "http://localhost:57679/api/clinic";
 
 const config = {
   headers: { Authorization: `Bearer ${authHeader()}` },
